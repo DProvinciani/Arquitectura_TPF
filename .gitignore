@@ -77,3 +77,4 @@ instruction_memory.mif
 ipcore_dir/_xmsgs/cg.xmsgs
 ipcore_dir/_xmsgs/pn_parser.xmsgs
 xst/work/work.sdbx
+iseconfig/
