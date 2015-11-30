@@ -35,8 +35,5 @@ module sig_extend(
 		begin 
 			reg_out <= $signed(reg_in);
 		end
-		
-	
-		
 	end
 endmodule
