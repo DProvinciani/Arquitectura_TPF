@@ -44,14 +44,14 @@ module latch_EX_MEM
 	input wire m_MemRead_in,
 	input wire m_MemWrite_in,
 	/* Control signals OUTPUTS */
-	input wire zero_out,
+	output wire zero_out,
 	//Write back
-	input wire wb_RegWrite_out,
-	input wire wb_MemtoReg_out,
+	output wire wb_RegWrite_out,
+	output wire wb_MemtoReg_out,
 	//Memory
-	input wire m_Branch_out,
-	input wire m_MemRead_out,
-	input wire m_MemWrite_out
+	output wire m_Branch_out,
+	output wire m_MemRead_out,
+	output wire m_MemWrite_out
 	);
 	/* Data REGISTERS */
 	reg [B-1:0]add_result_reg;

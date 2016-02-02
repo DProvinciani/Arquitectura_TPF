@@ -23,7 +23,7 @@ module instruction_fetch
 		parameter B=32 // ancho de la direccion (PC)
 	)
 	(
-		input wire [B-1:0] pc_branch, //PC para tomar el salto
+		input wire [B-1:0] pc_branch, 	//PC para tomar el salto
 		input wire PCSrc, 				//Senial de control para elegir el PC
 		//input wire enable,
 		input wire reset,
@@ -35,7 +35,6 @@ module instruction_fetch
 	
 	reg [B-1:0] pc;							//registro PC
 												
-	//mux mux_pc_src(.item_a(pc_incrementado), .item_b(pc_branch), .select(PCSrc), .signal(pc_wire));
 	adder add (.value1(pc), .value2(4), .result(pc_incrementado));
 	instructionMemory im (.addra(pc), .clka(clk), .douta(instruction), .ena(1));
 	

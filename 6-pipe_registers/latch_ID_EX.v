@@ -48,22 +48,24 @@ module latch_ID_EX
 	input wire m_MemWrite_in,
 	//Execution
 	input wire ex_RegDst_in,
-	input wire ex_ALUOp0_in,
-	input wire ex_ALUOp1_in,
+	//input wire ex_ALUOp0_in,
+	//input wire ex_ALUOp1_in,
+	input wire ex_ALUOp_in,
 	input wire ex_ALUSrc_in,
 	/* Control signals OUTPUTS */
 	//Write back
-	input wire wb_RegWrite_out,
-	input wire wb_MemtoReg_out,
+	output wire wb_RegWrite_out,
+	output wire wb_MemtoReg_out,
 	//Memory
-	input wire m_Branch_out,
-	input wire m_MemRead_out,
-	input wire m_MemWrite_out,
+	output wire m_Branch_out,
+	output wire m_MemRead_out,
+	output wire m_MemWrite_out,
 	//Execution
-	input wire ex_RegDst_out,
-	input wire ex_ALUOp0_out,
-	input wire ex_ALUOp1_out,
-	input wire ex_ALUSrc_out
+	output wire ex_RegDst_out,
+	//output wire ex_ALUOp0_out,
+	//output wire ex_ALUOp1_out,
+	output wire ex_ALUOp_out,
+	output wire ex_ALUSrc_out
 	);
 	/* Data REGISTERS */
 	reg [W-1:0]pc_next_reg;
@@ -82,8 +84,9 @@ module latch_ID_EX
 	reg m_MemWrite_reg;
 	//Execution
 	reg ex_RegDst_reg;
-	reg ex_ALUOp0_reg;
-	reg ex_ALUOp1_reg;
+	//reg ex_ALUOp0_reg;
+	//reg ex_ALUOp1_reg;
+	reg ex_ALUOp_reg;
 	reg ex_ALUSrc_reg;
 	
 	always @(posedge clk)
@@ -106,8 +109,9 @@ module latch_ID_EX
 		m_MemWrite_reg <= m_MemWrite_in;
 		//Execution
 		ex_RegDst_reg <= ex_RegDst_in;
-		ex_ALUOp0_reg <= ex_ALUOp0_in;
-		ex_ALUOp1_reg <= ex_ALUOp1_in;
+		//ex_ALUOp0_reg <= ex_ALUOp0_in;
+		//ex_ALUOp1_reg <= ex_ALUOp1_in;
+		ex_ALUOp_reg <= ex_ALUOp_in;
 		ex_ALUSrc_reg <= ex_ALUSrc_in;
 		
 	end
@@ -129,8 +133,9 @@ module latch_ID_EX
 	assign m_MemWrite_out = m_MemWrite_reg;
 	//Execution
 	assign ex_RegDst_out = ex_RegDst_reg;
-	assign ex_ALUOp0_out = ex_ALUOp0_reg;
-	assign ex_ALUOp1_out = ex_ALUOp1_reg;
+	//assign ex_ALUOp0_out = ex_ALUOp0_reg;
+	//assign ex_ALUOp1_out = ex_ALUOp1_reg;
+	assign ex_ALUOp_out = ex_ALUOp_reg;
 	assign ex_ALUSrc_out = ex_ALUSrc_reg;
 	
 	

@@ -29,12 +29,12 @@ module instruction_decode
 		/*Control signals input*/
 		input wire RegWrite,					//Señal de control de WB
 		/*Data signals input*/
-		input wire [B-1:0] pc_incrementado_in,		//se pasa a la etapa ex
+		//input wire [B-1:0] pc_incrementado_in,		//se pasa a la etapa ex
 		input wire [B-1:0] instruction,
 		input wire [W-1:0] address_write,			//registro a escribir en el WB
 		input wire [B-1:0] data_write,			//datos a escribir en el WB 
 		
-		output wire [B-1:0] pc_incrementado_out,		//se pasa a la etapa ex
+		//output wire [B-1:0] pc_incrementado_out,		//se pasa a la etapa ex
 		/*Data signals output*/
 		output wire [B-1:0]reg_data1,					//dato 1 del reg
 		output wire [B-1:0]reg_data2,					//dato 2 del reg
@@ -51,8 +51,9 @@ module instruction_decode
 		output wire m_MemWrite_out,
 		//Execution
 		output wire ex_RegDst_out,
-		output wire ex_ALUOp0_out,
-		output wire ex_ALUOp1_out,
+		//output wire ex_ALUOp0_out,
+		//output wire ex_ALUOp1_out,
+		output wire ex_ALUOp_out,
 		output wire ex_ALUSrc_out
     );
 	
@@ -67,8 +68,9 @@ module instruction_decode
 						  .m_MemWrite_out(m_MemWrite_out),
 						  //Execution
 						  .ex_RegDst_out(ex_RegDst_out),
-						  .ex_ALUOp0_out(ex_ALUOp0_out),
-						  .ex_ALUOp1_out(ex_ALUOp1_out),
+						  //.ex_ALUOp0_out(ex_ALUOp0_out),
+						  //.ex_ALUOp1_out(ex_ALUOp1_out),
+						  .ex_ALUOp_out(ex_ALUOp_out),
 						  .ex_ALUSrc_out(ex_ALUSrc_out)
 						  );
 	registers_memory rb (.clk(clk),
@@ -86,7 +88,7 @@ module instruction_decode
 	
 	assign rt = instruction[20:16];
 	assign rd = instruction[15:11];
-	assign pc_incrementado_out = pc_incrementado_in;
+	//assign pc_incrementado_out = pc_incrementado_in;
 	
 
 endmodule
