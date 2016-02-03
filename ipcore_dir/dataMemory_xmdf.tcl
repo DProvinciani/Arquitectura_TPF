@@ -123,7 +123,7 @@ utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory/s
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type Ignore
 incr fcount
 
-utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory/simulation/functional/simulate_isim.bat
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory/simulation/functional/simulate_isim.sh
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type Ignore
 incr fcount
 
@@ -171,7 +171,7 @@ utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory/s
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type Ignore
 incr fcount
 
-utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory/simulation/timing/simulate_isim.bat
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory/simulation/timing/simulate_isim.sh
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type Ignore
 incr fcount
 
@@ -215,12 +215,12 @@ utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory.a
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type asy
 incr fcount
 
-utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory.ngc
-utilities_xmdf::xmdfSetData $instance FileSet $fcount type ngc
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory.mif
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type AnyView
 incr fcount
 
-utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory.sym
-utilities_xmdf::xmdfSetData $instance FileSet $fcount type symbol
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory.ngc
+utilities_xmdf::xmdfSetData $instance FileSet $fcount type ngc
 incr fcount
 
 utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path dataMemory.v

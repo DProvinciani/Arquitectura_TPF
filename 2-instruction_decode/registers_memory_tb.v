@@ -26,6 +26,7 @@ module registers_memory_tb;
 
 	// Inputs
 	reg clk;
+	reg reset;
 	reg wr_en;
 	reg [4:0] w_addr;
 	reg [4:0] r_addr1;
@@ -38,6 +39,7 @@ module registers_memory_tb;
 	// Instantiate the Unit Under Test (UUT)
 	registers_memory uut (
 		.clk(clk), 
+		.reset(reset),
 		.wr_en(wr_en), 
 		.w_addr(w_addr), 
 		.r_addr1(r_addr1),
@@ -55,9 +57,10 @@ module registers_memory_tb;
 		r_addr1 = 0;
 		r_addr2 = 1;
 		w_data = 0;
-
+		reset = 1;
 		// Wait 100 ns for global reset to finish
 		#100;
+		reset = 0;
 		wr_en = 1; //escribo
 		w_addr = 0;//escribo en el reg 0
 		w_data = 25;//dato que escribo en reg 0

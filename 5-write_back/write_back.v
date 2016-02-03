@@ -27,7 +27,8 @@ module write_back
 	input wire[B-1:0]mem_data,
 	input wire[B-1:0]ALU_data,
 	input wire MemtoReg,
-	output wire data_out
+	//input wire[D-1:0]instruction,
+	output wire [B-1:0] data_out
    );
 	mux wb_mux (
 	.select(MemtoReg),

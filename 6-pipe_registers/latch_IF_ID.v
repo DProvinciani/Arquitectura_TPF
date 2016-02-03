@@ -21,26 +21,32 @@
 module latch_IF_ID
 	#(
 	parameter B=32	//32 bits instruccion, 7 bits pc_next (direccion)
-	)
+   )
 	(
 	input wire clk,
+	input wire reset,
 	input wire [B-1:0]pc_incrementado_in,
 	input wire [B-1:0]instruction_in,
-	//output reg [B-1:0]pc_incrementado_out,
-	//output reg [B-1:0]instruction_out
-	output wire [B-1:0]pc_incrementado_out,
-	output wire [B-1:0]instruction_out
+	output reg [B-1:0]pc_incrementado_out,
+	output reg [B-1:0]instruction_out
 	);
-	reg [B-1:0] pc_incrementado_reg;
-	reg [B-1:0] instruction_reg= 32'b10001100000100000000000000000000;
+	//reg [B-1:0] instr_reg;
+	//reg [W-1:0] pc_next_reg;
 	
-	always @(posedge clk)
+	always @(posedge clk, posedge reset)
 	begin
-		instruction_reg <= instruction_in;
-		pc_incrementado_reg <= pc_incrementado_in;
+		if (reset)
+		begin
+			pc_incrementado_out <= 0;
+			instruction_out <=0;
+		end
+		else
+		begin
+			instruction_out <= instruction_in;
+			pc_incrementado_out <= pc_incrementado_in;
+		end
 	end
 	
-	assign pc_incrementado_out = pc_incrementado_reg;
-	assign instruction_out = instruction_reg;
-	
+	//assign instruction_out = instr_reg;
+	//assign pc_next_out = pc_next_reg;
 endmodule

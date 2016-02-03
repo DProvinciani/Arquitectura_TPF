@@ -35,7 +35,6 @@ module data_access
 		input wire branch_in,
 		/*Data signals output*/
 		output wire [B-1:0] data_out,
-		output wire [B-1:0] alu_out,
 		/*Control signals output*/
 		output wire branch_out
     );
@@ -47,14 +46,13 @@ module data_access
 		assign we[0]=mem_write;
 		
 		dataMemory dm(	.clka(clk), 
-							.rsta(0),
-							.ena(1),
+							.rsta(1'b0),
+							.ena(1'b1),
 							.wea(we),
 							.addra(addr_in),
 							.dina(write_data),
 							.douta(data_out));
 	
 		assign branch_out = zero && branch_in;
-		assign alu_out = addr_in;
 
 endmodule

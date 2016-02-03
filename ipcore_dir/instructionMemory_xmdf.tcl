@@ -107,7 +107,7 @@ utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path instructionM
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type Ignore
 incr fcount
 
-utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path instructionMemory/simulation/functional/simulate_isim.bat
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path instructionMemory/simulation/functional/simulate_isim.sh
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type Ignore
 incr fcount
 
@@ -163,7 +163,7 @@ utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path instructionM
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type Ignore
 incr fcount
 
-utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path instructionMemory/simulation/timing/simulate_isim.bat
+utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path instructionMemory/simulation/timing/simulate_isim.sh
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type Ignore
 incr fcount
 
@@ -213,10 +213,6 @@ incr fcount
 
 utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path instructionMemory.ngc
 utilities_xmdf::xmdfSetData $instance FileSet $fcount type ngc
-incr fcount
-
-utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path instructionMemory.sym
-utilities_xmdf::xmdfSetData $instance FileSet $fcount type symbol
 incr fcount
 
 utilities_xmdf::xmdfSetData $instance FileSet $fcount relative_path instructionMemory.v

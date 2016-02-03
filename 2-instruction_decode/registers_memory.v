@@ -26,6 +26,7 @@ module registers_memory
 	)
 	(
 		input wire clk,	// clock del sistema
+		input wire reset,
 		input wire wr_en,	// seal de control para habilitar escritura
 								// esta se testea en flanco de subida
 		input wire [W-1:0] w_addr, r_addr1, r_addr2,
@@ -37,13 +38,24 @@ module registers_memory
    );
 	
 	// declaracion de seniales
-	reg [B-1:0] array_reg [2**W:0]; 
+	reg [B-1:0] array_reg [0:31];
+	integer i;
 							// cantidad de registros direccionables segun W
 							// para W=5 2**5=32 registros
 	// operacion escritura
-	always @(posedge clk)
-		if (wr_en)		// 
-			array_reg[w_addr] <= w_data;
+	
+	always @(posedge clk,posedge reset)
+	begin 		
+			if (reset)
+				begin
+					for (i=0;i<32;i=i+1)
+					begin
+						array_reg[i] <= 0;
+					end
+				end
+			else if (wr_en)
+				array_reg[w_addr] <= w_data;
+	end
 	// operacion lectura
 	assign r_data1 = array_reg[r_addr1];
 	assign r_data2 = array_reg[r_addr2];

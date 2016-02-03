@@ -35,9 +35,7 @@ module control_unit
 		output wire m_MemWrite_out,
 		//Execution
 		output wire ex_RegDst_out,
-		//output wire ex_ALUOp0_out,
-		//output wire ex_ALUOp1_out,
-		output wire ex_ALUOp_out,
+		output wire [1:0] ex_ALUOp_out,
 		output wire ex_ALUSrc_out
     );
 		
@@ -77,8 +75,6 @@ module control_unit
 		
 		//Asignando las señales de control internas con las señales de salida
 		//Execution
-		//assign ex_ALUOp1_out = ex_ctrl_sgnl[3];
-		//assign ex_ALUOp0_out = ex_ctrl_sgnl[2];
 		assign ex_ALUOp_out = ex_ctrl_sgnl[3:2];
 		assign ex_RegDst_out = ex_ctrl_sgnl[1];
 		assign ex_ALUSrc_out = ex_ctrl_sgnl[0];

@@ -4,10 +4,10 @@
 // Company: 
 // Engineer:
 //
-// Create Date:   01:07:18 01/29/2016
+// Create Date:   19:18:01 11/27/2015
 // Design Name:   adder
-// Module Name:   /home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/adder_tb.v
-// Project Name:  arquitectura_tpf
+// Module Name:   D:/workspace-ISE/Pipeline/adder_tb.v
+// Project Name:  Pipeline
 // Target Device:  
 // Tool versions:  
 // Description: 
@@ -25,38 +25,42 @@
 module adder_tb;
 
 	// Inputs
-	reg [31:0] value1;
-	//reg [31:0] value2;
-	reg clk;
+	reg [6:0] pc;
 
 	// Outputs
-	wire [31:0] result;
+	wire [6:0] pc_next;
 
 	// Instantiate the Unit Under Test (UUT)
 	adder uut (
-		.value1(value1), 
-		.value2(1), 
-		.clk(clk), 
-		.result(result)
+		.pc(pc), 
+		.pc_next(pc_next)
 	);
 
 	initial begin
 		// Initialize Inputs
-		value1 = 0;
-		//value2 = 0;
-		clk = 0;
-
-		// Wait 100 ns for global reset to finish
+		pc = 7'b0000000;
 		#100;
-        
+        pc = 7'b0000001;
+		#100;
+		pc = 7'b0000010;
+		#100;
+		pc = 7'b0000011;
+		#100;
+		pc = 7'b0000100;
+		#100;
+		pc = 7'b0000101;
+		#100;
+		pc = 7'b0000110;
+		#100;
+		pc = 7'b0000111;
+		#100;
+		pc = 7'b0001000;
+		#100;
+		pc = 7'b1111111;
+		#100;
 		// Add stimulus here
-		#10 value1=4;
-		//#10 value2=2;
-		
-	end
-	
-	always
-			#1 clk=~clk;
 
+	end
+      
 endmodule
 

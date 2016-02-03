@@ -20,20 +20,21 @@
 //////////////////////////////////////////////////////////////////////////////////
 module latch_EX_MEM
 	#(
-	parameter B=32, W=7
+	parameter B=32, W=5
    )
 	(
 	input wire clk,
+	input wire reset,
 	/* Data signals INPUTS */
 	input wire [B-1:0]add_result_in,
 	input wire [B-1:0]alu_result_in,
 	input wire [B-1:0]r_data2_in,
-	input wire [B-1:0]mux_RegDst_in,
+	input wire [W-1:0]mux_RegDst_in,
 	/* Data signals OUTPUTS */
 	output wire [B-1:0]add_result_out,
 	output wire [B-1:0]alu_result_out,
 	output wire [B-1:0]r_data2_out,
-	output wire [B-1:0]mux_RegDst_out,
+	output wire [W-1:0]mux_RegDst_out,
 	/* Control signals INPUTS*/
 	input wire zero_in,
 	//Write back
@@ -57,7 +58,7 @@ module latch_EX_MEM
 	reg [B-1:0]add_result_reg;
 	reg [B-1:0]alu_result_reg;
 	reg [B-1:0]r_data2_reg;
-	reg [B-1:0]mux_RegDst_reg;
+	reg [W-1:0]mux_RegDst_reg;
 	/* Control REGISTERS */
 	reg zero_reg;
 	//Write back
@@ -68,23 +69,38 @@ module latch_EX_MEM
 	reg m_MemRead_reg;
 	reg m_MemWrite_reg;
 	
-	always @(posedge clk)
+	always @(posedge clk, posedge reset)
 	begin
-		/* Data signals write to ID_EX register */
-		add_result_reg <= add_result_in;
-		alu_result_reg <= alu_result_in;
-		r_data2_reg <= r_data2_in;
-		mux_RegDst_reg <= mux_RegDst_in;
-		/* Control signals write to ID_EX register */
-		zero_reg <= zero_in;
-		//Write back
-		wb_RegWrite_reg <= wb_RegWrite_in;
-		wb_MemtoReg_reg <= wb_MemtoReg_in;
-		//Memory
-		m_Branch_reg <= m_Branch_in;
-		m_MemRead_reg <= m_MemRead_in;
-		m_MemWrite_reg <= m_MemWrite_in;
-		
+		if (reset)
+		begin
+			add_result_reg <= 0;
+			alu_result_reg <= 0;
+			r_data2_reg <= 0;
+			mux_RegDst_reg <= 0;
+			zero_reg <= 0;
+			wb_RegWrite_reg <= 0;
+			wb_MemtoReg_reg <= 0;
+			m_Branch_reg <= 0;
+			m_MemRead_reg <= 0;
+			m_MemWrite_reg <= 0;
+		end
+		else
+		begin
+			/* Data signals write to ID_EX register */
+			add_result_reg <= add_result_in;
+			alu_result_reg <= alu_result_in;
+			r_data2_reg <= r_data2_in;
+			mux_RegDst_reg <= mux_RegDst_in;
+			/* Control signals write to ID_EX register */
+			zero_reg <= zero_in;
+			//Write back
+			wb_RegWrite_reg <= wb_RegWrite_in;
+			wb_MemtoReg_reg <= wb_MemtoReg_in;
+			//Memory
+			m_Branch_reg <= m_Branch_in;
+			m_MemRead_reg <= m_MemRead_in;
+			m_MemWrite_reg <= m_MemWrite_in;
+		end
 	end
 	/* Data signals read from ID_EX register */	
 	assign add_result_out = add_result_reg;

@@ -29,7 +29,7 @@ module instruction_decode
 		/*Control signals input*/
 		input wire RegWrite,					//Señal de control de WB
 		/*Data signals input*/
-		//input wire [B-1:0] pc_incrementado_in,		//se pasa a la etapa ex
+	//	input wire [B-1:0] pc_incrementado_in,		//se pasa a la etapa ex
 		input wire [B-1:0] instruction,
 		input wire [W-1:0] address_write,			//registro a escribir en el WB
 		input wire [B-1:0] data_write,			//datos a escribir en el WB 
@@ -51,9 +51,7 @@ module instruction_decode
 		output wire m_MemWrite_out,
 		//Execution
 		output wire ex_RegDst_out,
-		//output wire ex_ALUOp0_out,
-		//output wire ex_ALUOp1_out,
-		output wire ex_ALUOp_out,
+		output wire [1:0] ex_ALUOp_out,
 		output wire ex_ALUSrc_out
     );
 	
@@ -68,12 +66,11 @@ module instruction_decode
 						  .m_MemWrite_out(m_MemWrite_out),
 						  //Execution
 						  .ex_RegDst_out(ex_RegDst_out),
-						  //.ex_ALUOp0_out(ex_ALUOp0_out),
-						  //.ex_ALUOp1_out(ex_ALUOp1_out),
 						  .ex_ALUOp_out(ex_ALUOp_out),
 						  .ex_ALUSrc_out(ex_ALUSrc_out)
 						  );
 	registers_memory rb (.clk(clk),
+								.reset(reset),
 								.wr_en(RegWrite),
 								.r_addr1(instruction[25:21]), 
 								.r_addr2(instruction[20:16]), 
@@ -81,6 +78,7 @@ module instruction_decode
 								.r_data1(reg_data1), 
 								.r_data2(reg_data2));
 	sig_extend sig(.clk(clk),
+						.reset(reset),
 						.reg_in(instruction[15:0]), 		//toma el inmediato de 16bits y le realiza
 						.reg_out(sgn_extend_data_imm));	//la operacion de signo extendido
 	

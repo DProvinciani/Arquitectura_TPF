@@ -1,5 +1,72 @@
-INFO:sim:172 - Generating IP...
-Applying current project options...
-Finished applying current project options.
+Welcome to Xilinx CORE Generator.
+Help system initialized.
+The IP Catalog has been reloaded.
+Opening project file
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/coregen
+.cgp.
+Recustomize and Generate (Under Original Project Settings)INFO:sim:172 - Generating IP...
 Cancelled executing Tcl generator.
-Wrote CGP file for project 'dataMemory'.
+Recustomize and Generate (Under Original Project Settings)INFO:sim:172 - Generating IP...
+WARNING:sim - A core named 'instructionMemory' already exists in the project.
+   Output products for this core may be overwritten.
+Resolving generics for 'instructionMemory'...
+WARNING:sim - A core named 'instructionMemory' already exists in the project.
+   Output products for this core may be overwritten.
+Applying external generics to 'instructionMemory'...
+Delivering associated files for 'instructionMemory'...
+Delivering EJava files for 'instructionMemory'...
+Generating implementation netlist for 'instructionMemory'...
+INFO:sim - Pre-processing HDL files for 'instructionMemory'...
+Running synthesis for 'instructionMemory'
+Running ngcbuild...
+Writing VEO instantiation template for 'instructionMemory'...
+Writing Verilog behavioral simulation model for 'instructionMemory'...
+WARNING:sim - Overwriting existing file
+   /home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/
+   _cg/instructionMemory/doc/blk_mem_gen_v7_3_vinfo.html with file from view
+   xilinx_documentation
+Delivered 1 file into directory
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/instructionMemory
+Generating ASY schematic symbol...
+INFO:sim:949 - Finished generation of ASY schematic symbol.
+Generating metadata file...
+Regenerating ISE project file for 'instructionMemory'...
+Generating ISE project...
+XCO file found: instructionMemory.xco
+XMDF file found: instructionMemory_xmdf.tcl
+Adding
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/instructionMemory.asy -view all -origin_type imported
+Adding
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/instructionMemory.ngc -view all -origin_type created
+Checking file
+"/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_c
+g/instructionMemory.ngc" for project device match ...
+File
+"/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_c
+g/instructionMemory.ngc" device information matches project device.
+Adding
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/instructionMemory.v -view all -origin_type created
+INFO:HDLCompiler:1845 - Analyzing Verilog file
+   "/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp
+   /_cg/instructionMemory.v" into library work
+INFO:ProjectMgmt - Parsing design hierarchy completed successfully.
+Adding
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/instructionMemory.veo -view all -origin_type imported
+INFO:TclTasksC:2116 - The automatic calculation of top has been turned-off.
+   Please set the new top explicitly by running the "project set top" command.
+   To re-calculate the new top automatically, set the "Auto Implementation Top"
+   property to true.
+Top level has been set to "/instructionMemory"
+Generating README file...
+Generating FLIST file...
+INFO:sim:948 - Finished FLIST file generation.
+Launching README viewer...
+Moving files to output directory...
+Finished moving files to output directory
+Saved CGP file for project 'coregen'.
+Closed project file.
