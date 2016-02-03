@@ -20,23 +20,34 @@
 //////////////////////////////////////////////////////////////////////////////////
 module pipeline(
 	input wire clk,
-	input wire reset
+	input wire reset,
+	//////////////////////////// FOR TESTING
+	output wire [31:0] test_pc,
+	output wire [31:0] test_fetched_instruction,
+	output wire [31:0] test_fetched_instruction_post_IF_ID,
+	output wire [31:0] test_read_data1,
+	output wire [31:0] test_read_data2,
+	output wire [31:0] test_sign_extended,
+	output wire [31:0] test_add_result,
+	output wire [31:0] test_alu_result,
+	output wire [31:0] test_read_memory_data
     );
 	
-	wire [31:0] pc_branch;
+	wire MEM_branch_out; //Cable que viene desde la etapa MEM
 	wire PCSrc;
-	wire [31:0] pc_incrementado;
-	wire [31:0] instruction;
-	wire [31:0] TEST_pc_wire;
+	wire [31:0] IF_pc_incrementado;
+	wire [31:0] IF_instruction;
+	wire [31:0] IF_TEST_pc_wire;
 	
 	instruction_fetch IF(
-		.pc_branch(pc_branch),
+		.pc_branch(MEM_branch_out),
 		.PCSrc(PCSrc),
 		.reset(reset),
 		.clk(clk),
-		.pc_incrementado(pc_incrementado),
-		.instruction(instruction),
-		.pc_wire(TEST_pc_wire)
+		//Outputs
+		.pc_incrementado(IF_pc_incrementado),
+		.instruction(IF_instruction),
+		.pc_wire(IF_TEST_pc_wire)
     );
 	
 	wire [31:0] pc_incrementado_out;
@@ -44,15 +55,15 @@ module pipeline(
 	
 	latch_IF_ID IF_ID(
 	.clk(clk),
-	.pc_incrementado_in(pc_incrementado),
-	.instruction_in(instruction),
+	.pc_incrementado_in(IF_pc_incrementado),
+	.instruction_in(IF_instruction),
+	//Output
 	.pc_incrementado_out(pc_incrementado_out),
 	.instruction_out(instruction_out)
 	);
 	
 	wire RegWrite;
-	wire [4:0] mux_dst_out;
-	wire [4:0] mux_memToReg_out;
+	wire [31:0] WB_mux_memToReg_out;
 	wire [31:0] reg_data1_out;
 	wire [31:0] reg_data2_out;
 	wire [31:0] sgn_extend_data_imm_out;
@@ -68,14 +79,15 @@ module pipeline(
 	//wire ex_ALUOp1_out;
 	wire ex_ALUOp_out;
 	wire ex_ALUSrc_out;
+	wire [4:0] MEM_WB_mux_RegDst_EX_MEM_out;
 	
 	instruction_decode ID(
 		.clk(clk),
 		.reset(reset),
 		.RegWrite(RegWrite),
 		.instruction(instruction_out),
-		.address_write(mux_dst_out),
-		.data_write(mux_memToReg_out),
+		.address_write(MEM_WB_mux_RegDst_EX_MEM_out),
+		.data_write(WB_mux_memToReg_out),
 		.reg_data1(reg_data1_out),
 		.reg_data2(reg_data2_out),
 		.sgn_extend_data_imm(sgn_extend_data_imm_out),
@@ -183,7 +195,6 @@ module pipeline(
 	wire add_result_EX_MEM_out;
 	wire alu_result_EX_MEM_out;
 	wire r_data2_EX_MEM_out;
-	wire mux_RegDst_EX_MEM_out;
 	wire zero_EX_MEM_out;
 	wire wb_RegWrite_EX_MEM_out;
 	wire wb_MemtoReg_EX_MEM_out;
@@ -199,11 +210,6 @@ module pipeline(
 	.alu_result_in(alu_result_out),
 	.r_data2_in(reg2Out_out),
 	.mux_RegDst_in(muxRegDstOut_out),
-	/* Data signals OUTPUTS */
-	.add_result_out(add_result_EX_MEM_out),
-	.alu_result_out(alu_result_EX_MEM_out),
-	.r_data2_out(r_data2_EX_MEM_out),
-	.mux_RegDst_out(mux_RegDst_EX_MEM_out),
 	/* Control signals INPUTS*/
 	.zero_in(zero_out),
 	//Write back
@@ -213,8 +219,13 @@ module pipeline(
 	.m_Branch_in(m_Branch_out),
 	.m_MemRead_in(m_MemRead_out),
 	.m_MemWrite_in(m_MemWrite_out),
+	/* Data signals OUTPUTS */
+	.add_result_out(add_result_EX_MEM_out),
+	.alu_result_out(alu_result_EX_MEM_out),
+	.r_data2_out(r_data2_EX_MEM_out),
+	.mux_RegDst_out(mux_RegDst_EX_MEM_out),
 	/* Control signals OUTPUTS */
-	.zero_out(zero_out),
+	.zero_out(zero_EX_MEM_out),
 	//Write back
 	.wb_RegWrite_out(wb_RegWrite_EX_MEM_out),
 	.wb_MemtoReg_out(wb_MemtoReg_EX_MEM_out),
@@ -224,5 +235,66 @@ module pipeline(
 	.m_MemWrite_out(m_MemWrite_EX_MEM_out)
 	);
 	
+	wire [31:0] MEM_data_out;
+	wire [31:0] MEM_alu_out;
+	
+	data_access MEM(
+		.clk(clk),
+		.addr_in(alu_result_EX_MEM_out),
+		.write_data(r_data2_EX_MEM_out),
+		.mem_write(m_MemWrite_EX_MEM_out),
+		.zero(zero_EX_MEM_out),
+		.branch_in(m_Branch_EX_MEM_out),
+		//Output
+		.data_out(MEM_data_out),
+		.alu_out(MEM_alu_out),
+		.branch_out(MEM_branch_out)
+    );
+	
+	wire [31:0] MEM_WB_read_data_out;
+	wire [31:0] MEM_WB_alu_result_out;
+	wire [31:0] MEM_WB_mux_RegDst_out;
+	/* Control signals OUTPUTS */
+	//Write back
+	wire MEM_WB_wb_RegWrite_out;
+	wire MEM_WB_wb_MemtoReg_out;
+	
+	latch_MEM_WB MEM_WB(
+		.clk(clk),
+		/* Data signals INPUTS */
+		.read_data_in(MEM_data_out),
+		.alu_result_in(MEM_alu_out),
+		.mux_RegDst_in(mux_RegDst_EX_MEM_out),
+		/* Control signals INPUTS*/
+		//Write back
+		.wb_RegWrite_in(wb_RegWrite_EX_MEM_out),
+		.wb_MemtoReg_in(wb_MemtoReg_EX_MEM_out),
+		/* Data signals OUTPUTS */
+		.read_data_out(MEM_WB_read_data_out),
+		.alu_result_out(MEM_WB_alu_result_out),
+		.mux_RegDst_out(MEM_WB_mux_RegDst_out),
+		/* Control signals OUTPUTS */
+		//Write back
+		.wb_RegWrite_out(MEM_WB_wb_RegWrite_out),
+		.wb_MemtoReg_out(MEM_WB_wb_MemtoReg_out)
+	);
+	
+	write_back WB(
+	.clk(clk),
+	.mem_data(MEM_WB_read_data_out),
+	.ALU_data(MEM_WB_alu_result_out),
+	.MemtoReg(MEM_WB_wb_MemtoReg_out),
+	.data_out(WB_mux_memToReg_out)
+	);
+	
+	assign test_pc = IF_TEST_pc_wire;
+	assign test_fetched_instruction = IF_instruction;
+	assign test_fetched_instruction_post_IF_ID = instruction_out;
+	assign test_read_data1 = reg_data1_out;
+	assign test_read_data2 = reg_data2_out;
+	assign test_sign_extended = sgn_extend_data_imm_out;
+	assign test_add_result = add_result_out;
+	assign test_alu_result = alu_result_out;
+	assign test_read_memory_data = MEM_data_out;
 
 endmodule

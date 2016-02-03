@@ -38,8 +38,8 @@ module latch_MEM_WB
 	input wire wb_MemtoReg_in,
 	/* Control signals OUTPUTS */
 	//Write back
-	input wire wb_RegWrite_out,
-	input wire wb_MemtoReg_out
+	output wire wb_RegWrite_out,
+	output wire wb_MemtoReg_out
 
    );
 	/* Data REGISTERS */

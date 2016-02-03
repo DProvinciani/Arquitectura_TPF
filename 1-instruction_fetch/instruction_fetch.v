@@ -25,7 +25,6 @@ module instruction_fetch
 	(
 		input wire [B-1:0] pc_branch, 	//PC para tomar el salto
 		input wire PCSrc, 				//Senial de control para elegir el PC
-		//input wire enable,
 		input wire reset,
 		input wire clk,
 		output wire [B-1:0] pc_incrementado, //PC para enviar al registro IF/ID
