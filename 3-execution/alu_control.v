@@ -21,9 +21,17 @@
 module alu_control(
 	input [1:0] ALUOp,
 	input [5:0] funct,
-	output reg [3:0] ALUcontrolOut
+	output wire [3:0] ALUcontrolOut
 	);
-
+	
+	assign ALUcontrolOut = 	(ALUOp == 2'b00) ? 4'b0010 : //ADD
+									(ALUOp == 2'b01) ? 4'b0110 : //SUB
+									(	(funct == 6'b100000) ? 4'b0010 :
+										(funct == 6'b100010) ? 4'b0110 : //SUB
+										(funct == 6'b100100) ? 4'b0000 : //AND
+										(funct == 6'b100101) ? 4'b0001 : //OR
+										4'b0111); //SLT
+	/*														 
 	always @(*) begin
 		case (ALUOp)
 		2'b00: ALUcontrolOut <= 4'b0010; //ADD
@@ -39,4 +47,5 @@ module alu_control(
 				end
 		endcase
 	end
+	*/
 endmodule

@@ -27,21 +27,32 @@ module pipeline_tb;
 	// Inputs
 	reg clk;
 	reg reset;
-
-	// Outputs
-	wire [31:0] test_pc;
-	wire [31:0] test_fetched_instruction;
-	wire [31:0] test_fetched_instruction_post_IF_ID;
-	wire [31:0] test_read_data1;
-	wire [31:0] test_read_data2;
-	wire [31:0] test_sign_extended;
-	wire [31:0] test_add_result;
-	wire [31:0] test_alu_result;
-	wire [31:0] test_read_memory_data;
-	wire [4:0] test_MEM_WB_mux_RegDst_EX_MEM_out;
-	wire [4:0] test_inst_15_11_out;
-	wire [4:0] test_inst_20_16_out;
-	wire [31:0] test_alu_result_EX_MEM_out;
+	
+	//IF (salidas)
+	////Datos
+	wire [31:0] test_pc_incrementado_IF;
+	wire [31:0] test_instruction_IF;
+	
+	//IF-ID (salidas)
+	////Datos
+	wire [31:0] test_pc_incrementado_IF_ID;
+	wire [31:0] test_instruction_IF_ID;
+	
+	//ID (salidas)
+	////Control
+	wire test_wb_RegWrite_ID;
+	wire test_wb_MemtoReg_ID;
+	//////MEM
+	wire test_m_Branch_ID;
+	wire test_m_MemRead_ID;
+	wire test_m_MemWrite_ID;
+	//////EX
+	wire test_ex_RegDst_ID;
+	wire [1:0] test_ex_ALUOp_ID;
+	wire test_ex_ALUSrc_ID;
+	////Datos
+	wire [31:0] test_sign_extend_ID;
+	
 	//ID-EX
 	////Control signals
 	wire test_wb_RegWrite_ID_EX_out;
@@ -59,23 +70,55 @@ module pipeline_tb;
 	wire [31:0] test_sign_extended_ID_EX_out;
 	wire [4:0] test_inst_15_11_ID_EX_out;
 	wire [4:0] test_inst_20_16_ID_EX_out;
+	
+	//EX
+	////Data signals
+	wire [31:0] test_alu_result_EX;
+		
+	//EX-MEM
+	////Data signals
+	wire [31:0] test_alu_result_EX_MEM;
+	
+	//MEM-WB
+	////Data signals
+	wire [31:0] test_mem_data_MEM_WB;
+	wire [4:1] test_reg_dest_addr_MEM_WB;
+	////Control
+	wire test_memToReg_MEM_WB;
+	
+	//WB
+	////Data signals
+	wire [31:0] test_mux_wb_data_WB;
+	
 	// Instantiate the Unit Under Test (UUT)
 	pipeline uut (
 		.clk(clk), 
-		.reset(reset), 
-		//.test_pc(test_pc), 
-		.test_fetched_instruction(test_fetched_instruction), 
-		.test_fetched_instruction_post_IF_ID(test_fetched_instruction_post_IF_ID),
-		//.test_read_data1(test_read_data1), 
-		//.test_read_data2(test_read_data2), 
-		//.test_sign_extended(test_sign_extended), 
-		//.test_add_result(test_add_result), 
-		//.test_alu_result(test_alu_result), 
-		//.test_read_memory_data(test_read_memory_data),
-		//.test_MEM_WB_mux_RegDst_EX_MEM_out(test_MEM_WB_mux_RegDst_EX_MEM_out),
-		//.test_inst_15_11_out(test_inst_15_11_out),
-		//.test_inst_20_16_out(test_inst_20_16_out),
-		//.test_alu_result_EX_MEM_out(test_alu_result_EX_MEM_out),
+		.reset(reset),
+		//IF (salidas)
+		////Datos
+		.test_pc_incrementado_IF(test_pc_incrementado_IF),
+		.test_instruction_IF(test_instruction_IF),
+		
+		//IF-ID (salidas)
+		////Datos
+		.test_pc_incrementado_IF_ID(test_pc_incrementado_IF_ID),
+		.test_instruction_IF_ID(test_instruction_IF_ID),
+		
+		//ID (salidas)
+		////Control
+		.test_wb_RegWrite_ID(test_wb_RegWrite_ID),
+		.test_wb_MemtoReg_ID(test_wb_MemtoReg_ID),
+		//////MEM
+		.test_m_Branch_ID(test_m_Branch_ID),
+		.test_m_MemRead_ID(test_m_MemRead_ID),
+		.test_m_MemWrite_ID(test_m_MemWrite_ID),
+		//////EX
+		.test_ex_RegDst_ID(test_ex_RegDst_ID),
+		.test_ex_ALUOp_ID(test_ex_ALUOp_ID),
+		.test_ex_ALUSrc_ID(test_ex_ALUSrc_ID),
+		////Datos
+		.test_sign_extend_ID(test_sign_extend_ID),
+		
 		//ID-EX
 		////Control signals
 		.test_wb_RegWrite_ID_EX_out(test_wb_RegWrite_ID_EX_out),
@@ -92,7 +135,25 @@ module pipeline_tb;
 		.test_data2_ID_EX_out(test_data2_ID_EX_out),
 		.test_sign_extended_ID_EX_out(test_sign_extended_ID_EX_out),
 		.test_inst_15_11_ID_EX_out(test_inst_15_11_ID_EX_out),
-		.test_inst_20_16_ID_EX_out(test_inst_20_16_ID_EX_out)
+		.test_inst_20_16_ID_EX_out(test_inst_20_16_ID_EX_out),
+		
+		//EX
+		////Data signals
+		.test_alu_result_EX(test_alu_result_EX),
+		
+		//EX-MEM
+		////Data signals
+		.test_alu_result_EX_MEM(test_alu_result_EX_MEM),
+		
+		//MEM-WB
+		////Data signals
+		.test_mem_data_MEM_WB(test_mem_data_MEM_WB),
+		.test_reg_dest_addr_MEM_WB(test_reg_dest_addr_MEM_WB),
+		////Control signals
+		.test_memToReg_MEM_WB(test_memToReg_MEM_WB),
+		
+		//WB
+		.test_mux_wb_data_WB(test_mux_wb_data_WB)
 	);
 
 	initial begin

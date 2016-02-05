@@ -25,17 +25,29 @@ module pipeline
 	(
 	input wire clk,
 	input wire reset,
-	//////////////////////////// FOR TESTING
-	output wire [31:0] test_pc,
-	output wire [31:0] test_fetched_instruction,
-	output wire [31:0] test_fetched_instruction_post_IF_ID,
-	output wire [31:0] test_read_data1,
-	output wire [31:0] test_read_data2,
-	output wire [31:0] test_sign_extended,
-	output wire [31:0] test_add_result,
-	output wire [31:0] test_alu_result,
-	output wire [31:0] test_read_memory_data,
-	//ID-EX
+	//IF (salidas)
+	////Datos
+	output wire [B-1:0] test_pc_incrementado_IF,
+	output wire [B-1:0] test_instruction_IF,
+	//IF-ID (salidas)
+	////Datos
+	output wire [B-1:0] test_pc_incrementado_IF_ID,
+	output wire [B-1:0] test_instruction_IF_ID,
+	//ID (salidas)
+	////Control
+	output wire test_wb_RegWrite_ID,
+	output wire test_wb_MemtoReg_ID,
+	//////MEM
+	output wire test_m_Branch_ID,
+	output wire test_m_MemRead_ID,
+	output wire test_m_MemWrite_ID,
+	//////EX
+	output wire test_ex_RegDst_ID,
+	output wire [1:0] test_ex_ALUOp_ID,
+	output wire test_ex_ALUSrc_ID,
+	////Datos
+	output wire [31:0] test_sign_extend_ID,
+	//ID-EX (salidas)
 	////Control signals
 	output wire test_wb_RegWrite_ID_EX_out,
 	output wire test_wb_MemtoReg_ID_EX_out,
@@ -52,10 +64,21 @@ module pipeline
 	output wire [31:0] test_sign_extended_ID_EX_out,
 	output wire [4:0] test_inst_15_11_ID_EX_out,
 	output wire [4:0] test_inst_20_16_ID_EX_out,
+	//EX
+	////Data signals
+	output wire [B-1:0] test_alu_result_EX,
 	//EX-MEM
-	output wire [B-1:0] test_alu_result_EX_MEM_out,
+	////Data signals
+	output wire [B-1:0] test_alu_result_EX_MEM,
 	//MEM-WB
-	output wire [4:0]  test_MEM_WB_mux_RegDst_EX_MEM_out
+	output wire [B-1:0] test_mem_data_MEM_WB,
+	output wire [4:0]  test_reg_dest_addr_MEM_WB,
+	////Control signals
+	output wire test_memToReg_MEM_WB,
+	
+	//WB
+	////Data signals
+	output wire [B-1:0] test_mux_wb_data_WB
     );
 	
 	wire [B-1:0] add_result_EX_MEM_out; //Cable que viene desde la etapa MEM
@@ -98,7 +121,7 @@ module pipeline
 	wire MEM_WB_wb_RegWrite_out;
 	//Data signals input ID
 	wire [B-1:0] WB_mux_memToReg_out;
-	wire [4:0] MEM_WB_mux_RegDst_EX_MEM_out;
+	wire [4:0] MEM_WB_mux_RegDst_out;
 	//Data signals output ID
 	wire [B-1:0] reg_data1_out;
 	wire [B-1:0] reg_data2_out;
@@ -115,8 +138,6 @@ module pipeline
 	wire m_MemWrite_out;
 	////EX
 	wire ex_RegDst_out;
-	//wire ex_ALUOp0_out;
-	//wire ex_ALUOp1_out;
 	wire [1:0] ex_ALUOp_out;
 	wire ex_ALUSrc_out;
 	
@@ -128,7 +149,7 @@ module pipeline
 		.RegWrite(MEM_WB_wb_RegWrite_out),
 		//Data signals input
 		.instruction(instruction_out),
-		.address_write(MEM_WB_mux_RegDst_EX_MEM_out),
+		.address_write(MEM_WB_mux_RegDst_out),
 		.data_write(WB_mux_memToReg_out),
 		//Control signals output
 		.wb_RegWrite_out(wb_RegWrite_out),
@@ -219,9 +240,9 @@ module pipeline
 	
 	third_step EX(
 		//Control signals input
-		.aluSrc(ex_ALUSrc_out),
+		.aluSrc(ex_ALUSrc_ID_EX_out),
 		.ALUOp(ex_ALUOp_ID_EX_out),
-		.regDst(ex_RegDst_out),
+		.regDst(ex_RegDst_ID_EX_out),
 		//Data signals input
 		.pcPlusFour(pc_next_out),
 		.reg1(r_data1_out),
@@ -239,6 +260,7 @@ module pipeline
 	
 	wire [B-1:0] alu_result_EX_MEM_out;
 	wire [B-1:0] r_data2_EX_MEM_out;
+	wire [4:0] MEM_WB_mux_RegDst_EX_MEM_out;
 	wire zero_EX_MEM_out;
 	wire wb_RegWrite_EX_MEM_out;
 	wire wb_MemtoReg_EX_MEM_out;
@@ -247,7 +269,6 @@ module pipeline
 	wire m_MemWrite_EX_MEM_out;
 	wire [4:0] mux_RegDst_EX_MEM_out;
 	
-//ACA NOS QUEDAMOS HAY MUCHOS ERRORES DE REPETIR LAS SEALES QUE ESTAMOS SOLUCIONANDO
 	latch_EX_MEM EX_MEM(
 	.clk(clk),
 	.reset(reset),
@@ -269,7 +290,7 @@ module pipeline
 	.add_result_out(add_result_EX_MEM_out),
 	.alu_result_out(alu_result_EX_MEM_out),
 	.r_data2_out(r_data2_EX_MEM_out),
-	.mux_RegDst_out(mux_RegDst_EX_MEM_out),
+	.mux_RegDst_out(MEM_WB_mux_RegDst_EX_MEM_out),
 	/* Control signals OUTPUTS */
 	.zero_out(zero_EX_MEM_out),
 	//Write back
@@ -310,7 +331,7 @@ module pipeline
 		/* Data signals INPUTS */
 		.read_data_in(MEM_data_out),
 		.alu_result_in(alu_result_EX_MEM_out),
-		.mux_RegDst_in(mux_RegDst_EX_MEM_out),
+		.mux_RegDst_in(MEM_WB_mux_RegDst_EX_MEM_out),
 		/* Control signals INPUTS*/
 		//Write back
 		.wb_RegWrite_in(wb_RegWrite_EX_MEM_out),
@@ -318,7 +339,7 @@ module pipeline
 		/* Data signals OUTPUTS */
 		.read_data_out(MEM_WB_read_data_out),
 		.alu_result_out(MEM_WB_alu_result_out),
-		.mux_RegDst_out(MEM_WB_mux_RegDst_EX_MEM_out),
+		.mux_RegDst_out(MEM_WB_mux_RegDst_out),
 		/* Control signals OUTPUTS */
 		//Write back
 		.wb_RegWrite_out(MEM_WB_wb_RegWrite_out),
@@ -333,19 +354,30 @@ module pipeline
 	.data_out(WB_mux_memToReg_out)
 	);
 	
-	assign test_pc = IF_TEST_pc_wire;
-	assign test_fetched_instruction = IF_instruction;
-	assign test_fetched_instruction_post_IF_ID = instruction_out;
-	assign test_read_data1 = reg_data1_out;
-	assign test_read_data2 = reg_data2_out;
-	assign test_sign_extended = sgn_extend_data_imm_out;
-	assign test_add_result = add_result_out;
-	assign test_alu_result = alu_result_out;
-	assign test_alu_result_EX_MEM_out = alu_result_EX_MEM_out;
-	assign test_read_memory_data = MEM_data_out;
-	assign test_MEM_WB_mux_RegDst_EX_MEM_out = MEM_WB_mux_RegDst_EX_MEM_out;
-	assign test_inst_15_11_out = inst_15_11_out;
-	assign test_inst_20_16_out = inst_20_16_out;
+	//IF (salidas)
+	////Datos
+	assign test_pc_incrementado_IF = IF_pc_incrementado;
+	assign test_instruction_IF = IF_instruction;
+	
+	//IF-ID (salidas)
+	////Datos
+	assign test_pc_incrementado_IF_ID = pc_incrementado_out;
+	assign test_instruction_IF_ID = instruction_out;
+	
+	//ID (salidas)
+	////Control
+	assign test_wb_RegWrite_ID = wb_RegWrite_out;
+	assign test_wb_MemtoReg_ID = wb_MemtoReg_out;
+	//////MEM
+	assign test_m_Branch_ID = m_Branch_out;
+	assign test_m_MemRead_ID = m_MemRead_out;
+	assign test_m_MemWrite_ID = m_MemWrite_out;
+	//////EX
+	assign test_ex_RegDst_ID = ex_RegDst_out;
+	assign test_ex_ALUOp_ID = ex_ALUOp_out;
+	assign test_ex_ALUSrc_ID = ex_ALUSrc_out;
+	////Datos
+	assign test_sign_extend_ID = sgn_extend_data_imm_out;	
 	
 	//ID-EX
 	////Control signals
@@ -364,5 +396,25 @@ module pipeline
 	assign test_sign_extended_ID_EX_out = sign_ext_out;
 	assign test_inst_15_11_ID_EX_out = inst_15_11_out;
 	assign test_inst_20_16_ID_EX_out = inst_20_16_out;
+	
+	//EX
+	////Data signals
+	assign test_alu_result_EX = alu_result_out;
+	
+	//EX-MEM
+	////Data signals
+	assign test_alu_result_EX_MEM = alu_result_EX_MEM_out;
+	
+	//MEM-WB
+	////Data signals
+	assign test_mem_data_MEM_WB = MEM_WB_read_data_out;
+	assign test_reg_dest_addr_MEM_WB = MEM_WB_mux_RegDst_out;
+	////Control
+	assign test_memToReg_MEM_WB = MEM_WB_wb_MemtoReg_out;
+	
+	//WB
+	////Data signals
+	assign test_mux_wb_data_WB = WB_mux_memToReg_out;
+	
 	
 endmodule

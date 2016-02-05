@@ -45,7 +45,7 @@ module data_access
 		assign we[1]=mem_write;
 		assign we[0]=mem_write;
 		
-		dataMemory dm(	.clka(clk), 
+		dataMemory dm(	.clka(~clk), 
 							.rsta(1'b0),
 							.ena(1'b1),
 							.wea(we),

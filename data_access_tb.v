@@ -34,7 +34,6 @@ module data_access_tb;
 
 	// Outputs
 	wire [31:0] data_out;
-	wire [31:0] addr_out;
 	wire branch_out;
 
 	// Instantiate the Unit Under Test (UUT)
@@ -46,7 +45,6 @@ module data_access_tb;
 		.zero(zero), 
 		.branch_in(branch_in), 
 		.data_out(data_out), 
-		.alu_out(addr_out), 
 		.branch_out(branch_out)
 	);
 

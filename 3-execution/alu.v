@@ -18,15 +18,25 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module alu #(parameter bits = 32)
+module alu #(parameter B = 32)
 	(
-	input wire [bits-1:0] op1,
-	input wire [bits-1:0] op2,
+	input wire [B-1:0] op1,
+	input wire [B-1:0] op2,
 	input wire [3:0] alu_control,
-	output reg [bits-1:0] result,
-	output reg zero
+	output wire [B-1:0] result,
+	output wire zero
 	);
 	
+	assign result = 	(alu_control == 4'b0010) ? op1 + op2 : //ADD
+							(alu_control == 4'b0110) ? op1 - op2 : //SUB
+							(alu_control == 4'b0000) ? op1 & op2 : //AND
+							(alu_control == 4'b0001) ? op1 | op2 : //OR
+							(alu_control == 4'b0111) ? op1 < op2 : //SLT
+							32'b11111111_11111111_11111111_11111111;
+	
+	assign zero = (result == 0) ? 1'b1 : 1'b0;
+							
+	/*
 	always @(*) begin
 		case (alu_control)
 			3'b0010: result = op1 + op2; //ADD
@@ -40,4 +50,5 @@ module alu #(parameter bits = 32)
 		else
 			zero = 0;
 	end
+	*/
 endmodule

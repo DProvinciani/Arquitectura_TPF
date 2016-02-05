@@ -26,13 +26,13 @@ module latch_MEM_WB
 	input wire clk,
 	input wire reset,
 	/* Data signals INPUTS */
-	input wire [B-1:0]read_data_in,
-	input wire [B-1:0]alu_result_in,
-	input wire [W-1:0]mux_RegDst_in,
+	input wire [B-1:0] read_data_in,
+	input wire [B-1:0] alu_result_in,
+	input wire [W-1:0] mux_RegDst_in,
 	/* Data signals OUTPUTS */
-	output wire [B-1:0]read_data_out,
-	output wire [B-1:0]alu_result_out,
-	output wire [W-1:0]mux_RegDst_out,
+	output wire [B-1:0] read_data_out,
+	output wire [B-1:0] alu_result_out,
+	output wire [W-1:0] mux_RegDst_out,
 	/* Control signals INPUTS*/
 	//Write back
 	input wire wb_RegWrite_in,

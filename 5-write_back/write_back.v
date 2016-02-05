@@ -32,8 +32,8 @@ module write_back
    );
 	mux wb_mux (
 	.select(MemtoReg),
-	.item_a(mem_data),
-	.item_b(ALU_data),
+	.item_a(ALU_data),
+	.item_b(mem_data),
 	.signal(data_out)
 	);
 	

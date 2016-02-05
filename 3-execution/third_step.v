@@ -20,9 +20,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 module third_step(
 		/*Control signals input*/
-		input wire aluSrc,		// TODO: Borrar al terminar el testbench
-		input wire [1:0] ALUOp,	// TODO: Borrar al terminar el testbench
-		input wire regDst,		// TODO: Borrar al terminar el testbench
+		input wire aluSrc,		
+		input wire [1:0] ALUOp,	
+		input wire regDst,		
 		/*Data signals input*/
 		input wire [31:0] pcPlusFour,
 		input wire [31:0] reg1,
@@ -47,7 +47,7 @@ module third_step(
 	
 	wire [31:0] muxAluSrc2Out;
 	
-	mux #(32) muxAluSrc2 (
+	mux muxAluSrc2 (
 		.select(aluSrc),
 		.item_a(reg2), 
 		.item_b(signExtend), 
@@ -62,7 +62,7 @@ module third_step(
 		.ALUcontrolOut(ALUcontrolOut)
 	);
 	
-	alu #(32) aluModule (
+	alu aluModule (
 		.op1(reg1),
 		.op2(muxAluSrc2Out),
 		.alu_control(ALUcontrolOut),

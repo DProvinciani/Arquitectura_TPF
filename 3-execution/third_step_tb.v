@@ -80,7 +80,7 @@ module third_step_tb;
 		#10;
 		
 		signExtend = 32'b00000000000000000000000000100010;
-		ALUOp = 2'b10;
+		ALUOp = 2'b00;
 		#10;
 		signExtend = 32'b00000000000000000000000000100100;
 		aluSrc = 1;

@@ -37,14 +37,14 @@ module instruction_fetch
 												
 	//mux mux_pc_src(.item_a(pc_incrementado), .item_b(pc_branch), .select(PCSrc), .signal(pc_wire));
 	adder add (.value1(pc), .value2(4), .result(pc_incrementado));
-	instructionMemory im (.addra(pc), .clka(clk), .douta(instruction), .ena(1'b1));
+	instructionMemory im (.addra(pc), .clka(~clk), .douta(instruction), .ena(1'b1));
 	
 	always@(posedge clk or posedge reset)
 	if (reset == 1) pc <= 0;		//Si entro por reset, resetea el PC
 	else
 	begin
 		if (PCSrc == 1) pc <= pc_branch;
-		else pc <= pc_incrementado;						//Si entro por clk, actualiza el PC con el nuevo valor
+		else pc <= pc_incrementado;			//Si entro por clk, actualiza el PC con el nuevo valor
 	end
 	
 	assign pc_wire = pc;

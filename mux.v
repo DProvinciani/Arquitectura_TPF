@@ -26,17 +26,9 @@ module mux
 		input wire select,
 		input wire [B-1:0] item_a,
 		input wire [B-1:0] item_b,
-		output reg [B-1:0] signal
+		output wire [B-1:0] signal
    );
 	
-	//reg [B-1:0] signal;
-	
-	always @(select)
-	begin
-		case (select)
-			1'b0: signal = item_a;
-			default: signal = item_b;
-		endcase
-	end
+	assign signal = ( select == 0 )? item_a : item_b;
 
 endmodule

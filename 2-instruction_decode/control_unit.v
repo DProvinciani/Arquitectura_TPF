@@ -39,10 +39,11 @@ module control_unit
 		output wire ex_ALUSrc_out
     );
 		
-		reg [3:0] ex_ctrl_sgnl;   //aluop1, aluop0, regdst, alusrc
-		reg [2:0] mem_ctrl_sgnl;	//branch, mem_read, mem_write 
-		reg [1:0] wb_ctrl_sgnl;		//reg_write, mem_to_reg
+		wire [3:0] ex_ctrl_sgnl;   //aluop1, aluop0, regdst, alusrc
+		wire [2:0] mem_ctrl_sgnl;	//branch, mem_read, mem_write 
+		wire [1:0] wb_ctrl_sgnl;		//reg_write, mem_to_reg
 		
+		/*
 		always @(posedge clk)
 			begin
 			case (opcode)
@@ -72,9 +73,23 @@ module control_unit
 					end
 				endcase
 				end
+				*/
 		
 		//Asignando las señales de control internas con las señales de salida
 		//Execution
+		assign ex_ctrl_sgnl = 	(opcode == 6'b000_000) ? 4'b1010 :
+										(opcode == 6'b100_011) ? 4'b0001 :
+										(opcode == 6'b101_011) ? 4'b0001 :
+										4'b0100;
+		assign mem_ctrl_sgnl = 	(opcode == 6'b000_000) ? 3'b000 :
+										(opcode == 6'b100_011) ? 3'b010 :
+										(opcode == 6'b101_011) ? 3'b001 :
+										3'b100;
+		assign wb_ctrl_sgnl = 	(opcode == 6'b000_000) ? 2'b10 :
+										(opcode == 6'b100_011) ? 2'b11 :
+										(opcode == 6'b101_011) ? 2'b00 :
+										2'b00;
+		
 		assign ex_ALUOp_out = ex_ctrl_sgnl[3:2];
 		assign ex_RegDst_out = ex_ctrl_sgnl[1];
 		assign ex_ALUSrc_out = ex_ctrl_sgnl[0];

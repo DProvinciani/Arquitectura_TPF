@@ -54,11 +54,11 @@ module instruction_fetch_tb;
 		clk = 0;
 
 		// Wait 100 ns for global reset to finish
-		#100;
+		#10;
       	
 		// Add stimulus here
-		#10 reset = 1;
-		#5 reset = 0;
+		#5 reset = 1;
+		#2 reset = 0;
 		//#5 pc_branch = 10;
 		//#5 PCSrc = 1;
 		//#5 PCSrc = 0;

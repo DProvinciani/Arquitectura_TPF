@@ -19,21 +19,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module sig_extend(
-	input [15:0]reg_in,
-	output reg signed [31:0]reg_out,
-	input wire clk,
-	input wire reset
+	input [15:0] reg_in,
+	output [31:0] reg_out
     );
 	
-	always @(posedge clk, posedge reset)
-	begin
-		if (reset)
-		begin
-			reg_out <= 0; 
-		end
-		else
-		begin 
-			reg_out <= $signed(reg_in);
-		end
-	end
+	assign reg_out = {{16{reg_in[15]}}, reg_in};
+	
 endmodule

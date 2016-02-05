@@ -77,8 +77,8 @@ module instruction_decode
 								.w_addr(address_write), .w_data(data_write), 
 								.r_data1(reg_data1), 
 								.r_data2(reg_data2));
-	sig_extend sig(.clk(clk),
-						.reset(reset),
+	sig_extend sig(//.clk(clk),
+						//.reset(reset),
 						.reg_in(instruction[15:0]), 		//toma el inmediato de 16bits y le realiza
 						.reg_out(sgn_extend_data_imm));	//la operacion de signo extendido
 	
