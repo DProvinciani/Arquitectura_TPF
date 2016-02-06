@@ -27,6 +27,7 @@ module pipeline_tb;
 	// Inputs
 	reg clk;
 	reg reset;
+	integer ciclo;
 	
 	//IF (salidas)
 	////Datos
@@ -82,7 +83,7 @@ module pipeline_tb;
 	//MEM-WB
 	////Data signals
 	wire [31:0] test_mem_data_MEM_WB;
-	wire [4:1] test_reg_dest_addr_MEM_WB;
+	wire [4:0] test_reg_dest_addr_MEM_WB;
 	////Control
 	wire test_memToReg_MEM_WB;
 	
@@ -160,6 +161,7 @@ module pipeline_tb;
 		// Initialize Inputs
 		clk = 0;
 		reset = 1;
+		ciclo = 0;
 
 		// Wait 100 ns for global reset to finish
 
@@ -172,7 +174,10 @@ module pipeline_tb;
 	always
 		begin
 			#1
-			clk=~clk;	
+			clk=~clk;
+			#1
+			clk=~clk;
+			ciclo = ciclo + 1;
 		end
       
 endmodule
