@@ -20,7 +20,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 module pipeline
 	#(
-		parameter B=32 // ancho de la direccion (PC)
+		parameter B=32, // ancho de la direccion (PC)
+		parameter W=5
 	)
 	(
 	input wire clk,
@@ -75,346 +76,345 @@ module pipeline
 	output wire [4:0]  test_reg_dest_addr_MEM_WB,
 	////Control signals
 	output wire test_memToReg_MEM_WB,
-	
 	//WB
 	////Data signals
 	output wire [B-1:0] test_mux_wb_data_WB
     );
 	
-	wire [B-1:0] add_result_EX_MEM_out; //Cable que viene desde la etapa MEM
-	wire PCSrc;							//1 si tomamos el salto, 0 en caso contrario
-	wire [B-1:0] IF_pc_incrementado; //salida del modulo IF
-	wire [B-1:0] IF_instruction;		//salida del modulo IF
-	wire [B-1:0] IF_TEST_pc_wire;		//SACAR!
+	//IF
+	wire [B-1:0] add_result_EXMEM; 	//Cable que viene desde EXMEM
+	wire pcSrc_MEM;						//1 si tomamos el salto, 0 en caso contrario
+	wire [B-1:0] pc_incrementado_IF; //salida del modulo IF
+	wire [B-1:0] instruction_IF;		//salida del modulo IF
 	
 	instruction_fetch IF(
 		.clk(clk),
 		.reset(reset),
 		//Inputs
 		////Data
-		.pc_branch(add_result_EX_MEM_out),	
+		.pc_branch(add_result_EXMEM),	
 		////Control
-		.PCSrc(PCSrc),
+		.PCSrc(pcSrc_MEM),
 		//Outputs
 		////Data
-		.pc_incrementado(IF_pc_incrementado),
-		.instruction(IF_instruction),
-		.pc_wire(IF_TEST_pc_wire)			//SACAR!
+		.pc_incrementado(pc_incrementado_IF),
+		.instruction(instruction_IF)
     );
 	
-	//Seniales de salida de latch IF-ID
-	wire [B-1:0] pc_incrementado_out;
-	wire [B-1:0] instruction_out;
+	//IF-ID
+	//Data OUTPUT
+	wire [B-1:0] pc_incrementado_IFID;
+	wire [B-1:0] instruction_IFID;
 	
 	latch_IF_ID IF_ID(
-	//Input
 	.clk(clk),
 	.reset(reset),
-	.pc_incrementado_in(IF_pc_incrementado),
-	.instruction_in(IF_instruction),
-	//Output
-	.pc_incrementado_out(pc_incrementado_out),
-	.instruction_out(instruction_out)
+	//Data INPUT
+	.pc_incrementado_in(pc_incrementado_IF),
+	.instruction_in(instruction_IF),
+	//Data OUTPUT
+	.pc_incrementado_out(pc_incrementado_IFID),
+	.instruction_out(instruction_IFID)
 	);
 	
-	//Control signals input ID
-	wire MEM_WB_wb_RegWrite_out;
-	//Data signals input ID
-	wire [B-1:0] WB_mux_memToReg_out;
-	wire [4:0] MEM_WB_mux_RegDst_out;
-	//Data signals output ID
-	wire [B-1:0] reg_data1_out;
-	wire [B-1:0] reg_data2_out;
-	wire [B-1:0] sgn_extend_data_imm_out;
-	wire [4:0] rd_out;
-	wire [4:0] rt_out;
-	//Control signals output ID
+	//ID
+	//Data INPUT
+	wire [B-1:0] data_to_write_WB;
+	wire [W-1:0] reg_dest_addr_MEMWB;
+	//Control INPUT
+	wire wb_RegWrite_MEMWB;
+	//Data OUTPUT
+	wire [B-1:0] reg_data1_ID;
+	wire [B-1:0] reg_data2_ID;
+	wire [B-1:0] sgn_extend_ID;
+	wire [W-1:0] instruction_15_11_ID;
+	wire [W-1:0] instruction_20_16_ID;
+	//Control OUTPUT
 	////WB
-	wire wb_RegWrite_out;
-	wire wb_MemtoReg_out;
+	wire wb_RegWrite_ID;
+	wire wb_MemtoReg_ID;
 	////MEM
-	wire m_Branch_out;
-	wire m_MemRead_out;
-	wire m_MemWrite_out;
+	wire m_Branch_ID;
+	wire m_MemRead_ID;
+	wire m_MemWrite_ID;
 	////EX
-	wire ex_RegDst_out;
-	wire [1:0] ex_ALUOp_out;
-	wire ex_ALUSrc_out;
-	
+	wire ex_RegDst_ID;
+	wire [1:0] ex_ALUOp_ID;
+	wire ex_ALUSrc_ID;
 	
 	instruction_decode ID(
 		.clk(clk),
 		.reset(reset),
-		//Control signals input
-		.RegWrite(MEM_WB_wb_RegWrite_out),
-		//Data signals input
-		.instruction(instruction_out),
-		.address_write(MEM_WB_mux_RegDst_out),
-		.data_write(WB_mux_memToReg_out),
-		//Control signals output
-		.wb_RegWrite_out(wb_RegWrite_out),
-		.wb_MemtoReg_out(wb_MemtoReg_out),
-		.m_Branch_out(m_Branch_out),
-		.m_MemRead_out(m_MemRead_out),
-		.m_MemWrite_out(m_MemWrite_out),
-		.ex_RegDst_out(ex_RegDst_out),
-		.ex_ALUOp_out(ex_ALUOp_out),
-		.ex_ALUSrc_out(ex_ALUSrc_out),
-		//Data signals output
-		.reg_data1(reg_data1_out),
-		.reg_data2(reg_data2_out),
-		.sgn_extend_data_imm(sgn_extend_data_imm_out),
-		.rd(rd_out),
-		.rt(rt_out)
+		//Control INPUT
+		.RegWrite(wb_RegWrite_MEMWB),
+		//Data INPUT
+		.instruction(instruction_IFID),
+		.address_write(reg_dest_addr_MEMWB),
+		.data_write(data_to_write_WB),
+		//Control OUTPUT
+		.wb_RegWrite_out(wb_RegWrite_ID),
+		.wb_MemtoReg_out(wb_MemtoReg_ID),
+		.m_Branch_out(m_Branch_ID),
+		.m_MemRead_out(m_MemRead_ID),
+		.m_MemWrite_out(m_MemWrite_ID),
+		.ex_RegDst_out(ex_RegDst_ID),
+		.ex_ALUOp_out(ex_ALUOp_ID),
+		.ex_ALUSrc_out(ex_ALUSrc_ID),
+		//Data OUTPUT
+		.reg_data1(reg_data1_ID),
+		.reg_data2(reg_data2_ID),
+		.sgn_extend_data_imm(sgn_extend_ID),
+		.rd(instruction_15_11_ID),
+		.rt(instruction_20_16_ID)
     );
 	
-	//ID-EX Control signals
-	//wire wb_RegWrite_in;
-	//wire wb_MemtoReg_in;
-	//wire m_Branch_in;
-	//wire m_MemRead_in;
-	//wire m_MemWrite_in;
-	//wire ex_RegDst_in;
-	//wire [1:0] ex_ALUOp_in;
-	//wire ex_ALUSrc_in;
-	wire wb_RegWrite_ID_EX_out;
-	wire wb_MemtoReg_ID_EX_out;
-	wire m_Branch_ID_EX_out;
-	wire m_MemRead_ID_EX_out;
-	wire m_MemWrite_ID_EX_out;
-	wire ex_RegDst_ID_EX_out;
-	wire [1:0] ex_ALUOp_ID_EX_out;
-	wire ex_ALUSrc_ID_EX_out;
-	//ID-EX Data signals
-	wire [B-1:0] pc_next_out;
-	wire [B-1:0] r_data1_out;
-	wire [B-1:0] r_data2_out;
-	wire [B-1:0] sign_ext_out;
-	wire [4:0] inst_20_16_out;
-	wire [4:0] inst_15_11_out;
-
+	//ID-EX 
+	////Control
+	wire wb_RegWrite_IDEX;
+	wire wb_MemtoReg_IDEX;
+	wire m_Branch_IDEX;
+	wire m_MemRead_IDEX;
+	wire m_MemWrite_IDEX;
+	wire ex_RegDst_IDEX;
+	wire [1:0] ex_ALUOp_IDEX;
+	wire ex_ALUSrc_IDEX; 
+	////Data
+	wire [B-1:0] pc_incrementado_IDEX;
+	wire [B-1:0] reg_data1_IDEX;
+	wire [B-1:0] reg_data2_IDEX;
+	wire [B-1:0] sgn_extend_IDEX;
+	wire [W-1:0] instruction_20_16_IDEX;
+	wire [W-1:0] instruction_15_11_IDEX;
 	
 	latch_ID_EX ID_EX(
 	.clk(clk),
 	.reset(reset),
 	//Control signals input
-	.wb_RegWrite_in(wb_RegWrite_out),
-	.wb_MemtoReg_in(wb_MemtoReg_out),
-	.m_Branch_in(m_Branch_out),
-	.m_MemRead_in(m_MemRead_out),
-	.m_MemWrite_in(m_MemWrite_out),
-	.ex_RegDst_in(ex_RegDst_out),
-	.ex_ALUOp_in(ex_ALUOp_out),
-	.ex_ALUSrc_in(ex_ALUSrc_out),
+	.wb_RegWrite_in(wb_RegWrite_ID),
+	.wb_MemtoReg_in(wb_MemtoReg_ID),
+	.m_Branch_in(m_Branch_ID),
+	.m_MemRead_in(m_MemRead_ID),
+	.m_MemWrite_in(m_MemWrite_ID),
+	.ex_RegDst_in(ex_RegDst_ID),
+	.ex_ALUOp_in(ex_ALUOp_ID),
+	.ex_ALUSrc_in(ex_ALUSrc_ID),
 	//Data signals input
-	.pc_next_in(pc_incrementado_out),
-	.r_data1_in(reg_data1_out),
-	.r_data2_in(reg_data2_out),
-	.sign_ext_in(sgn_extend_data_imm_out),
-	.inst_20_16_in(rt_out),
-	.inst_15_11_in(rd_out),
+	.pc_next_in(pc_incrementado_IFID),
+	.r_data1_in(reg_data1_ID),
+	.r_data2_in(reg_data2_ID),
+	.sign_ext_in(sgn_extend_ID),
+	.inst_20_16_in(instruction_20_16_ID),
+	.inst_15_11_in(instruction_15_11_ID),
 	//Control signals output
-	.wb_RegWrite_out(wb_RegWrite_ID_EX_out),
-	.wb_MemtoReg_out(wb_MemtoReg_ID_EX_out),
-	.m_Branch_out(m_Branch_ID_EX_out),
-	.m_MemRead_out(m_MemRead_ID_EX_out),
-	.m_MemWrite_out(m_MemWrite_ID_EX_out),
-	.ex_RegDst_out(ex_RegDst_ID_EX_out),
-	.ex_ALUOp_out(ex_ALUOp_ID_EX_out),
-	.ex_ALUSrc_out(ex_ALUSrc_ID_EX_out),
+	.wb_RegWrite_out(wb_RegWrite_IDEX),
+	.wb_MemtoReg_out(wb_MemtoReg_IDEX),
+	.m_Branch_out(m_Branch_IDEX),
+	.m_MemRead_out(m_MemRead_IDEX),
+	.m_MemWrite_out(m_MemWrite_IDEX),
+	.ex_RegDst_out(ex_RegDst_IDEX),
+	.ex_ALUOp_out(ex_ALUOp_IDEX),
+	.ex_ALUSrc_out(ex_ALUSrc_IDEX),
 	//Data signals output
-	.pc_next_out(pc_next_out),
-	.r_data1_out(r_data1_out),
-	.r_data2_out(r_data2_out),
-	.sign_ext_out(sign_ext_out),
-	.inst_20_16_out(inst_20_16_out),
-	.inst_15_11_out(inst_15_11_out)
+	.pc_next_out(pc_incrementado_IDEX),
+	.r_data1_out(reg_data1_IDEX),
+	.r_data2_out(reg_data2_IDEX),
+	.sign_ext_out(sgn_extend_IDEX),
+	.inst_20_16_out(instruction_20_16_IDEX),
+	.inst_15_11_out(instruction_15_11_IDEX)
 	);
 	
-	wire [B-1:0] add_result_out;
-	wire zero_out;
-	wire [B-1:0] alu_result_out;
-	wire [B-1:0] reg2Out_out;
-	wire [4:0] muxRegDstOut_out;
-	//wire [1:0] ex_ALUOp;
+	//EX
+	////Data
+	wire [B-1:0] add_result_EX;
+	wire zero_EX;
+	wire [B-1:0] alu_result_EX;
+	wire [B-1:0] reg_data2_EX;
+	wire [W-1:0] reg_dest_addr_EX;
 	
 	third_step EX(
-		//Control signals input
-		.aluSrc(ex_ALUSrc_ID_EX_out),
-		.ALUOp(ex_ALUOp_ID_EX_out),
-		.regDst(ex_RegDst_ID_EX_out),
-		//Data signals input
-		.pcPlusFour(pc_next_out),
-		.reg1(r_data1_out),
-		.reg2(r_data2_out),
-		.signExtend(sign_ext_out),
-		.regDst1(inst_20_16_out),
-		.regDst2(inst_15_11_out),
-		/*Signal output*/
-		.addResult(add_result_out),
-		.zero(zero_out),
-		.aluResult(alu_result_out),
-		.reg2Out(reg2Out_out),
-		.muxRegDstOut(muxRegDstOut_out)
+		//Control INPUT
+		.aluSrc(ex_ALUSrc_IDEX),
+		.ALUOp(ex_ALUOp_IDEX),
+		.regDst(ex_RegDst_IDEX),
+		//Data INPUT
+		.pcPlusFour(pc_incrementado_IDEX),
+		.reg1(reg_data1_IDEX),
+		.reg2(reg_data2_IDEX),
+		.signExtend(sgn_extend_IDEX),
+		.regDst1(instruction_20_16_IDEX),
+		.regDst2(instruction_15_11_IDEX),
+		//Data OUTPUT
+		.addResult(add_result_EX),
+		.zero(zero_EX),
+		.aluResult(alu_result_EX),
+		.reg2Out(reg_data2_EX),
+		.muxRegDstOut(reg_dest_addr_EX)
     );
 	
-	wire [B-1:0] alu_result_EX_MEM_out;
-	wire [B-1:0] r_data2_EX_MEM_out;
-	wire [4:0] MEM_WB_mux_RegDst_EX_MEM_out;
-	wire zero_EX_MEM_out;
-	wire wb_RegWrite_EX_MEM_out;
-	wire wb_MemtoReg_EX_MEM_out;
-	wire m_Branch_EX_MEM_out;
-	wire m_MemRead_EX_MEM_out;
-	wire m_MemWrite_EX_MEM_out;
-	wire [4:0] mux_RegDst_EX_MEM_out;
+	//EX-MEM
+	////Data
+	wire [B-1:0] alu_result_EXMEM;
+	wire [B-1:0] reg_data2_EXMEM;
+	wire [W-1:0] reg_dest_addr_EXMEM;
+	////Control
+	wire zero_EXMEM;
+	wire wb_RegWrite_EXMEM;
+	wire wb_MemtoReg_EXMEM;
+	wire m_Branch_EXMEM;
+	wire m_MemRead_EXMEM;
+	wire m_MemWrite_EXMEM;
 	
 	latch_EX_MEM EX_MEM(
 	.clk(clk),
 	.reset(reset),
-	/* Data signals INPUTS */
-	.add_result_in(add_result_out),
-	.alu_result_in(alu_result_out),
-	.r_data2_in(reg2Out_out),
-	.mux_RegDst_in(muxRegDstOut_out),
-	/* Control signals INPUTS*/
-	.zero_in(zero_out),
+	/* Data signals INPUT */
+	.add_result_in(add_result_EX),
+	.alu_result_in(alu_result_EX),
+	.r_data2_in(reg_data2_EX),
+	.mux_RegDst_in(reg_dest_addr_EX),
+	/* Control signals INPUT*/
+	.zero_in(zero_EX),
 	//Write back
-	.wb_RegWrite_in(wb_RegWrite_ID_EX_out),
-	.wb_MemtoReg_in(wb_MemtoReg_ID_EX_out),
+	.wb_RegWrite_in(wb_RegWrite_IDEX),
+	.wb_MemtoReg_in(wb_MemtoReg_IDEX),
 	//Memory
-	.m_Branch_in(m_Branch_ID_EX_out),
-	.m_MemRead_in(m_MemRead_ID_EX_out),
-	.m_MemWrite_in(m_MemWrite_ID_EX_out),
-	/* Data signals OUTPUTS */
-	.add_result_out(add_result_EX_MEM_out),
-	.alu_result_out(alu_result_EX_MEM_out),
-	.r_data2_out(r_data2_EX_MEM_out),
-	.mux_RegDst_out(MEM_WB_mux_RegDst_EX_MEM_out),
-	/* Control signals OUTPUTS */
-	.zero_out(zero_EX_MEM_out),
+	.m_Branch_in(m_Branch_IDEX),
+	.m_MemRead_in(m_MemRead_IDEX),
+	.m_MemWrite_in(m_MemWrite_IDEX),
+	/* Data signals OUTPUT */
+	.add_result_out(add_result_EXMEM),
+	.alu_result_out(alu_result_EXMEM),
+	.r_data2_out(reg_data2_EXMEM),
+	.mux_RegDst_out(reg_dest_addr_EXMEM),
+	/* Control signals OUTPUT */
+	.zero_out(zero_EXMEM),
 	//Write back
-	.wb_RegWrite_out(wb_RegWrite_EX_MEM_out),
-	.wb_MemtoReg_out(wb_MemtoReg_EX_MEM_out),
+	.wb_RegWrite_out(wb_RegWrite_EXMEM),
+	.wb_MemtoReg_out(wb_MemtoReg_EXMEM),
 	//Memory
-	.m_Branch_out(m_Branch_EX_MEM_out),
-	.m_MemRead_out(m_MemRead_EX_MEM_out),
-	.m_MemWrite_out(m_MemWrite_EX_MEM_out)
+	.m_Branch_out(m_Branch_EXMEM),
+	.m_MemRead_out(m_MemRead_EXMEM),
+	.m_MemWrite_out(m_MemWrite_EXMEM)
 	);
 	
-	wire [B-1:0] MEM_data_out;
+	//MEM
+	wire [B-1:0] data_MEM;
 	
 	data_access MEM(
 		.clk(clk),
 		//Control signals input
-		.zero(zero_EX_MEM_out),
-		.branch_in(m_Branch_EX_MEM_out),
-		.mem_write(m_MemWrite_EX_MEM_out),
+		.zero(zero_EXMEM),
+		.branch_in(m_Branch_EXMEM),
+		.mem_write(m_MemWrite_EXMEM),
 		//Data signals input
-		.addr_in(alu_result_EX_MEM_out),
-		.write_data(r_data2_EX_MEM_out),
+		.addr_in(alu_result_EXMEM),
+		.write_data(reg_data2_EXMEM),
 		//Output
-		.data_out(MEM_data_out),
-		.branch_out(PCSrc)
+		.data_out(data_MEM),
+		.branch_out(pcSrc_MEM)
     );
 	
-	wire [31:0] MEM_WB_read_data_out;
-	wire [31:0] MEM_WB_alu_result_out;
-	//wire [4:0] MEM_WB_mux_RegDst_out;
-	/* Control signals OUTPUTS */
-	//Write back
-	wire MEM_WB_wb_MemtoReg_out;
+	//MEM-WB
+	////Data
+	wire [B-1:0] data_MEMWB;
+	wire [B-1:0] alu_result_MEMWB;
+	////Control
+	wire wb_MemtoReg_MEMWB;
 	
 	latch_MEM_WB MEM_WB(
 		.clk(clk),
 		.reset(reset),
 		/* Data signals INPUTS */
-		.read_data_in(MEM_data_out),
-		.alu_result_in(alu_result_EX_MEM_out),
-		.mux_RegDst_in(MEM_WB_mux_RegDst_EX_MEM_out),
+		.read_data_in(data_MEM),
+		.alu_result_in(alu_result_EXMEM),
+		.mux_RegDst_in(reg_dest_addr_EXMEM),
 		/* Control signals INPUTS*/
 		//Write back
-		.wb_RegWrite_in(wb_RegWrite_EX_MEM_out),
-		.wb_MemtoReg_in(wb_MemtoReg_EX_MEM_out),
+		.wb_RegWrite_in(wb_RegWrite_EXMEM),
+		.wb_MemtoReg_in(wb_MemtoReg_EXMEM),
 		/* Data signals OUTPUTS */
-		.read_data_out(MEM_WB_read_data_out),
-		.alu_result_out(MEM_WB_alu_result_out),
-		.mux_RegDst_out(MEM_WB_mux_RegDst_out),
+		.read_data_out(data_MEMWB),
+		.alu_result_out(alu_result_MEMWB),
+		.mux_RegDst_out(reg_dest_addr_MEMWB),
 		/* Control signals OUTPUTS */
 		//Write back
-		.wb_RegWrite_out(MEM_WB_wb_RegWrite_out),
-		.wb_MemtoReg_out(MEM_WB_wb_MemtoReg_out)
+		.wb_RegWrite_out(wb_RegWrite_MEMWB),
+		.wb_MemtoReg_out(wb_MemtoReg_MEMWB)
 	);
+	
+	//WB
 	
 	write_back WB(
 	.clk(clk),
-	.mem_data(MEM_WB_read_data_out),
-	.ALU_data(MEM_WB_alu_result_out),
-	.MemtoReg(MEM_WB_wb_MemtoReg_out),
-	.data_out(WB_mux_memToReg_out)
+	//Data INPUT
+	.mem_data(data_MEMWB),
+	.ALU_data(alu_result_MEMWB),
+	//Control INPUT
+	.MemtoReg(wb_MemtoReg_MEMWB),
+	//Data OUTPUT
+	.data_out(data_to_write_WB)
 	);
 	
 	//IF (salidas)
 	////Datos
-	assign test_pc_incrementado_IF = IF_pc_incrementado;
-	assign test_instruction_IF = IF_instruction;
+	assign test_pc_incrementado_IF = pc_incrementado_IF;
+	assign test_instruction_IF = instruction_IF;
 	
 	//IF-ID (salidas)
 	////Datos
-	assign test_pc_incrementado_IF_ID = pc_incrementado_out;
-	assign test_instruction_IF_ID = instruction_out;
+	assign test_pc_incrementado_IF_ID = pc_incrementado_IFID;
+	assign test_instruction_IF_ID = instruction_IFID;
 	
 	//ID (salidas)
 	////Control
-	assign test_wb_RegWrite_ID = wb_RegWrite_out;
-	assign test_wb_MemtoReg_ID = wb_MemtoReg_out;
+	assign test_wb_RegWrite_ID = wb_RegWrite_ID;
+	assign test_wb_MemtoReg_ID = wb_MemtoReg_ID;
 	//////MEM
-	assign test_m_Branch_ID = m_Branch_out;
-	assign test_m_MemRead_ID = m_MemRead_out;
-	assign test_m_MemWrite_ID = m_MemWrite_out;
+	assign test_m_Branch_ID = m_Branch_ID;
+	assign test_m_MemRead_ID = m_MemRead_ID;
+	assign test_m_MemWrite_ID = m_MemWrite_ID;
 	//////EX
-	assign test_ex_RegDst_ID = ex_RegDst_out;
-	assign test_ex_ALUOp_ID = ex_ALUOp_out;
-	assign test_ex_ALUSrc_ID = ex_ALUSrc_out;
+	assign test_ex_RegDst_ID = ex_RegDst_ID;
+	assign test_ex_ALUOp_ID = ex_ALUOp_ID;
+	assign test_ex_ALUSrc_ID = ex_ALUSrc_ID;
 	////Datos
-	assign test_sign_extend_ID = sgn_extend_data_imm_out;	
+	assign test_sign_extend_ID = sgn_extend_ID;	
 	
-	//ID-EX
+	//ID-EX (salidas)
 	////Control signals
-	assign test_wb_RegWrite_ID_EX_out = wb_RegWrite_ID_EX_out;
-	assign test_wb_MemtoReg_ID_EX_out = wb_MemtoReg_ID_EX_out;
-	assign test_m_Branch_ID_EX_out = m_Branch_ID_EX_out;
-	assign test_m_MemRead_ID_EX_out = m_MemRead_ID_EX_out;
-	assign test_m_MemWrite_ID_EX_out = m_MemWrite_ID_EX_out;
-	assign test_ex_RegDst_ID_EX_out = ex_RegDst_ID_EX_out;
-	assign test_ex_ALUOp_ID_EX_out = ex_ALUOp_ID_EX_out;
-	assign test_ex_ALUSrc_ID_EX_out = ex_ALUSrc_ID_EX_out;
+	assign test_wb_RegWrite_ID_EX_out = wb_RegWrite_IDEX;
+	assign test_wb_MemtoReg_ID_EX_out = wb_MemtoReg_IDEX;
+	assign test_m_Branch_ID_EX_out = m_Branch_IDEX;
+	assign test_m_MemRead_ID_EX_out = m_MemRead_IDEX;
+	assign test_m_MemWrite_ID_EX_out = m_MemWrite_IDEX;
+	assign test_ex_RegDst_ID_EX_out = ex_RegDst_IDEX;
+	assign test_ex_ALUOp_ID_EX_out = ex_ALUOp_IDEX;
+	assign test_ex_ALUSrc_ID_EX_out = ex_ALUSrc_IDEX;
 	////Data signals
-	assign test_pc_incrementado_ID_EX_out = pc_next_out;
-	assign test_data1_ID_EX_out = r_data1_out;
-	assign test_data2_ID_EX_out = r_data2_out;
-	assign test_sign_extended_ID_EX_out = sign_ext_out;
-	assign test_inst_15_11_ID_EX_out = inst_15_11_out;
-	assign test_inst_20_16_ID_EX_out = inst_20_16_out;
+	assign test_pc_incrementado_ID_EX_out = pc_incrementado_IDEX;
+	assign test_data1_ID_EX_out = reg_data1_IDEX;
+	assign test_data2_ID_EX_out = reg_data2_IDEX;
+	assign test_sign_extended_ID_EX_out = sgn_extend_IDEX;
+	assign test_inst_15_11_ID_EX_out = instruction_15_11_IDEX;
+	assign test_inst_20_16_ID_EX_out = instruction_20_16_IDEX;
 	
 	//EX
 	////Data signals
-	assign test_alu_result_EX = alu_result_out;
+	assign test_alu_result_EX = alu_result_EX;
 	
 	//EX-MEM
 	////Data signals
-	assign test_alu_result_EX_MEM = alu_result_EX_MEM_out;
+	assign test_alu_result_EX_MEM = alu_result_EXMEM;
 	
 	//MEM-WB
 	////Data signals
-	assign test_mem_data_MEM_WB = MEM_WB_read_data_out;
-	assign test_reg_dest_addr_MEM_WB = MEM_WB_mux_RegDst_out;
+	assign test_mem_data_MEM_WB = data_MEMWB;
+	assign test_reg_dest_addr_MEM_WB = reg_dest_addr_MEMWB;
 	////Control
-	assign test_memToReg_MEM_WB = MEM_WB_wb_MemtoReg_out;
+	assign test_memToReg_MEM_WB = wb_MemtoReg_MEMWB;
 	
 	//WB
 	////Data signals
-	assign test_mux_wb_data_WB = WB_mux_memToReg_out;
-	
+	assign test_mux_wb_data_WB = data_to_write_WB;
 	
 endmodule
