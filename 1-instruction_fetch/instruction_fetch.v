@@ -24,13 +24,13 @@ module instruction_fetch
 	)
 	(
 		input wire [B-1:0] pc_branch, //PC para tomar el salto
+		input wire [B-1:0] pc_jump,
 		input wire PCSrc, 				//Senial de control para elegir el PC
-		//input wire enable,
+		input wire jump,
 		input wire reset,
 		input wire clk,
 		output wire [B-1:0] pc_incrementado, //PC para enviar al registro IF/ID
-		output [B-1:0] instruction,
-		output wire [31:0] pc_wire			/////SACAR!
+		output [B-1:0] instruction
     );
 	
 	reg [B-1:0] pc;							//registro PC
@@ -44,9 +44,8 @@ module instruction_fetch
 	else
 	begin
 		if (PCSrc == 1) pc <= pc_branch;
+		else if (jump == 1) pc <= pc_jump;
 		else pc <= pc_incrementado;			//Si entro por clk, actualiza el PC con el nuevo valor
 	end
-	
-	assign pc_wire = pc;
 	
 endmodule

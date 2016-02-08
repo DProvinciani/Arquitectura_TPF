@@ -18,9 +18,13 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module shift_left(
-    	input [31:0] shift_in,
-		output [31:0] shift_out
+module shift_left
+	#(
+		parameter B=32
+	)
+	(
+    	input [B-1:0] shift_in,
+		output [B-1:0] shift_out
     );
 	
 	assign shift_out = (shift_in << 2);

@@ -21,7 +21,7 @@
 module third_step(
 		/*Control signals input*/
 		input wire aluSrc,		
-		input wire [1:0] ALUOp,	
+		input wire [5:0] ALUOp,	
 		input wire regDst,		
 		/*Data signals input*/
 		input wire [31:0] pcPlusFour,

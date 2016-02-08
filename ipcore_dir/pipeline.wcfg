@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/pipeline_tb_isim_beh1.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="pipeline_tb" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="37" />
+   <wvobject fp_name="/pipeline_tb/test_pc_incrementado_IF_ID" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_pc_incrementado_IF_ID[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_pc_incrementado_IF_ID[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_instruction_IF_ID" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_instruction_IF_ID[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_instruction_IF_ID[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_wb_RegWrite_ID" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_wb_RegWrite_ID</obj_property>
+      <obj_property name="ObjectShortName">test_wb_RegWrite_ID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_wb_MemtoReg_ID" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_wb_MemtoReg_ID</obj_property>
+      <obj_property name="ObjectShortName">test_wb_MemtoReg_ID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_m_Jump_ID" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_m_Jump_ID</obj_property>
+      <obj_property name="ObjectShortName">test_m_Jump_ID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_m_Branch_ID" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_m_Branch_ID</obj_property>
+      <obj_property name="ObjectShortName">test_m_Branch_ID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_m_MemRead_ID" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_m_MemRead_ID</obj_property>
+      <obj_property name="ObjectShortName">test_m_MemRead_ID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_m_MemWrite_ID" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_m_MemWrite_ID</obj_property>
+      <obj_property name="ObjectShortName">test_m_MemWrite_ID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_ex_RegDst_ID" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_ex_RegDst_ID</obj_property>
+      <obj_property name="ObjectShortName">test_ex_RegDst_ID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_ex_ALUOp_ID" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_ex_ALUOp_ID[1:0]</obj_property>
+      <obj_property name="ObjectShortName">test_ex_ALUOp_ID[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_ex_ALUSrc_ID" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_ex_ALUSrc_ID</obj_property>
+      <obj_property name="ObjectShortName">test_ex_ALUSrc_ID</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_sign_extend_ID" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_sign_extend_ID[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_sign_extend_ID[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_wb_RegWrite_ID_EX_out" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_wb_RegWrite_ID_EX_out</obj_property>
+      <obj_property name="ObjectShortName">test_wb_RegWrite_ID_EX_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_wb_MemtoReg_ID_EX_out" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_wb_MemtoReg_ID_EX_out</obj_property>
+      <obj_property name="ObjectShortName">test_wb_MemtoReg_ID_EX_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_m_Jump_ID_EX_out" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_m_Jump_ID_EX_out</obj_property>
+      <obj_property name="ObjectShortName">test_m_Jump_ID_EX_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_m_Branch_ID_EX_out" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_m_Branch_ID_EX_out</obj_property>
+      <obj_property name="ObjectShortName">test_m_Branch_ID_EX_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_m_MemRead_ID_EX_out" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_m_MemRead_ID_EX_out</obj_property>
+      <obj_property name="ObjectShortName">test_m_MemRead_ID_EX_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_m_MemWrite_ID_EX_out" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_m_MemWrite_ID_EX_out</obj_property>
+      <obj_property name="ObjectShortName">test_m_MemWrite_ID_EX_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_ex_RegDst_ID_EX_out" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_ex_RegDst_ID_EX_out</obj_property>
+      <obj_property name="ObjectShortName">test_ex_RegDst_ID_EX_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_ex_ALUOp_ID_EX_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_ex_ALUOp_ID_EX_out[1:0]</obj_property>
+      <obj_property name="ObjectShortName">test_ex_ALUOp_ID_EX_out[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_ex_ALUSrc_ID_EX_out" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_ex_ALUSrc_ID_EX_out</obj_property>
+      <obj_property name="ObjectShortName">test_ex_ALUSrc_ID_EX_out</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_pc_incrementado_ID_EX_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_pc_incrementado_ID_EX_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_pc_incrementado_ID_EX_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_data1_ID_EX_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_data1_ID_EX_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_data1_ID_EX_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_data2_ID_EX_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_data2_ID_EX_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_data2_ID_EX_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_sign_extended_ID_EX_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_sign_extended_ID_EX_out[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_sign_extended_ID_EX_out[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_inst_15_11_ID_EX_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_inst_15_11_ID_EX_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">test_inst_15_11_ID_EX_out[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_inst_20_16_ID_EX_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_inst_20_16_ID_EX_out[4:0]</obj_property>
+      <obj_property name="ObjectShortName">test_inst_20_16_ID_EX_out[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_alu_result_EX" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_alu_result_EX[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_alu_result_EX[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_alu_result_EX_MEM" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_alu_result_EX_MEM[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_alu_result_EX_MEM[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_mem_data_MEM_WB" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_mem_data_MEM_WB[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_mem_data_MEM_WB[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_reg_dest_addr_MEM_WB" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_reg_dest_addr_MEM_WB[4:0]</obj_property>
+      <obj_property name="ObjectShortName">test_reg_dest_addr_MEM_WB[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_memToReg_MEM_WB" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">test_memToReg_MEM_WB</obj_property>
+      <obj_property name="ObjectShortName">test_memToReg_MEM_WB</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_mux_wb_data_WB" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_mux_wb_data_WB[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_mux_wb_data_WB[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#0000ff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_pc_incrementado_IF" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_pc_incrementado_IF[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_pc_incrementado_IF[31:0]</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#a0a0a4</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/test_instruction_IF" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">test_instruction_IF[31:0]</obj_property>
+      <obj_property name="ObjectShortName">test_instruction_IF[31:0]</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#a0a0a4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/pipeline_tb/ciclo" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">ciclo[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ciclo[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#ff00ff</obj_property>
+   </wvobject>
+</wave_config>

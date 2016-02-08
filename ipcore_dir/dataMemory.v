@@ -113,7 +113,7 @@ output [31 : 0] douta;
     .C_WEB_WIDTH(4),
     .C_WRITE_DEPTH_A(64),
     .C_WRITE_DEPTH_B(64),
-    .C_WRITE_MODE_A("WRITE_FIRST"),
+    .C_WRITE_MODE_A("READ_FIRST"),
     .C_WRITE_MODE_B("WRITE_FIRST"),
     .C_WRITE_WIDTH_A(32),
     .C_WRITE_WIDTH_B(32),

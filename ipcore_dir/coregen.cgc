@@ -30,7 +30,7 @@
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.WRITE_WIDTH_A">32</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.WRITE_DEPTH_A">64</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.READ_WIDTH_A">32</spirit:configurableElementValue>
-            <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.OPERATING_MODE_A">WRITE_FIRST</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.OPERATING_MODE_A">READ_FIRST</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.ENABLE_A">Use_ENA_Pin</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.WRITE_WIDTH_B">32</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.READ_WIDTH_B">32</spirit:configurableElementValue>
@@ -148,7 +148,7 @@
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.REGISTER_PORTB_OUTPUT_OF_SOFTECC">false</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PIPELINE_STAGES">0</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.LOAD_INIT_FILE">true</spirit:configurableElementValue>
-            <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.COE_FILE">./instructionsCode.coe</spirit:configurableElementValue>
+            <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.COE_FILE">./programa.coe</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.FILL_REMAINING_MEMORY_LOCATIONS">false</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.REMAINING_MEMORY_LOCATIONS">0</spirit:configurableElementValue>
             <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.USE_RSTA_PIN">false</spirit:configurableElementValue>
@@ -273,16 +273,16 @@
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.mif</xilinx:name>
                      <xilinx:userFileType>mif</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:24 GMT 2016</xilinx:timeStamp>
-                     <xilinx:checkSum>0x08305874</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:03 GMT 2016</xilinx:timeStamp>
+                     <xilinx:checkSum>0x206FAEE2</xilinx:checkSum>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./summary.log</xilinx:name>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:24 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:02 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x6BA8EEC8</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -290,16 +290,16 @@
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.mif</xilinx:name>
                      <xilinx:userFileType>mif</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:38 GMT 2016</xilinx:timeStamp>
-                     <xilinx:checkSum>0x08305874</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:20 GMT 2016</xilinx:timeStamp>
+                     <xilinx:checkSum>0x206FAEE2</xilinx:checkSum>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./summary.log</xilinx:name>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:38 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:20 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x6BA8EEC8</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -307,9 +307,9 @@
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.xco</xilinx:name>
                      <xilinx:userFileType>xco</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:38 GMT 2016</xilinx:timeStamp>
-                     <xilinx:checkSum>0x08A7C139</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:21 GMT 2016</xilinx:timeStamp>
+                     <xilinx:checkSum>0xAE92B73A</xilinx:checkSum>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -320,7 +320,7 @@
                      <xilinx:userFileType>txt</xilinx:userFileType>
                      <xilinx:timeStamp>Sun Oct 13 18:11:47 GMT 2013</xilinx:timeStamp>
                      <xilinx:checkSum>0xF95F2A26</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/doc/blk_mem_gen_v7_3_vinfo.html</xilinx:name>
@@ -328,7 +328,7 @@
                      <xilinx:userFileType>unknown</xilinx:userFileType>
                      <xilinx:timeStamp>Sun Oct 13 18:11:47 GMT 2013</xilinx:timeStamp>
                      <xilinx:checkSum>0x702C7FA8</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/doc/pg058-blk-mem-gen.pdf</xilinx:name>
@@ -336,7 +336,7 @@
                      <xilinx:userFileType>pdf</xilinx:userFileType>
                      <xilinx:timeStamp>Sun Oct 13 18:11:47 GMT 2013</xilinx:timeStamp>
                      <xilinx:checkSum>0x39526EEE</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -345,313 +345,313 @@
                      <xilinx:name>./instructionMemory/example_design/instructionMemory_exdes.ucf</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>ucf</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xC44C6B6D</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/example_design/instructionMemory_exdes.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xB6619FFF</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/example_design/instructionMemory_exdes.xdc</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xdc</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x7684D6D4</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/example_design/instructionMemory_prod.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xA26FE8CE</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/implement/implement.bat</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x9D3F7E06</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/implement/implement.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x5BA33B21</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/implement/planAhead_ise.bat</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x855734E1</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/implement/planAhead_ise.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xA2EB16BB</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/implement/planAhead_ise.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xFB4DBBA6</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/implement/xst.prj</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xD62EC740</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/implement/xst.scr</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x3822276B</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/addr_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x0500E48D</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/bmg_stim_gen.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xD5D7E619</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/bmg_tb_pkg.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xE0D93E5B</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/simcmds.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x8474ADBC</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/simulate_isim.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x82236BC3</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/simulate_mti.bat</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x86EA5D67</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/simulate_mti.do</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xD4844F7F</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/simulate_mti.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x86EA5D67</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/simulate_ncsim.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x2821C855</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/simulate_vcs.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:22 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x10E10510</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/ucli_commands.key</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:22 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x709C77AC</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/vcs_session.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:22 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x7AB0113E</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/wave_mti.do</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x90D85A1D</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/functional/wave_ncsim.sv</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:22 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x2165FF24</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/instructionMemory_synth.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xF37B663F</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/instructionMemory_tb.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x186030DE</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/random.vhd</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>vhdl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x2939160A</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/simcmds.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x8474ADBC</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/simulate_isim.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x5E05110B</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/simulate_mti.bat</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:24 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x86EA5D67</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/simulate_mti.do</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:24 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x82FDD155</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/simulate_mti.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:40 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:24 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x86EA5D67</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/simulate_ncsim.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x0B81537B</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/simulate_vcs.sh</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:22 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xAEDE8EC0</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/ucli_commands.key</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:22 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x709C77AC</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/vcs_session.tcl</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:22 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x65B0667E</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/wave_mti.do</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:23 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x4410A6FE</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory/simulation/timing/wave_ncsim.sv</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:56:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:21:22 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0xDA7B8EF5</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -659,9 +659,9 @@
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.ngc</xilinx:name>
                      <xilinx:userFileType>ngc</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:58:29 GMT 2016</xilinx:timeStamp>
-                     <xilinx:checkSum>0x307D1513</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Mon Feb 08 20:23:39 GMT 2016</xilinx:timeStamp>
+                     <xilinx:checkSum>0xF3964E36</xilinx:checkSum>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -675,9 +675,9 @@
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.veo</xilinx:name>
                      <xilinx:userFileType>veo</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:58:31 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:23:41 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x1C3C52C7</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -685,9 +685,9 @@
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.v</xilinx:name>
                      <xilinx:userFileType>verilog</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:58:31 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:23:41 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x83BA1FB3</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -696,9 +696,9 @@
                      <xilinx:name>./instructionMemory/doc/blk_mem_gen_v7_3_vinfo.html</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:58:32 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:23:42 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x702C7FA8</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -706,23 +706,23 @@
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.asy</xilinx:name>
                      <xilinx:userFileType>asy</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:58:42 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:23:57 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x887C7F7A</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.mif</xilinx:name>
                      <xilinx:userFileType>mif</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:58:42 GMT 2016</xilinx:timeStamp>
-                     <xilinx:checkSum>0x08305874</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Mon Feb 08 20:23:57 GMT 2016</xilinx:timeStamp>
+                     <xilinx:checkSum>0x206FAEE2</xilinx:checkSum>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./summary.log</xilinx:name>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:58:42 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:23:56 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x6BA8EEC8</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -731,9 +731,9 @@
                      <xilinx:name>./instructionMemory_xmdf.tcl</xilinx:name>
                      <xilinx:userFileType>tclXmdf</xilinx:userFileType>
                      <xilinx:userFileType>tcl</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:58:43 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:23:57 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x604B0351</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -742,17 +742,17 @@
                      <xilinx:name>./instructionMemory.gise</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>gise</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:58:53 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:24:12 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x721A5263</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.xise</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xise</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:58:53 GMT 2016</xilinx:timeStamp>
-                     <xilinx:checkSum>0x5280743F</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Mon Feb 08 20:24:12 GMT 2016</xilinx:timeStamp>
+                     <xilinx:checkSum>0xD3B0EB7F</xilinx:checkSum>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -761,25 +761,25 @@
                      <xilinx:name>./_xmsgs/pn_parser.xmsgs</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>unknown</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:59:02 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:24:24 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x5EC5C4CF</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.gise</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>gise</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:59:02 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:24:25 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x175E5E1E</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                   <xilinx:file>
                      <xilinx:name>./instructionMemory.xise</xilinx:name>
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>xise</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:59:02 GMT 2016</xilinx:timeStamp>
-                     <xilinx:checkSum>0x15E7C960</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:timeStamp>Mon Feb 08 20:24:25 GMT 2016</xilinx:timeStamp>
+                     <xilinx:checkSum>0xF89312EA</xilinx:checkSum>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -792,9 +792,9 @@
                      <xilinx:userFileType>ignore</xilinx:userFileType>
                      <xilinx:userFileType>txtFlist</xilinx:userFileType>
                      <xilinx:userFileType>txt</xilinx:userFileType>
-                     <xilinx:timeStamp>Wed Feb 03 18:59:03 GMT 2016</xilinx:timeStamp>
+                     <xilinx:timeStamp>Mon Feb 08 20:24:26 GMT 2016</xilinx:timeStamp>
                      <xilinx:checkSum>0x38FEBA6D</xilinx:checkSum>
-                     <xilinx:generationId>generationID_706127423</xilinx:generationId>
+                     <xilinx:generationId>generationID_1879581046</xilinx:generationId>
                   </xilinx:file>
                </xilinx:fileSet>
                <xilinx:fileSet>
@@ -821,7 +821,7 @@
          <xilinx:flowOptions>
             <xilinx:busFormat>BusFormatAngleBracketNotRipped</xilinx:busFormat>
             <xilinx:designEntry>Verilog</xilinx:designEntry>
-            <xilinx:asySymbol>true</xilinx:asySymbol>
+            <xilinx:asySymbol>false</xilinx:asySymbol>
             <xilinx:flowVendor>Other</xilinx:flowVendor>
             <xilinx:addPads>false</xilinx:addPads>
             <xilinx:removeRPMs>false</xilinx:removeRPMs>

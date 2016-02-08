@@ -29,10 +29,10 @@ module instruction_decode
 		/*Control signals input*/
 		input wire RegWrite,					//Señal de control de WB
 		/*Data signals input*/
-	//	input wire [B-1:0] pc_incrementado_in,		//se pasa a la etapa ex
 		input wire [B-1:0] instruction,
 		input wire [W-1:0] address_write,			//registro a escribir en el WB
 		input wire [B-1:0] data_write,			//datos a escribir en el WB 
+		input wire [B-1:0] pc_incrementado,
 		
 		//output wire [B-1:0] pc_incrementado_out,		//se pasa a la etapa ex
 		/*Data signals output*/
@@ -41,17 +41,19 @@ module instruction_decode
 		output wire [B-1:0]sgn_extend_data_imm,		//Inmediato de 32bits
 		output wire [W-1:0]rd,
 		output wire [W-1:0]rt,
+		output wire [B-1:0] pc_jump,
 		/* Control signals OUTPUTS */
 		//Write back
 		output wire wb_RegWrite_out,
 		output wire wb_MemtoReg_out,
 		//Memory
+		output wire m_Jump_out,
 		output wire m_Branch_out,
 		output wire m_MemRead_out,
 		output wire m_MemWrite_out,
 		//Execution
 		output wire ex_RegDst_out,
-		output wire [1:0] ex_ALUOp_out,
+		output wire [5:0] ex_ALUOp_out,
 		output wire ex_ALUSrc_out
     );
 	
@@ -61,6 +63,7 @@ module instruction_decode
 						  .wb_RegWrite_out(wb_RegWrite_out),
 						  .wb_MemtoReg_out(wb_MemtoReg_out),
 						  //Memory
+						  .m_Jump_out(m_Jump_out),
 						  .m_Branch_out(m_Branch_out),
 						  .m_MemRead_out(m_MemRead_out),
 						  .m_MemWrite_out(m_MemWrite_out),
@@ -82,11 +85,15 @@ module instruction_decode
 						.reg_in(instruction[15:0]), 		//toma el inmediato de 16bits y le realiza
 						.reg_out(sgn_extend_data_imm));	//la operacion de signo extendido
 	
-	
+	//Calc pc jump
+	wire [B-1:0] shiftLeftOut;
+	shift_left shiftModule(
+    	.shift_in(instruction),
+		.shift_out(shiftLeftOut)
+    );
+	assign pc_jump = {pc_incrementado[31:28], shiftLeftOut[27:0]};
 	
 	assign rt = instruction[20:16];
 	assign rd = instruction[15:11];
-	//assign pc_incrementado_out = pc_incrementado_in;
-	
 
 endmodule

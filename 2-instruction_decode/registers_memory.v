@@ -44,7 +44,7 @@ module registers_memory
 							// para W=5 2**5=32 registros
 	// operacion escritura
 	
-	always @(posedge clk,posedge reset)
+	always @(negedge clk,posedge reset)
 	begin 		
 			if (reset)
 				begin

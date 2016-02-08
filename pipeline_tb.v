@@ -44,12 +44,13 @@ module pipeline_tb;
 	wire test_wb_RegWrite_ID;
 	wire test_wb_MemtoReg_ID;
 	//////MEM
+	wire test_m_Jump_ID;
 	wire test_m_Branch_ID;
 	wire test_m_MemRead_ID;
 	wire test_m_MemWrite_ID;
 	//////EX
 	wire test_ex_RegDst_ID;
-	wire [1:0] test_ex_ALUOp_ID;
+	wire [5:0] test_ex_ALUOp_ID;
 	wire test_ex_ALUSrc_ID;
 	////Datos
 	wire [31:0] test_sign_extend_ID;
@@ -58,11 +59,12 @@ module pipeline_tb;
 	////Control signals
 	wire test_wb_RegWrite_ID_EX_out;
 	wire test_wb_MemtoReg_ID_EX_out;
+	wire test_m_Jump_ID_EX_out;
 	wire test_m_Branch_ID_EX_out;
 	wire test_m_MemRead_ID_EX_out;
 	wire test_m_MemWrite_ID_EX_out;
 	wire test_ex_RegDst_ID_EX_out;
-	wire [1:0] test_ex_ALUOp_ID_EX_out;
+	wire [5:0] test_ex_ALUOp_ID_EX_out;
 	wire test_ex_ALUSrc_ID_EX_out;
 	////Data signals
 	wire [31:0] test_pc_incrementado_ID_EX_out;
@@ -110,6 +112,7 @@ module pipeline_tb;
 		.test_wb_RegWrite_ID(test_wb_RegWrite_ID),
 		.test_wb_MemtoReg_ID(test_wb_MemtoReg_ID),
 		//////MEM
+		.test_m_Jump_ID(test_m_Jump_ID),
 		.test_m_Branch_ID(test_m_Branch_ID),
 		.test_m_MemRead_ID(test_m_MemRead_ID),
 		.test_m_MemWrite_ID(test_m_MemWrite_ID),
@@ -124,6 +127,7 @@ module pipeline_tb;
 		////Control signals
 		.test_wb_RegWrite_ID_EX_out(test_wb_RegWrite_ID_EX_out),
 		.test_wb_MemtoReg_ID_EX_out(test_wb_MemtoReg_ID_EX_out),
+		.test_m_Jump_ID_EX_out(test_m_Jump_ID_EX_out),
 		.test_m_Branch_ID_EX_out(test_m_Branch_ID_EX_out),
 		.test_m_MemRead_ID_EX_out(test_m_MemRead_ID_EX_out),
 		.test_m_MemWrite_ID_EX_out(test_m_MemWrite_ID_EX_out),
