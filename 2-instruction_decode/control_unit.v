@@ -25,6 +25,7 @@ module control_unit
 	(
 		input wire clk,
 		input wire [5:0] opcode,
+		input wire [5:0] func,
 		/* Control signals OUTPUTS */
 		//Write back
 		output wire wb_RegWrite_out,
@@ -32,26 +33,36 @@ module control_unit
 		//Memory
 		output wire m_Jump_out,
 		output wire m_Branch_out,
+		output wire m_BranchNot_out,
 		output wire m_MemRead_out,
 		output wire m_MemWrite_out,
 		//Execution
 		output wire ex_RegDst_out,
 		output wire [5:0] ex_ALUOp_out,
-		output wire ex_ALUSrc_out
+		output wire ex_ALUSrc_out,
+		//Jump
+		output wire jr_jalr_out
     );
 		
 		wire [7:0] ex_ctrl_sgnl;   //------------ aluop1, aluop0, regdst, alusrc
-		wire [3:0] mem_ctrl_sgnl;	//jump, branch, mem_read, mem_write 
+		wire [4:0] mem_ctrl_sgnl;	//mem_read, mem_write, jump, branch, branchNot  
 		wire [1:0] wb_ctrl_sgnl;	//reg_write, mem_to_reg
+		wire jr_jalr_sgnl;
 		
 		//Asignando las señales de control internas con las señales de salida
 		//Execution
 		//Asignando las seÃ±ales de control internas con las seÃ±ales de salida
 		//Execution
-		assign ex_ctrl_sgnl = 	(opcode == 6'b000_000) ? 8'b00000010 : //R-type
+										//R-type
+		assign ex_ctrl_sgnl = 	(opcode == 6'b000_000) ? (	(func == 000110) ? 8'b00000011 : //SRLV
+																			(func == 000111) ? 8'b00000011 : //SRAV
+																			(func == 000100) ? 8'b00000011 : //SLLV
+																			//(func == 001000) ? 8'b00000010 : //JR
+																			//(func == 001001) ? 8'b00000010 :	//JALR
+																		  8'b00000010) :
 										//I-Type
-										(opcode == 6'b000_100) ? 8'b00010000 : //BEQ --> RegDst y ALUSrc ?
-										(opcode == 6'b000_101) ? 8'b00010100 : //BNE --> RegDst y ALUSrc ?
+										(opcode == 6'b000_100) ? 8'b00010000 : //BEQ
+										(opcode == 6'b000_101) ? 8'b00010100 : //BNE
 										(opcode == 6'b001_000) ? 8'b00100001 : //ADDI
 										(opcode == 6'b001_010) ? 8'b00101001 : //SLTI
 										(opcode == 6'b001_100) ? 8'b00110001 : //ANDI
@@ -67,34 +78,81 @@ module control_unit
 										(opcode == 6'b101_000) ? 8'b10100001 : //SB
 										(opcode == 6'b101_001) ? 8'b10100101 : //SH
 										(opcode == 6'b101_011) ? 8'b10101101 : //SW 
-										//J-Type
-										(opcode == 6'b000_010) ? 8'b00000000 : //j
+										(opcode == 6'b000_010) ? 8'b00001010 : //J
+										(opcode == 6'b000_011) ? 8'b00001110 : //JAL
 										8'b00000000;
 		
-		assign mem_ctrl_sgnl = 	(opcode == 6'b000_000) ? 4'b0000 :	//r-type
-										(opcode == 6'b100_011) ? 4'b0010 :	//lw
-										(opcode == 6'b101_011) ? 4'b0001 :	//sw
-										(opcode == 6'b000_100) ? 4'b0100 :	//beq
-										(opcode == 6'b000_010) ? 4'b1000 :	//jump
-										4'b0000;
+										//R-Type
+		assign mem_ctrl_sgnl = 	(opcode == 6'b000_000) ? (	(func == 001000) ? 5'b00001 :	//JR
+																			(func == 001001) ? 5'b00001 :	//JALR
+																		  5'b00000) :  
+										//I-Type
+										(opcode == 6'b000_100) ? 5'b00100 : //BEQ
+										(opcode == 6'b000_101) ? 5'b00010 : //BNE
+										(opcode == 6'b001_000) ? 5'b00000 : //ADDI
+										(opcode == 6'b001_010) ? 5'b00000 : //SLTI
+										(opcode == 6'b001_100) ? 5'b00000 : //ANDI
+										(opcode == 6'b001_101) ? 5'b00000 : //ORI
+										(opcode == 6'b001_110) ? 5'b00000 : //XORI
+										(opcode == 6'b001_111) ? 5'b00000 : //LUI
+										(opcode == 6'b100_000) ? 5'b10000 : //LB
+										(opcode == 6'b100_001) ? 5'b10000 : //LH
+										(opcode == 6'b100_011) ? 5'b10000 : //LW
+										(opcode == 6'b100_100) ? 5'b10000 : //LBU
+										(opcode == 6'b100_101) ? 5'b10000 : //LHU
+										(opcode == 6'b100_111) ? 5'b10000 : //LWU
+										(opcode == 6'b101_000) ? 5'b01000 : //SB
+										(opcode == 6'b101_001) ? 5'b01000 : //SH
+										(opcode == 6'b101_011) ? 5'b01000 : //SW 
+										(opcode == 6'b000_010) ? 5'b00001 : //J
+										(opcode == 6'b000_011) ? 5'b00001 : //JAL
+										5'b00000;
 										
-		assign wb_ctrl_sgnl = 	(opcode == 6'b000_000) ? 2'b10 :		//r-type
-										(opcode == 6'b100_011) ? 2'b11 :		//lw
-										(opcode == 6'b101_011) ? 2'b00 :		//sw
-										(opcode == 6'b000_100) ? 2'b00 :		//beq
-										(opcode == 6'b000_010) ? 2'b00 :		//jump
+										//R-Type
+		assign wb_ctrl_sgnl = 	(opcode == 6'b000_000) ? ((func == 001000) ? 2'b00 : //JR
+																		  2'b01) : 
+										//I-Type
+										(opcode == 6'b000_100) ? 2'b00 : //BEQ
+										(opcode == 6'b000_101) ? 2'b00 : //BNE
+										(opcode == 6'b001_000) ? 2'b01 : //ADDI
+										(opcode == 6'b001_010) ? 2'b01 : //SLTI
+										(opcode == 6'b001_100) ? 2'b01 : //ANDI
+										(opcode == 6'b001_101) ? 2'b01 : //ORI
+										(opcode == 6'b001_110) ? 2'b01 : //XORI
+										(opcode == 6'b001_111) ? 2'b01 : //LUI
+										(opcode == 6'b100_000) ? 2'b11 : //LB
+										(opcode == 6'b100_001) ? 2'b11 : //LH
+										(opcode == 6'b100_011) ? 2'b11 : //LW
+										(opcode == 6'b100_100) ? 2'b11 : //LBU
+										(opcode == 6'b100_101) ? 2'b11 : //LHU
+										(opcode == 6'b100_111) ? 2'b11 : //LWU
+										(opcode == 6'b101_000) ? 2'b00 : //SB
+										(opcode == 6'b101_001) ? 2'b00 : //SH
+										(opcode == 6'b101_011) ? 2'b00 : //SW 
+										(opcode == 6'b000_010) ? 2'b00 : //J
+										(opcode == 6'b000_011) ? 2'b01 : //JAL
 										2'b00;
 		
+		assign jr_jalr_sgnl = 	(opcode == 6'b000_000) ? ((func == 001000) ? 1'b1 :	//JR
+																		  (func == 001001) ? 1'b1 :	//JALR
+																		  1'b0) :
+										1'b0;
+		
+		//Ex
 		assign ex_ALUOp_out = ex_ctrl_sgnl[7:2];
 		assign ex_RegDst_out = ex_ctrl_sgnl[1];
 		assign ex_ALUSrc_out = ex_ctrl_sgnl[0];
 		//Memory
-		assign m_Jump_out = mem_ctrl_sgnl[3]; 
+		assign m_MemRead_out = mem_ctrl_sgnl[4];
+		assign m_MemWrite_out = mem_ctrl_sgnl[3];
 		assign m_Branch_out = mem_ctrl_sgnl[2];
-		assign m_MemRead_out = mem_ctrl_sgnl[1];
-		assign m_MemWrite_out = mem_ctrl_sgnl[0];
+		assign m_BranchNot_out = mem_ctrl_sgnl[1];
+		assign m_Jump_out = mem_ctrl_sgnl[0]; 
+		
 		//Write back
-		assign wb_RegWrite_out = wb_ctrl_sgnl[1];
-		assign wb_MemtoReg_out = wb_ctrl_sgnl[0];
+		assign wb_RegWrite_out = wb_ctrl_sgnl[0];
+		assign wb_MemtoReg_out = wb_ctrl_sgnl[1];
+		
+		assign jr_jalr_out = jr_jalr_sgnl;
 		
 endmodule

@@ -45,8 +45,11 @@ module latch_EX_MEM
 	//Memory
 	input wire m_Jump_in,
 	input wire m_Branch_in,
+	input wire m_BranchNot_in,
 	input wire m_MemRead_in,
 	input wire m_MemWrite_in,
+	//Other
+	input [5:0] opcode_in,
 	/* Control signals OUTPUTS */
 	output wire zero_out,
 	//Write back
@@ -55,8 +58,11 @@ module latch_EX_MEM
 	//Memory
 	output wire m_Jump_out,
 	output wire m_Branch_out,
+	output wire m_BranchNot_out,
 	output wire m_MemRead_out,
-	output wire m_MemWrite_out
+	output wire m_MemWrite_out,
+	//Other
+	output wire [5:0] opcode_out
 	);
 	/* Data REGISTERS */
 	reg [B-1:0] add_result_reg;
@@ -72,8 +78,11 @@ module latch_EX_MEM
 	//Memory
 	reg m_Jump_reg;
 	reg m_Branch_reg;
+	reg m_BranchNot_reg;
 	reg m_MemRead_reg;
 	reg m_MemWrite_reg;
+	//other
+	reg opcode_reg;
 	
 	always @(posedge clk, posedge reset)
 	begin
@@ -89,8 +98,10 @@ module latch_EX_MEM
 			wb_MemtoReg_reg <= 0;
 			m_Jump_reg <= 0;
 			m_Branch_reg <= 0;
+			m_BranchNot_reg <= 0;
 			m_MemRead_reg <= 0;
 			m_MemWrite_reg <= 0;
+			opcode_reg <= 0;
 		end
 		else
 		begin
@@ -108,8 +119,11 @@ module latch_EX_MEM
 			//Memory
 			m_Jump_reg <= m_Jump_in;
 			m_Branch_reg <= m_Branch_in;
+			m_BranchNot_reg <= m_BranchNot_in;
 			m_MemRead_reg <= m_MemRead_in;
 			m_MemWrite_reg <= m_MemWrite_in;
+			//Other
+			opcode_reg <= opcode_in;
 		end
 	end
 	/* Data signals read from ID_EX register */	
@@ -127,8 +141,9 @@ module latch_EX_MEM
 	//Memory
 	assign m_Jump_out = m_Jump_reg;
 	assign m_Branch_out = m_Branch_reg;
+	assign m_BranchNot_out = m_BranchNot_reg;
 	assign m_MemRead_out = m_MemRead_reg;
 	assign m_MemWrite_out = m_MemWrite_reg;
-
+	assign opcode_out = opcode_reg;
 
 endmodule

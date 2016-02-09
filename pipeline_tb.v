@@ -40,6 +40,9 @@ module pipeline_tb;
 	wire [31:0] test_instruction_IF_ID;
 	
 	//ID (salidas)
+	////Datos
+	wire [31:0] test_data1_ID;
+	wire [31:0] test_data2_ID;
 	////Control
 	wire test_wb_RegWrite_ID;
 	wire test_wb_MemtoReg_ID;
@@ -108,6 +111,9 @@ module pipeline_tb;
 		.test_instruction_IF_ID(test_instruction_IF_ID),
 		
 		//ID (salidas)
+		////Datos
+		.test_data1_ID(test_data1_ID),
+		.test_data2_ID(test_data2_ID),
 		////Control
 		.test_wb_RegWrite_ID(test_wb_RegWrite_ID),
 		.test_wb_MemtoReg_ID(test_wb_MemtoReg_ID),

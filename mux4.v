@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    16:05:17 11/28/2015 
+// Create Date:    21:37:33 02/08/2016 
 // Design Name: 
-// Module Name:    sig_extend 
+// Module Name:    mux4 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,15 +18,22 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module sig_extend
+module mux4
 	#(
-		parameter B=16
+		parameter B=32
 	)
 	(
-		input [B-1:0] reg_in,
-		output [31:0] reg_out
+		input wire [1:0] sel,
+		input wire [B-1:0] item_a,
+		input wire [B-1:0] item_b,
+		input wire [B-1:0] item_c,
+		input wire [B-1:0] item_d,
+		output wire [B-1:0] signal
     );
-	
-	assign reg_out = {{(32-B){reg_in[B-1]}}, reg_in};
+
+	assign signal = 	(sel == 2'b00) ? item_a :
+							(sel == 2'b01) ? item_b :
+							(sel == 2'b10) ? item_c :
+							item_d;
 	
 endmodule

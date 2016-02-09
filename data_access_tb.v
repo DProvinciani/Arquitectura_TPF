@@ -31,10 +31,11 @@ module data_access_tb;
 	reg mem_write;
 	reg zero;
 	reg branch_in;
-
+	reg branchNot_in;
+	
 	// Outputs
 	wire [31:0] data_out;
-	wire branch_out;
+	wire pcSrc_out;
 
 	// Instantiate the Unit Under Test (UUT)
 	data_access uut (
@@ -43,9 +44,10 @@ module data_access_tb;
 		.write_data(write_data), 
 		.mem_write(mem_write), 
 		.zero(zero), 
-		.branch_in(branch_in), 
+		.branch_in(branch_in),
+		.branchNot_in(branchNot_in), 		
 		.data_out(data_out), 
-		.branch_out(branch_out)
+		.pcSrc_out(pcSrc_out)
 	);
 
 	initial begin
@@ -56,6 +58,7 @@ module data_access_tb;
 		mem_write = 0;
 		zero = 0;
 		branch_in = 0;
+		branchNot_in = 0;
 
 		// Wait 100 ns for global reset to finish
 		#100;
@@ -68,11 +71,15 @@ module data_access_tb;
 			addr_in = 0;
 			mem_write = 1'b1;
 			write_data = 3;
+			branch_in = 1;
+			zero = 1;
 		end
 		#5 mem_write = 1'b0;
 		#5 addr_in = 4;
 		#5 
 		begin
+			zero = 0;
+			branchNot_in = 1;
 			addr_in = 4;
 			mem_write = 1'b1;
 			write_data = 7;

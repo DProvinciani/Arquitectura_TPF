@@ -48,25 +48,31 @@ module latch_ID_EX
 	//Memory
 	input wire m_Jump_in,
 	input wire m_Branch_in,
+	input wire m_BranchNot_in,
 	input wire m_MemRead_in,
 	input wire m_MemWrite_in,
 	//Execution
 	input wire ex_RegDst_in,
 	input wire [5:0] ex_ALUOp_in,
 	input wire ex_ALUSrc_in,
+	//Other
+	input wire [5:0] opcode_in,
 	/* Control signals OUTPUTS */
 	//Write back
-	input wire wb_RegWrite_out,
-	input wire wb_MemtoReg_out,
+	output wire wb_RegWrite_out,
+	output wire wb_MemtoReg_out,
 	//Memory
-	input wire m_Jump_out,
-	input wire m_Branch_out,
-	input wire m_MemRead_out,
-	input wire m_MemWrite_out,
+	output wire m_Jump_out,
+	output wire m_Branch_out,
+	output wire m_BranchNot_out,
+	output wire m_MemRead_out,
+	output wire m_MemWrite_out,
 	//Execution
-	input wire ex_RegDst_out,
-	input wire [5:0] ex_ALUOp_out,
-	input wire ex_ALUSrc_out
+	output wire ex_RegDst_out,
+	output wire [5:0] ex_ALUOp_out,
+	output wire ex_ALUSrc_out,
+	//Other
+	output wire [5:0] opcode_out
 	);
 	/* Data REGISTERS */
 	reg [B-1:0] pc_next_reg;
@@ -83,12 +89,15 @@ module latch_ID_EX
 	//Memory
 	reg m_Jump_reg;
 	reg m_Branch_reg;
+	reg m_BranchNot_reg;
 	reg m_MemRead_reg;
 	reg m_MemWrite_reg;
 	//Execution
 	reg ex_RegDst_reg;
 	reg [5:0] ex_ALUOp_reg;
 	reg ex_ALUSrc_reg;
+	//Other
+	reg [5:0] opcode_reg;
 	
 	always @(posedge clk, posedge reset)
 	begin
@@ -105,11 +114,13 @@ module latch_ID_EX
 				wb_MemtoReg_reg <= 0;
 				m_Jump_reg <= 0;
 				m_Branch_reg <= 0;
+				m_BranchNot_reg <= 0;
 				m_MemRead_reg <= 0;
 				m_MemWrite_reg <= 0;
 				ex_RegDst_reg <= 0;
 				ex_ALUOp_reg <= 0;
 				ex_ALUSrc_reg <= 0;
+				opcode_reg <= 0;
 		end
 		else
 		begin
@@ -129,12 +140,15 @@ module latch_ID_EX
 		//Memory
 		m_Jump_reg <= m_Jump_in;
 		m_Branch_reg <= m_Branch_in;
+		m_BranchNot_reg <= m_BranchNot_in;
 		m_MemRead_reg <= m_MemRead_in;
 		m_MemWrite_reg <= m_MemWrite_in;
 		//Execution
 		ex_RegDst_reg <= ex_RegDst_in;
 		ex_ALUOp_reg <= ex_ALUOp_in;
 		ex_ALUSrc_reg <= ex_ALUSrc_in;
+		//Other
+		opcode_reg <= opcode_in;
 		end
 	end
 	/* Data signals read from ID_EX register */	
@@ -153,12 +167,14 @@ module latch_ID_EX
 	//Memory
 	assign m_Jump_out = m_Jump_reg;
 	assign m_Branch_out = m_Branch_reg;
+	assign m_BranchNot_out = m_BranchNot_reg;
 	assign m_MemRead_out = m_MemRead_reg;
 	assign m_MemWrite_out = m_MemWrite_reg;
 	//Execution
 	assign ex_RegDst_out = ex_RegDst_reg;
 	assign ex_ALUOp_out = ex_ALUOp_reg;
 	assign ex_ALUSrc_out = ex_ALUSrc_reg;
-	
-	
+	//Other
+	assign opcode_out = opcode_reg;
+
 endmodule
