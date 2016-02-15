@@ -36,10 +36,10 @@ module alu #(parameter B = 32)
 							(alu_control == 4'b0110) ? op1 < op2 : //SLT
 							(alu_control == 4'b0111) ? op1 << op2[10:6] : //SLL
 							(alu_control == 4'b1000) ? op1 >> op2[10:6] : //SRL
-							(alu_control == 4'b1001) ? op1 >>> op2[10:6] : //SRA
+							(alu_control == 4'b1001) ? {$signed(op1) >>> op2[10:6]} : //SRA
 							(alu_control == 4'b1010) ? op1 << op2 : //SLLV
 							(alu_control == 4'b1011) ? op1 >> op2 : //SRLV
-							(alu_control == 4'b1100) ? op1 >>> op2 : //SRAV
+							(alu_control == 4'b1100) ? {$signed(op1) >>> op2} : //SRAV
 							(alu_control == 4'b1101) ? {op2[15:0],16'b00000000_00000000} : //LUI
 							32'b11111111_11111111_11111111_11111111;
 	assign zero = (result == 0) ? 1'b1 : 1'b0;
