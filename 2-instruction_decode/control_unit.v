@@ -54,12 +54,7 @@ module control_unit
 		//Asignando las seÃ±ales de control internas con las seÃ±ales de salida
 		//Execution
 										//R-type
-		assign ex_ctrl_sgnl = 	(opcode == 6'b000_000) ? (	(func == 000110) ? 8'b00000011 : //SRLV
-																			(func == 000111) ? 8'b00000011 : //SRAV
-																			(func == 000100) ? 8'b00000011 : //SLLV
-																			//(func == 001000) ? 8'b00000010 : //JR
-																			//(func == 001001) ? 8'b00000010 :	//JALR
-																		  8'b00000010) :
+		assign ex_ctrl_sgnl = 	
 										//I-Type
 										(opcode == 6'b000_100) ? 8'b00010000 : //BEQ
 										(opcode == 6'b000_101) ? 8'b00010100 : //BNE
@@ -80,11 +75,17 @@ module control_unit
 										(opcode == 6'b101_011) ? 8'b10101101 : //SW 
 										(opcode == 6'b000_010) ? 8'b00001010 : //J
 										(opcode == 6'b000_011) ? 8'b00001110 : //JAL
-										8'b00000000;
+										(	(func == 6'b000000) ? 8'b00000011 : //SLL
+											(func == 6'b000010) ? 8'b00000011 : //SRL
+											(func == 6'b000011) ? 8'b00000011 : //SRA
+											//(func == 6'b000110) ? 8'b00000011 : //SRLV
+											//(func == 6'b000111) ? 8'b00000011 : //SRAV
+											//(func == 6'b000100) ? 8'b00000011 : //SLLV
+											8'b00000010);
 		
 										//R-Type
-		assign mem_ctrl_sgnl = 	(opcode == 6'b000_000) ? (	(func == 001000) ? 5'b00001 :	//JR
-																			(func == 001001) ? 5'b00001 :	//JALR
+		assign mem_ctrl_sgnl = 	(opcode == 6'b000_000) ? (	(func == 6'b001000) ? 5'b00001 :	//JR
+																			(func == 6'b001001) ? 5'b00001 :	//JALR
 																		  5'b00000) :  
 										//I-Type
 										(opcode == 6'b000_100) ? 5'b00100 : //BEQ
@@ -109,7 +110,7 @@ module control_unit
 										5'b00000;
 										
 										//R-Type
-		assign wb_ctrl_sgnl = 	(opcode == 6'b000_000) ? ((func == 001000) ? 2'b00 : //JR
+		assign wb_ctrl_sgnl = 	(opcode == 6'b000_000) ? ((func == 6'b001000) ? 2'b00 : //JR
 																		  2'b01) : 
 										//I-Type
 										(opcode == 6'b000_100) ? 2'b00 : //BEQ
@@ -133,8 +134,8 @@ module control_unit
 										(opcode == 6'b000_011) ? 2'b01 : //JAL
 										2'b00;
 		
-		assign jr_jalr_sgnl = 	(opcode == 6'b000_000) ? ((func == 001000) ? 1'b1 :	//JR
-																		  (func == 001001) ? 1'b1 :	//JALR
+		assign jr_jalr_sgnl = 	(opcode == 6'b000_000) ? ((func == 6'b001000) ? 1'b1 :	//JR
+																		  (func == 6'b001001) ? 1'b1 :	//JALR
 																		  1'b0) :
 										1'b0;
 		

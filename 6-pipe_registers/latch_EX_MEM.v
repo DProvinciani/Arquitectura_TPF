@@ -82,7 +82,7 @@ module latch_EX_MEM
 	reg m_MemRead_reg;
 	reg m_MemWrite_reg;
 	//other
-	reg opcode_reg;
+	reg [5:0] opcode_reg;
 	
 	always @(posedge clk, posedge reset)
 	begin

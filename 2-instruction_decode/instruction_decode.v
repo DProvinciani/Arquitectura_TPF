@@ -57,13 +57,22 @@ module instruction_decode
 		output wire [5:0] ex_ALUOp_out,
 		output wire ex_ALUSrc_out,
 		//Other
-		output wire [5:0] opcode_out
+		output wire [5:0] opcode_out,
+		
+		//Para testing
+		output wire [B-1:0] reg_16,
+		output wire [B-1:0] reg_17,
+		output wire [B-1:0] reg_18,
+		output wire [B-1:0] reg_19,
+		output wire [B-1:0] reg_20
     );
 	
 	wire jump;
 	wire jr_jalr_out;
 	wire [B-1:0] data1;
 	wire [B-1:0] data2;
+	
+	assign opcode_out = instruction[31:26];
 	
 	control_unit cu (.clk(clk),
 						  .opcode(instruction[31:26]),
@@ -91,7 +100,13 @@ module instruction_decode
 								.r_addr2(instruction[20:16]), 
 								.w_addr(address_write), .w_data(data_write), 
 								.r_data1(data1), 
-								.r_data2(data2));
+								.r_data2(data2),
+								.reg_16(reg_16),
+								.reg_17(reg_17),
+								.reg_18(reg_18),
+								.reg_19(reg_19),
+								.reg_20(reg_20)
+								);
 	sig_extend sig(.reg_in(instruction[15:0]), 		//toma el inmediato de 16bits y le realiza
 						.reg_out(sgn_extend_data_imm));	//la operacion de signo extendido
 	
@@ -141,7 +156,5 @@ module instruction_decode
 		.item_b(5'b11111), //31
 		.signal(rd)
 	);
-	
-	assign opcode_out = instruction[31:26];
 
 endmodule

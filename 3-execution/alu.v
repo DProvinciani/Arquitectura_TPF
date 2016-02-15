@@ -20,8 +20,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 module alu #(parameter B = 32)
 	(
-	input wire [B-1:0] op1,
-	input wire [B-1:0] op2,
+	input wire signed [B-1:0] op1,
+	input wire signed [B-1:0] op2,
 	input wire [3:0] alu_control,
 	output wire [B-1:0] result,
 	output wire zero
@@ -37,8 +37,8 @@ module alu #(parameter B = 32)
 							(alu_control == 4'b0111) ? op1 << op2[10:6] : //SLL
 							(alu_control == 4'b1000) ? op1 >> op2[10:6] : //SRL
 							(alu_control == 4'b1001) ? {$signed(op1) >>> op2[10:6]} : //SRA
-							(alu_control == 4'b1010) ? op1 << op2 : //SLLV
-							(alu_control == 4'b1011) ? op1 >> op2 : //SRLV
+							(alu_control == 4'b1010) ? op2 << op1 : //SLLV
+							(alu_control == 4'b1011) ? op2 >> op1 : //SRLV
 							(alu_control == 4'b1100) ? {$signed(op1) >>> op2} : //SRAV
 							(alu_control == 4'b1101) ? {op2[15:0],16'b00000000_00000000} : //LUI
 							32'b11111111_11111111_11111111_11111111;

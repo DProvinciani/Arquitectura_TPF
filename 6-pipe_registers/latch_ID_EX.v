@@ -76,8 +76,8 @@ module latch_ID_EX
 	);
 	/* Data REGISTERS */
 	reg [B-1:0] pc_next_reg;
-	reg [B-1:0] r_data1_reg;
-	reg [B-1:0] r_data2_reg;
+	reg signed [B-1:0] r_data1_reg;
+	reg signed [B-1:0] r_data2_reg;
 	reg [B-1:0] sign_ext_reg;
 	reg [W-1:0] inst_20_16_reg;
 	reg [W-1:0] inst_15_11_reg;

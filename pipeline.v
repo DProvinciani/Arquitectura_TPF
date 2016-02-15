@@ -76,6 +76,8 @@ module pipeline
 	//EX-MEM
 	////Data signals
 	output wire [B-1:0] test_alu_result_EX_MEM,
+	////Control
+	output wire [5:0] test_opcode_EX_MEM,
 	//MEM-WB
 	output wire [B-1:0] test_mem_data_MEM_WB,
 	output wire [4:0]  test_reg_dest_addr_MEM_WB,
@@ -83,7 +85,14 @@ module pipeline
 	output wire test_memToReg_MEM_WB,
 	//WB
 	////Data signals
-	output wire [B-1:0] test_mux_wb_data_WB
+	output wire [B-1:0] test_mux_wb_data_WB,
+	
+	//Registros (datos en los registros)
+	output wire [B-1:0] reg_16,
+	output wire [B-1:0] reg_17,
+	output wire [B-1:0] reg_18,
+	output wire [B-1:0] reg_19,
+	output wire [B-1:0] reg_20
     );
 	
 	//IF
@@ -185,7 +194,13 @@ module pipeline
 		.sgn_extend_data_imm(sgn_extend_ID),
 		.rd(instruction_15_11_ID),
 		.rt(instruction_20_16_ID),
-		.pc_jump(pc_jump_ID)
+		.pc_jump(pc_jump_ID),
+		//Registros
+		.reg_16(reg_16),
+		.reg_17(reg_17),
+		.reg_18(reg_18),
+		.reg_19(reg_19),
+		.reg_20(reg_20)
     );
 	
 	//ID-EX 
@@ -457,6 +472,8 @@ module pipeline
 	//EX-MEM
 	////Data signals
 	assign test_alu_result_EX_MEM = alu_result_EXMEM;
+	////Control
+	assign test_opcode_EX_MEM = opcode_EXMEM;
 	
 	//MEM-WB
 	////Data signals

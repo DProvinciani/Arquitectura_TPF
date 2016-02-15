@@ -28,6 +28,7 @@ module data_access_tb;
 	reg clk;
 	reg [31:0] addr_in;
 	reg [31:0] write_data;
+	reg [5:0] opcode;
 	reg mem_write;
 	reg zero;
 	reg branch_in;
@@ -43,7 +44,8 @@ module data_access_tb;
 		.addr_in(addr_in), 
 		.write_data(write_data), 
 		.mem_write(mem_write), 
-		.zero(zero), 
+		.zero(zero),
+		.opcode(opcode),
 		.branch_in(branch_in),
 		.branchNot_in(branchNot_in), 		
 		.data_out(data_out), 
@@ -59,6 +61,7 @@ module data_access_tb;
 		zero = 0;
 		branch_in = 0;
 		branchNot_in = 0;
+		opcode = 6'b100011;
 
 		// Wait 100 ns for global reset to finish
 		#100;
@@ -66,6 +69,9 @@ module data_access_tb;
 		// Add stimulus here
 		#5 addr_in = 0;
 		#5 addr_in = 4;
+		#5 addr_in = 8;
+		#5 addr_in = 12;
+		/*
 		#5 
 		begin
 			addr_in = 0;
@@ -89,6 +95,7 @@ module data_access_tb;
 		#5 addr_in=4;
 		#5 branch_in=1;
 		#5 zero=1;
+		*/
 	end
       
 		always

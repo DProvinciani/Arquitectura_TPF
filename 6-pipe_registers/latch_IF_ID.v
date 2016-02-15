@@ -30,8 +30,6 @@ module latch_IF_ID
 	output reg [B-1:0]pc_incrementado_out,
 	output reg [B-1:0]instruction_out
 	);
-	//reg [B-1:0] instr_reg;
-	//reg [W-1:0] pc_next_reg;
 	
 	always @(posedge clk, posedge reset)
 	begin
@@ -46,7 +44,5 @@ module latch_IF_ID
 			pc_incrementado_out <= pc_incrementado_in;
 		end
 	end
-	
-	//assign instruction_out = instr_reg;
-	//assign pc_next_out = pc_next_reg;
+
 endmodule

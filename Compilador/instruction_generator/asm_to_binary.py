@@ -1,11 +1,17 @@
 import dec_to_binary
 
 
-def rd_rt_shamt(fields):
-    rt = dec_to_binary.strdec_to_bin(int((fields[1])[1:-1]), 5)
+#def rd_rt_shamt(fields):
+#    rt = dec_to_binary.strdec_to_bin(int((fields[1])[1:-1]), 5)
+#    rd = dec_to_binary.strdec_to_bin(int((fields[0])[1:-1]), 5)
+#    shamt = dec_to_binary.strdec_to_bin(int((fields[2])[:-1]), 5)
+#    return str(rt + rd + shamt)
+
+def rd_rs_shamt(fields):
+    rs = dec_to_binary.strdec_to_bin(int((fields[1])[1:-1]), 5)
     rd = dec_to_binary.strdec_to_bin(int((fields[0])[1:-1]), 5)
     shamt = dec_to_binary.strdec_to_bin(int((fields[2])[:-1]), 5)
-    return str(rt + rd + shamt)
+    return str(rs + "00000" + rd + shamt)
 
 
 def rd_rt_rs(fields):
@@ -51,17 +57,17 @@ def rt_offset_base(fields):
 
 def generate_sll(fields):
     opcode = "000000"
-    return str(opcode + "00000" + rd_rt_shamt(fields) + "000000")
+    return str(opcode + rd_rs_shamt(fields) + "000000")
 
 
 def generate_srl(fields):
     opcode = "000000"
-    return str(opcode + "00000" + rd_rt_shamt(fields) + "000010")
+    return str(opcode + rd_rs_shamt(fields) + "000010")
 
 
 def generate_sra(fields):
     opcode = "000000"
-    return str(opcode + "00000" + rd_rt_shamt(fields) + "000011")
+    return str(opcode + rd_rs_shamt(fields) + "000011")
 
 
 def generate_sllv(fields):
@@ -218,3 +224,7 @@ def generate_jal(fields):  # Chequear que no de error porque fields es una sola 
     opcode = "000011"
     target = dec_to_binary.strdec_to_bin(int((fields[0])[:-1]), 26)
     return str(opcode + target)
+
+def generate_nop(fields):  # Chequear que no de error porque fields es una sola palabra
+    instruction = "00000000000000000000000000000000"
+    return str(instruction)

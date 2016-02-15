@@ -33,8 +33,13 @@ module registers_memory
 								// direccion lectura o escritura segun el caso
 		input wire [B-1:0] w_data,
 								// datos para escritura, si es el caso
-		output wire [B-1:0] r_data1, r_data2
+		output wire [B-1:0] r_data1, r_data2,
 								// datos que se leen, siempre se lee
+		output wire [B-1:0] reg_16,
+		output wire [B-1:0] reg_17,
+		output wire [B-1:0] reg_18,
+		output wire [B-1:0] reg_19,
+		output wire [B-1:0] reg_20
    );
 	
 	// declaracion de seniales
@@ -59,4 +64,12 @@ module registers_memory
 	// operacion lectura
 	assign r_data1 = array_reg[r_addr1];
 	assign r_data2 = array_reg[r_addr2];
+	
+	//Para testing
+	assign reg_16 = array_reg[16];
+	assign reg_17 = array_reg[17];
+	assign reg_18 = array_reg[18];
+	assign reg_19 = array_reg[19];
+	assign reg_20 = array_reg[20];
+	
 endmodule

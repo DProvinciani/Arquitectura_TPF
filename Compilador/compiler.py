@@ -5,10 +5,10 @@ from instruction_generator import dec_to_binary
 
 
 def parse_instruction(instruction):
-    fields = instruction.split()
-    instruction_name = fields.pop(0)
-    function = getattr(asm_to_binary, 'generate_' + instruction_name.lower())
-    return function(fields)
+    fields = instruction.split()	#Arma un array con las palabras de una instruccion
+    instruction_name = fields.pop(0)    #Saca la primer palabra de la instruccion y la toma como nombre de la instruccion.
+    function = getattr(asm_to_binary, 'generate_' + instruction_name.lower())	
+    return function(fields)	#llama a la funcion encargada de generar la instruccion
 
 
 def read_file(filename):
@@ -29,14 +29,18 @@ if __name__ == "__main__":
         index += 1
     index = raw_input("Please, chose a file to compile: ")
 
-    print ("\nReading assembler file...")
+    print ("\nReading assembler file..." + index)
+    
     instructions = read_file(files[int(index)-1])
+    print instructions.__len__()
 
     print ("Compiling...")
     binary = open("result/" + (files[int(index)-1])[:-4] + ".coe", 'w')
     binary.write("memory_initialization_radix=2;\nmemory_initialization_vector=\n")
     for i in range(0, instructions.__len__()):
-        binary.write(parse_instruction(instructions[i]))
+	print instructions[i]
+	print i        
+	binary.write(parse_instruction(instructions[i]))
         if i == instructions.__len__()-1:
             binary.write(";")
         else:

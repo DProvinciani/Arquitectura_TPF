@@ -34,6 +34,7 @@ module mux4
 	assign signal = 	(sel == 2'b00) ? item_a :
 							(sel == 2'b01) ? item_b :
 							(sel == 2'b10) ? item_c :
-							item_d;
+							(sel == 2'b11) ? item_d :
+							32'b11111111_11111111_11111111_11111111;
 	
 endmodule

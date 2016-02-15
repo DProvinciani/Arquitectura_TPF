@@ -26,12 +26,12 @@ module third_step_tb;
 
 	// Inputs
 	reg aluSrc;
-	reg [1:0] ALUOp;
+	reg [5:0] ALUOp;
 	reg regDst;
 	reg [31:0] pcPlusFour;
-	reg [31:0] reg1;
-	reg [31:0] reg2;
-	reg [31:0] signExtend;
+	reg signed [31:0] reg1;
+	reg signed [31:0] reg2;
+	reg signed [31:0] signExtend;
 	reg [4:0] regDst1;
 	reg [4:0] regDst2;
 
@@ -66,34 +66,32 @@ module third_step_tb;
 		ALUOp = 0;
 		regDst = 0;
 		pcPlusFour = 32;
-		reg1 = 7;
-		reg2 = 3;
+		reg1 = 4;
+		reg2 = 32'b10000000_00000000_00000000_00000001;
 		signExtend = 25;
 		regDst1 = 5'b00101;
 		regDst2 = 5'b01000;
 
 		// Wait 100 ns for global reset to finish
-		#100;
+		
         
 		// Add stimulus here
 		regDst = 1;
 		#10;
 		
-		signExtend = 32'b00000000000000000000000000100010;
-		ALUOp = 2'b00;
+		signExtend = 32'b00000000_00000000_00000000_00000111;
 		#10;
-		signExtend = 32'b00000000000000000000000000100100;
-		aluSrc = 1;
+		/*
+		signExtend = 32'b00000000000000000000000000000111;
 		#10;
-		signExtend = 32'b00000000000000000000000000100101;
+		signExtend = 32'b00000000000000000000000000000111;
 		#10;
-		signExtend = 32'b00000000000000000000000000101010;
+		signExtend = 32'b00000000000000000000000000000111;
 		#10;
 		aluSrc = 0;
-		reg2 = 7;
 		signExtend = 32'b00000000000000000000000000100010;
 		#10;
-		
+		*/	
 	end
 	
 endmodule

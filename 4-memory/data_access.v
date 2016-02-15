@@ -61,13 +61,15 @@ module data_access
 			.reg_in(write_data[15:0]),
 			.reg_out(sh)
 		);
-		mux4 mux_store
+		wire [B-1:0] write_data_mem;
+		mux4 mux_store 
 		(
 			.sel(opcode[1:0]),
 			.item_a(sb),
 			.item_b(sh),
 			.item_c(),
-			.item_d(write_data)
+			.item_d(write_data),
+			.signal(write_data_mem)
 		);
 		
 		wire [B-1:0] data_mem;
@@ -76,7 +78,7 @@ module data_access
 							.ena(1'b1),
 							.wea(we),
 							.addra(addr_in),
-							.dina(write_data),
+							.dina(write_data_mem),
 							.douta(data_mem));
 		
 		//Manejo de los "load"

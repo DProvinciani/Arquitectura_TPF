@@ -84,6 +84,8 @@ module pipeline_tb;
 	//EX-MEM
 	////Data signals
 	wire [31:0] test_alu_result_EX_MEM;
+	////Control
+	wire [5:0] test_opcode_EX_MEM;
 	
 	//MEM-WB
 	////Data signals
@@ -95,6 +97,13 @@ module pipeline_tb;
 	//WB
 	////Data signals
 	wire [31:0] test_mux_wb_data_WB;
+	
+	//Registros
+	wire [31:0] test_reg_16;
+	wire [31:0] test_reg_17;
+	wire [31:0] test_reg_18;
+	wire [31:0] test_reg_19;
+	wire [31:0] test_reg_20;
 	
 	// Instantiate the Unit Under Test (UUT)
 	pipeline uut (
@@ -155,6 +164,8 @@ module pipeline_tb;
 		//EX-MEM
 		////Data signals
 		.test_alu_result_EX_MEM(test_alu_result_EX_MEM),
+		////Control
+		.test_opcode_EX_MEM(test_opcode_EX_MEM),
 		
 		//MEM-WB
 		////Data signals
@@ -164,7 +175,14 @@ module pipeline_tb;
 		.test_memToReg_MEM_WB(test_memToReg_MEM_WB),
 		
 		//WB
-		.test_mux_wb_data_WB(test_mux_wb_data_WB)
+		.test_mux_wb_data_WB(test_mux_wb_data_WB),
+		
+		//Registros
+		.reg_16(test_reg_16),
+		.reg_17(test_reg_17),
+		.reg_18(test_reg_18),
+		.reg_19(test_reg_19),
+		.reg_20(test_reg_20)
 	);
 
 	initial begin
