@@ -29,9 +29,19 @@ module pipeline_tb;
 	reg reset;
 	integer ciclo;
 	
+	//HZ
+	wire [1:0] test_ForwardAE;
+	wire [1:0] test_ForwardBE;
+	wire test_stallF;
+	wire test_stallD;
+	wire test_flushE;
+	wire [4:0] test_instruction_25_21_ID;
+	wire [4:0] test_instruction_20_16_ID;
+	wire test_wb_MemtoReg_IDEX;
+	
 	//IF (salidas)
 	////Datos
-	wire [31:0] test_pc_incrementado_IF;
+	wire [31:0] test_pc_incrementado_PC;
 	wire [31:0] test_instruction_IF;
 	
 	//IF-ID (salidas)
@@ -76,6 +86,7 @@ module pipeline_tb;
 	wire [31:0] test_sign_extended_ID_EX_out;
 	wire [4:0] test_inst_15_11_ID_EX_out;
 	wire [4:0] test_inst_20_16_ID_EX_out;
+	wire [4:0] test_inst_25_21_ID_EX_out;
 	
 	//EX
 	////Data signals
@@ -86,6 +97,7 @@ module pipeline_tb;
 	wire [31:0] test_alu_result_EX_MEM;
 	////Control
 	wire [5:0] test_opcode_EX_MEM;
+	wire test_wb_MemtoReg_EXMEM;
 	
 	//MEM-WB
 	////Data signals
@@ -111,7 +123,7 @@ module pipeline_tb;
 		.reset(reset),
 		//IF (salidas)
 		////Datos
-		.test_pc_incrementado_IF(test_pc_incrementado_IF),
+		.test_pc_incrementado_PC(test_pc_incrementado_PC),
 		.test_instruction_IF(test_instruction_IF),
 		
 		//IF-ID (salidas)
@@ -123,6 +135,8 @@ module pipeline_tb;
 		////Datos
 		.test_data1_ID(test_data1_ID),
 		.test_data2_ID(test_data2_ID),
+		.test_instruction_20_16_ID(test_instruction_20_16_ID),
+		.test_instruction_25_21_ID(test_instruction_25_21_ID),
 		////Control
 		.test_wb_RegWrite_ID(test_wb_RegWrite_ID),
 		.test_wb_MemtoReg_ID(test_wb_MemtoReg_ID),
@@ -156,6 +170,14 @@ module pipeline_tb;
 		.test_sign_extended_ID_EX_out(test_sign_extended_ID_EX_out),
 		.test_inst_15_11_ID_EX_out(test_inst_15_11_ID_EX_out),
 		.test_inst_20_16_ID_EX_out(test_inst_20_16_ID_EX_out),
+		.test_inst_25_21_ID_EX_out(test_inst_25_21_ID_EX_out),
+		///////For hazards
+		.test_ForwardAE(test_ForwardAE),
+		.test_ForwardBE(test_ForwardBE),
+		.test_stallF(test_stallF),
+		.test_stallD(test_stallD),
+		.test_flushE(test_flushE),
+		.test_wb_MemtoReg_IDEX(test_wb_MemtoReg_IDEX),
 		
 		//EX
 		////Data signals
@@ -166,6 +188,7 @@ module pipeline_tb;
 		.test_alu_result_EX_MEM(test_alu_result_EX_MEM),
 		////Control
 		.test_opcode_EX_MEM(test_opcode_EX_MEM),
+		.test_wb_MemtoReg_EXMEM(test_wb_MemtoReg_EXMEM),
 		
 		//MEM-WB
 		////Data signals

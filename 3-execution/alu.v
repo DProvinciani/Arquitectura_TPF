@@ -39,7 +39,7 @@ module alu #(parameter B = 32)
 							(alu_control == 4'b1001) ? {$signed(op1) >>> op2[10:6]} : //SRA
 							(alu_control == 4'b1010) ? op2 << op1 : //SLLV
 							(alu_control == 4'b1011) ? op2 >> op1 : //SRLV
-							(alu_control == 4'b1100) ? {$signed(op1) >>> op2} : //SRAV
+							(alu_control == 4'b1100) ? {$signed(op2) >>> op1} : //SRAV
 							(alu_control == 4'b1101) ? {op2[15:0],16'b00000000_00000000} : //LUI
 							32'b11111111_11111111_11111111_11111111;
 	assign zero = (result == 0) ? 1'b1 : 1'b0;

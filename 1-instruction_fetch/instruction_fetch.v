@@ -23,29 +23,18 @@ module instruction_fetch
 		parameter B=32 // ancho de la direccion (PC)
 	)
 	(
-		input wire [B-1:0] pc_branch, //PC para tomar el salto
-		input wire [B-1:0] pc_jump,
-		input wire PCSrc, 				//Senial de control para elegir el PC
-		input wire jump,
 		input wire reset,
 		input wire clk,
-		output wire [B-1:0] pc_incrementado, //PC para enviar al registro IF/ID
-		output [B-1:0] instruction
+		input wire [B-1:0] pc,
+		//output wire [B-1:0] pc_incrementado, //PC para enviar al registro IF/ID
+		output [B-1:0] instruction				
     );
-	
-	reg [B-1:0] pc;							//registro PC
 												
-	//mux mux_pc_src(.item_a(pc_incrementado), .item_b(pc_branch), .select(PCSrc), .signal(pc_wire));
-	adder add (.value1(pc), .value2(4), .result(pc_incrementado));
-	instructionMemory im (.addra(pc), .clka(~clk), .douta(instruction), .ena(1'b1));
-	
-	always@(posedge clk or posedge reset)
-	if (reset == 1) pc <= 0;		//Si entro por reset, resetea el PC
-	else
-	begin
-		if (PCSrc == 1) pc <= pc_branch;
-		else if (jump == 1) pc <= pc_jump;
-		else pc <= pc_incrementado;			//Si entro por clk, actualiza el PC con el nuevo valor
-	end
+		instructionMemory im (
+		.addra(pc),
+		.clka(~clk), 
+		.douta(instruction), 
+		.ena(1'b1)
+		);
 	
 endmodule

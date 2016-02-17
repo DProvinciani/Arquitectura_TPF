@@ -24,99 +24,169 @@ module pipeline
 		parameter W=5
 	)
 	(
-	input wire clk,
-	input wire reset,
-	//IF (salidas)
-	////Datos
-	output wire [B-1:0] test_pc_incrementado_IF,
-	output wire [B-1:0] test_instruction_IF,
-	//IF-ID (salidas)
-	////Datos
-	output wire [B-1:0] test_pc_incrementado_IF_ID,
-	output wire [B-1:0] test_instruction_IF_ID,
-	//ID (salidas)
-	////Datos
-	output wire [31:0] test_data1_ID,
-	output wire [31:0] test_data2_ID,
-	////Control
-	output wire test_wb_RegWrite_ID,
-	output wire test_wb_MemtoReg_ID,
-	//////MEM
-	output wire test_m_Jump_ID,
-	output wire test_m_Branch_ID,
-	output wire test_m_MemRead_ID,
-	output wire test_m_MemWrite_ID,
-	//////EX
-	output wire test_ex_RegDst_ID,
-	output wire [5:0] test_ex_ALUOp_ID,
-	output wire test_ex_ALUSrc_ID,
-	////Datos
-	output wire [31:0] test_sign_extend_ID,
-	//ID-EX (salidas)
-	////Control signals
-	output wire test_wb_RegWrite_ID_EX_out,
-	output wire test_wb_MemtoReg_ID_EX_out,
-	output wire test_m_Jump_ID_EX_out,
-	output wire test_m_Branch_ID_EX_out,
-	output wire test_m_MemRead_ID_EX_out,
-	output wire test_m_MemWrite_ID_EX_out,
-	output wire test_ex_RegDst_ID_EX_out,
-	output wire [5:0] test_ex_ALUOp_ID_EX_out,
-	output wire test_ex_ALUSrc_ID_EX_out,
-	////Data signals
-	output wire [31:0] test_pc_incrementado_ID_EX_out,
-	output wire [31:0] test_data1_ID_EX_out,
-	output wire [31:0] test_data2_ID_EX_out,
-	output wire [31:0] test_sign_extended_ID_EX_out,
-	output wire [4:0] test_inst_15_11_ID_EX_out,
-	output wire [4:0] test_inst_20_16_ID_EX_out,
-	//EX
-	////Data signals
-	output wire [B-1:0] test_alu_result_EX,
-	//EX-MEM
-	////Data signals
-	output wire [B-1:0] test_alu_result_EX_MEM,
-	////Control
-	output wire [5:0] test_opcode_EX_MEM,
-	//MEM-WB
-	output wire [B-1:0] test_mem_data_MEM_WB,
-	output wire [4:0]  test_reg_dest_addr_MEM_WB,
-	////Control signals
-	output wire test_memToReg_MEM_WB,
-	//WB
-	////Data signals
-	output wire [B-1:0] test_mux_wb_data_WB,
-	
-	//Registros (datos en los registros)
-	output wire [B-1:0] reg_16,
-	output wire [B-1:0] reg_17,
-	output wire [B-1:0] reg_18,
-	output wire [B-1:0] reg_19,
-	output wire [B-1:0] reg_20
+		input wire clk,
+		input wire reset,
+		//IF (salidas)
+		////Datos
+		output wire [B-1:0] test_pc_incrementado_PC,
+		output wire [B-1:0] test_instruction_IF,
+		//IF-ID (salidas)
+		////Datos
+		output wire [B-1:0] test_pc_incrementado_IF_ID,
+		output wire [B-1:0] test_instruction_IF_ID,
+		//ID (salidas)
+		////Datos
+		output wire [31:0] test_data1_ID,
+		output wire [31:0] test_data2_ID,
+		output wire [31:0] test_sign_extend_ID,
+		output wire [W-1:0] test_instruction_25_21_ID,    //RsD
+		output wire [W-1:0] test_instruction_20_16_ID,    //RtD
+		////Control
+		//////WB
+		output wire test_wb_RegWrite_ID,
+		output wire test_wb_MemtoReg_ID,
+		//////MEM
+		output wire test_m_Jump_ID,
+		output wire test_m_Branch_ID,
+		output wire test_m_MemRead_ID,
+		output wire test_m_MemWrite_ID,
+		//////EX
+		output wire test_ex_RegDst_ID,
+		output wire [5:0] test_ex_ALUOp_ID,
+		output wire test_ex_ALUSrc_ID,
+		//ID-EX (salidas)
+		////Control signals
+		output wire test_wb_RegWrite_ID_EX_out,
+		output wire test_wb_MemtoReg_ID_EX_out,
+		output wire test_m_Jump_ID_EX_out,
+		output wire test_m_Branch_ID_EX_out,
+		output wire test_m_MemRead_ID_EX_out,
+		output wire test_m_MemWrite_ID_EX_out,
+		output wire test_ex_RegDst_ID_EX_out,
+		output wire [5:0] test_ex_ALUOp_ID_EX_out,
+		output wire test_ex_ALUSrc_ID_EX_out,
+		////Data signals
+		output wire [31:0] test_pc_incrementado_ID_EX_out,
+		output wire [31:0] test_data1_ID_EX_out,
+		output wire [31:0] test_data2_ID_EX_out,
+		output wire [31:0] test_sign_extended_ID_EX_out,
+		output wire [4:0] test_inst_15_11_ID_EX_out,
+		output wire [4:0] test_inst_20_16_ID_EX_out,
+		output wire [4:0] test_inst_25_21_ID_EX_out,
+		output wire [1:0] test_ForwardAE,
+		output wire [1:0] test_ForwardBE,
+		output wire test_flushE,
+		output wire test_stallD,
+		output wire test_stallF,
+		output wire test_wb_MemtoReg_ID_EX,
+		output wire test_wb_MemtoReg_IDEX,
+		//EX
+		////Data signals
+		output wire [B-1:0] test_alu_result_EX,
+		//EX-MEM
+		////Data signals
+		output wire [B-1:0] test_alu_result_EX_MEM,
+		////Control
+		output wire [5:0] test_opcode_EX_MEM,
+		output wire test_wb_MemtoReg_EXMEM,
+		//MEM-WB
+		output wire [B-1:0] test_mem_data_MEM_WB,
+		output wire [4:0]  test_reg_dest_addr_MEM_WB,
+		////Control signals
+		output wire test_memToReg_MEM_WB,
+		//WB
+		////Data signals
+		output wire [B-1:0] test_mux_wb_data_WB,
+		//HZ
+		////Control
+		output wire test_flushE_HZ,
+		output wire test_stallD_HZ,
+		output wire test_stallF_HZ,
+		output wire [1:0] test_ForwardAE_HZ,
+		output wire [1:0] test_ForwardBE_HZ,
+		
+		//Registros (datos en los registros)
+		output wire [B-1:0] reg_16,
+		output wire [B-1:0] reg_17,
+		output wire [B-1:0] reg_18,
+		output wire [B-1:0] reg_19,
+		output wire [B-1:0] reg_20
     );
 	
-	//IF
+	//outputs de modulos posteriores estan declarados aca porque hazard los necesita
+   wire [W-1:0] instruction_25_21_IDEX; //RsE
+   wire [W-1:0] instruction_20_16_IDEX; //RtE
+   wire wb_RegWrite_EXMEM;
+   wire wb_RegWrite_MEMWB;
+   wire [W-1:0] reg_dest_addr_MEMWB;
+   wire [W-1:0] reg_dest_addr_EXMEM;
+   wire [W-1:0] instruction_25_21_ID;    //RsD
+   wire [W-1:0] instruction_20_16_ID;    //RtD
+   //wire wb_MemtoReg_EXMEM;
+	wire wb_MemtoReg_IDEX;
+   
+   //output hazard unit
+   wire [1:0] ForwardAE_HZ;
+   wire [1:0] ForwardBE_HZ;
+   wire stallF_HZ;
+   wire stallD_HZ;
+   wire flushE_HZ;
+	
+	//HZ
+	Hazard_unit HU(
+		 //Input
+		 ////Data
+		 .RsE(instruction_25_21_IDEX),
+		 .RtE(instruction_20_16_IDEX),
+		 .RsD(instruction_25_21_ID),
+		 .RtD(instruction_20_16_ID),
+		 .WriteRegM(reg_dest_addr_EXMEM),
+		 .WriteRegWB(reg_dest_addr_MEMWB),
+		 ////Control
+		 .RegWriteM(wb_RegWrite_EXMEM),
+		 .RegWriteWB(wb_RegWrite_MEMWB),
+		 .MemtoRegEX(wb_MemtoReg_IDEX),
+		 //Output
+		 .ForwardAE(ForwardAE_HZ),
+		 .ForwardBE(ForwardBE_HZ),
+		 .stallF(stallF_HZ),
+		 .stallD(stallD_HZ),
+		 .flushE(flushE_HZ)
+   );
+	
+	//PC
 	wire [B-1:0] add_result_EXMEM; 	//Cable que viene desde EXMEM
 	wire [B-1:0] pc_jump_EXMEM;
 	wire pcSrc_MEM;						//1 si tomamos el salto, 0 en caso contrario
-	//wire jump_MEM;
 	wire m_Jump_EXMEM;
-	wire [B-1:0] pc_incrementado_IF; //salida del modulo IF
+	wire [B-1:0] pc_incrementado_PC; //salida del modulo PC
+	wire [B-1:0] pc_PC;					//salida del modulo PC
 	wire [B-1:0] instruction_IF;		//salida del modulo IF
 	
+	PC_counter PC(
+		//inputs
+		.clk(clk),
+		.reset(reset),
+		//.disa(1'b0),
+		.disa(stallF_HZ),
+		.pc_branch(add_result_EXMEM), //PC para tomar el salto
+		.pc_jump(pc_jump_EXMEM),
+		.PCSrc(pcSrc_MEM), 				//Senial de control para elegir el PC
+		.jump(m_Jump_EXMEM),
+		//outputs
+		.pc_out(pc_PC),					//salida que va a IF
+		.pc_incrementado(pc_incrementado_PC)	//salida que va directo a IF/ID
+   );
+	
+	//IF
 	instruction_fetch IF(
 		.clk(clk),
 		.reset(reset),
 		//Inputs
 		////Data
-		.pc_branch(add_result_EXMEM),
-		.pc_jump(pc_jump_EXMEM),
-		////Control
-		.jump(m_Jump_EXMEM),
-		.PCSrc(pcSrc_MEM),
+		.pc(pc_PC),
 		//Outputs
 		////Data
-		.pc_incrementado(pc_incrementado_IF),
 		.instruction(instruction_IF)
     );
 	
@@ -126,28 +196,29 @@ module pipeline
 	wire [B-1:0] instruction_IFID;
 	
 	latch_IF_ID IF_ID(
-	.clk(clk),
-	.reset(reset),
-	//Data INPUT
-	.pc_incrementado_in(pc_incrementado_IF),
-	.instruction_in(instruction_IF),
-	//Data OUTPUT
-	.pc_incrementado_out(pc_incrementado_IFID),
-	.instruction_out(instruction_IFID)
+		.clk(clk),
+		.reset(reset),
+		//.disa(1'b0),
+		.disa(stallD_HZ),
+		//Data INPUT
+		.pc_incrementado_in(pc_incrementado_PC),
+		.instruction_in(instruction_IF),
+		//Data OUTPUT
+		.pc_incrementado_out(pc_incrementado_IFID),
+		.instruction_out(instruction_IFID)
 	);
 	
 	//ID
 	//Data INPUT
 	wire [B-1:0] data_to_write_WB;
-	wire [W-1:0] reg_dest_addr_MEMWB;
+	//wire [W-1:0] reg_dest_addr_MEMWB;
 	//Control INPUT
-	wire wb_RegWrite_MEMWB;
+	//wire wb_RegWrite_MEMWB;
 	//Data OUTPUT
 	wire [B-1:0] reg_data1_ID;
 	wire [B-1:0] reg_data2_ID;
 	wire [B-1:0] sgn_extend_ID;
-	wire [W-1:0] instruction_15_11_ID;
-	wire [W-1:0] instruction_20_16_ID;
+	wire [W-1:0] instruction_15_11_ID; //RdD; RsD y RtD definidas mas arriba, las usa HZ 
 	wire [B-1:0] pc_jump_ID;
 	//Control OUTPUT
 	////WB
@@ -194,6 +265,7 @@ module pipeline
 		.sgn_extend_data_imm(sgn_extend_ID),
 		.rd(instruction_15_11_ID),
 		.rt(instruction_20_16_ID),
+		.rs(instruction_25_21_ID),
 		.pc_jump(pc_jump_ID),
 		//Registros
 		.reg_16(reg_16),
@@ -206,7 +278,7 @@ module pipeline
 	//ID-EX 
 	////Control
 	wire wb_RegWrite_IDEX;
-	wire wb_MemtoReg_IDEX;
+	//wire wb_MemtoReg_IDEX;
 	wire m_Jump_IDEX;
 	wire m_Branch_IDEX;
 	wire m_BranchNot_IDEX;
@@ -221,57 +293,61 @@ module pipeline
 	wire [B-1:0] reg_data1_IDEX;
 	wire [B-1:0] reg_data2_IDEX;
 	wire [B-1:0] sgn_extend_IDEX;
-	wire [W-1:0] instruction_20_16_IDEX;
+	//wire [W-1:0] instruction_20_16_IDEX;
 	wire [W-1:0] instruction_15_11_IDEX;
 	wire [B-1:0] pc_jump_IDEX;
 	
 	latch_ID_EX ID_EX(
-	.clk(clk),
-	.reset(reset),
-	//Control signals input
-	.wb_RegWrite_in(wb_RegWrite_ID),
-	.wb_MemtoReg_in(wb_MemtoReg_ID),
-	.m_Jump_in(m_Jump_ID),
-	.m_Branch_in(m_Branch_ID),
-	.m_BranchNot_in(m_BranchNot_ID),
-	.m_MemRead_in(m_MemRead_ID),
-	.m_MemWrite_in(m_MemWrite_ID),
-	.ex_RegDst_in(ex_RegDst_ID),
-	.ex_ALUOp_in(ex_ALUOp_ID),
-	.ex_ALUSrc_in(ex_ALUSrc_ID),
-	.opcode_in(opcode_ID),
-	//Data signals input
-	.pc_next_in(pc_incrementado_IFID),
-	.r_data1_in(reg_data1_ID),
-	.r_data2_in(reg_data2_ID),
-	.sign_ext_in(sgn_extend_ID),
-	.inst_20_16_in(instruction_20_16_ID),
-	.inst_15_11_in(instruction_15_11_ID),
-	.pc_jump_in(pc_jump_ID),
-	//Control signals output
-	.wb_RegWrite_out(wb_RegWrite_IDEX),
-	.wb_MemtoReg_out(wb_MemtoReg_IDEX),
-	.m_Jump_out(m_Jump_IDEX),
-	.m_Branch_out(m_Branch_IDEX),
-	.m_BranchNot_out(m_BranchNot_IDEX),
-	.m_MemRead_out(m_MemRead_IDEX),
-	.m_MemWrite_out(m_MemWrite_IDEX),
-	.ex_RegDst_out(ex_RegDst_IDEX),
-	.ex_ALUOp_out(ex_ALUOp_IDEX),
-	.ex_ALUSrc_out(ex_ALUSrc_IDEX),
-	.opcode_out(opcode_IDEX),
-	//Data signals output
-	.pc_next_out(pc_incrementado_IDEX),
-	.r_data1_out(reg_data1_IDEX),
-	.r_data2_out(reg_data2_IDEX),
-	.sign_ext_out(sgn_extend_IDEX),
-	.inst_20_16_out(instruction_20_16_IDEX),
-	.inst_15_11_out(instruction_15_11_IDEX),
-	.pc_jump_out(pc_jump_IDEX)
+		.clk(clk),
+		.reset(reset),
+		.flush(flushE_HZ),
+		//Control signals input
+		.wb_RegWrite_in(wb_RegWrite_ID),
+		.wb_MemtoReg_in(wb_MemtoReg_ID),
+		.m_Jump_in(m_Jump_ID),
+		.m_Branch_in(m_Branch_ID),
+		.m_BranchNot_in(m_BranchNot_ID),
+		.m_MemRead_in(m_MemRead_ID),
+		.m_MemWrite_in(m_MemWrite_ID),
+		.ex_RegDst_in(ex_RegDst_ID),
+		.ex_ALUOp_in(ex_ALUOp_ID),
+		.ex_ALUSrc_in(ex_ALUSrc_ID),
+		.opcode_in(opcode_ID),
+		//Data signals input
+		.pc_next_in(pc_incrementado_IFID),
+		.r_data1_in(reg_data1_ID),
+		.r_data2_in(reg_data2_ID),
+		.sign_ext_in(sgn_extend_ID),
+		.inst_25_21_in(instruction_25_21_ID),
+		.inst_20_16_in(instruction_20_16_ID),
+		.inst_15_11_in(instruction_15_11_ID),
+		.pc_jump_in(pc_jump_ID),
+		//Control signals output
+		.wb_RegWrite_out(wb_RegWrite_IDEX),
+		.wb_MemtoReg_out(wb_MemtoReg_IDEX),
+		.m_Jump_out(m_Jump_IDEX),
+		.m_Branch_out(m_Branch_IDEX),
+		.m_BranchNot_out(m_BranchNot_IDEX),
+		.m_MemRead_out(m_MemRead_IDEX),
+		.m_MemWrite_out(m_MemWrite_IDEX),
+		.ex_RegDst_out(ex_RegDst_IDEX),
+		.ex_ALUOp_out(ex_ALUOp_IDEX),
+		.ex_ALUSrc_out(ex_ALUSrc_IDEX),
+		.opcode_out(opcode_IDEX),
+		//Data signals output
+		.pc_next_out(pc_incrementado_IDEX),
+		.r_data1_out(reg_data1_IDEX),
+		.r_data2_out(reg_data2_IDEX),
+		.sign_ext_out(sgn_extend_IDEX),
+		.inst_25_21_out(instruction_25_21_IDEX),
+		.inst_20_16_out(instruction_20_16_IDEX),
+		.inst_15_11_out(instruction_15_11_IDEX),
+		.pc_jump_out(pc_jump_IDEX)
 	);
 	
 	//EX
 	////Data
+	wire [B-1:0] alu_result_EXMEM; //salida de EX_MEM
 	wire [B-1:0] add_result_EX;
 	wire zero_EX;
 	wire [B-1:0] alu_result_EX;
@@ -290,6 +366,11 @@ module pipeline
 		.signExtend(sgn_extend_IDEX),
 		.regDst1(instruction_20_16_IDEX),
 		.regDst2(instruction_15_11_IDEX),
+		//Agregado apra hazards
+		.reg_muxes_b(data_to_write_WB),
+		.reg_muxes_d(alu_result_EXMEM),
+		.ForwardAE(ForwardAE_HZ),
+		.ForwardBE(ForwardBE_HZ),
 		//Data OUTPUT
 		.addResult(add_result_EX),
 		.zero(zero_EX),
@@ -300,14 +381,14 @@ module pipeline
 	
 	//EX-MEM
 	////Data
-	wire [B-1:0] alu_result_EXMEM;
+	//wire [B-1:0] alu_result_EXMEM;   //Definida mas arriba
 	wire [B-1:0] reg_data2_EXMEM;
-	wire [W-1:0] reg_dest_addr_EXMEM;
+	//wire [W-1:0] reg_dest_addr_EXMEM; //Definida mas arriba
 	
 	////Control
 	wire zero_EXMEM;
-	wire wb_RegWrite_EXMEM;
-	wire wb_MemtoReg_EXMEM;
+	//wire wb_RegWrite_EXMEM;	//Definida mas arriba
+	wire wb_MemtoReg_EXMEM;	//Definida mas arriba	
 	wire m_Branch_EXMEM;
 	wire m_BranchNot_EXMEM;
 	wire m_MemRead_EXMEM;
@@ -315,46 +396,46 @@ module pipeline
 	wire [5:0] opcode_EXMEM;
 	
 	latch_EX_MEM EX_MEM(
-	.clk(clk),
-	.reset(reset),
-	/* Data signals INPUT */
-	.add_result_in(add_result_EX),
-	.alu_result_in(alu_result_EX),
-	.r_data2_in(reg_data2_EX),
-	.mux_RegDst_in(reg_dest_addr_EX),
-	.pc_jump_in(pc_jump_IDEX),
-	/* Control signals INPUT*/
-	.zero_in(zero_EX),
-	//Write back
-	.wb_RegWrite_in(wb_RegWrite_IDEX),
-	.wb_MemtoReg_in(wb_MemtoReg_IDEX),
-	//Memory
-	.m_Jump_in(m_Jump_IDEX),
-	.m_Branch_in(m_Branch_IDEX),
-	.m_BranchNot_in(m_BranchNot_IDEX),
-	.m_MemRead_in(m_MemRead_IDEX),
-	.m_MemWrite_in(m_MemWrite_IDEX),
-	//Other
-	.opcode_in(opcode_IDEX),
-	/* Data signals OUTPUT */
-	.add_result_out(add_result_EXMEM),
-	.alu_result_out(alu_result_EXMEM),
-	.r_data2_out(reg_data2_EXMEM),
-	.mux_RegDst_out(reg_dest_addr_EXMEM),
-	.pc_jump_out(pc_jump_EXMEM),
-	/* Control signals OUTPUT */
-	.zero_out(zero_EXMEM),
-	//Write back
-	.wb_RegWrite_out(wb_RegWrite_EXMEM),
-	.wb_MemtoReg_out(wb_MemtoReg_EXMEM),
-	//Memory
-	.m_Jump_out(m_Jump_EXMEM),
-	.m_Branch_out(m_Branch_EXMEM),
-	.m_BranchNot_out(m_BranchNot_EXMEM),
-	.m_MemRead_out(m_MemRead_EXMEM),
-	.m_MemWrite_out(m_MemWrite_EXMEM),
-	//Other
-	.opcode_out(opcode_EXMEM)
+		.clk(clk),
+		.reset(reset),
+		/* Data signals INPUT */
+		.add_result_in(add_result_EX),
+		.alu_result_in(alu_result_EX),
+		.r_data2_in(reg_data2_EX),
+		.mux_RegDst_in(reg_dest_addr_EX),
+		.pc_jump_in(pc_jump_IDEX),
+		/* Control signals INPUT*/
+		.zero_in(zero_EX),
+		//Write back
+		.wb_RegWrite_in(wb_RegWrite_IDEX),
+		.wb_MemtoReg_in(wb_MemtoReg_IDEX),
+		//Memory
+		.m_Jump_in(m_Jump_IDEX),
+		.m_Branch_in(m_Branch_IDEX),
+		.m_BranchNot_in(m_BranchNot_IDEX),
+		.m_MemRead_in(m_MemRead_IDEX),
+		.m_MemWrite_in(m_MemWrite_IDEX),
+		//Other
+		.opcode_in(opcode_IDEX),
+		/* Data signals OUTPUT */
+		.add_result_out(add_result_EXMEM),
+		.alu_result_out(alu_result_EXMEM),
+		.r_data2_out(reg_data2_EXMEM),
+		.mux_RegDst_out(reg_dest_addr_EXMEM),
+		.pc_jump_out(pc_jump_EXMEM),
+		/* Control signals OUTPUT */
+		.zero_out(zero_EXMEM),
+		//Write back
+		.wb_RegWrite_out(wb_RegWrite_EXMEM),
+		.wb_MemtoReg_out(wb_MemtoReg_EXMEM),
+		//Memory
+		.m_Jump_out(m_Jump_EXMEM),
+		.m_Branch_out(m_Branch_EXMEM),
+		.m_BranchNot_out(m_BranchNot_EXMEM),
+		.m_MemRead_out(m_MemRead_EXMEM),
+		.m_MemWrite_out(m_MemWrite_EXMEM),
+		//Other
+		.opcode_out(opcode_EXMEM)
 	);
 	
 	//MEM
@@ -407,19 +488,19 @@ module pipeline
 	//WB
 	
 	write_back WB(
-	.clk(clk),
-	//Data INPUT
-	.mem_data(data_MEMWB),
-	.ALU_data(alu_result_MEMWB),
-	//Control INPUT
-	.MemtoReg(wb_MemtoReg_MEMWB),
-	//Data OUTPUT
-	.data_out(data_to_write_WB)
+		.clk(clk),
+		//Data INPUT
+		.mem_data(data_MEMWB),
+		.ALU_data(alu_result_MEMWB),
+		//Control INPUT
+		.MemtoReg(wb_MemtoReg_MEMWB),
+		//Data OUTPUT
+		.data_out(data_to_write_WB)
 	);
 	
 	//IF (salidas)
 	////Datos
-	assign test_pc_incrementado_IF = pc_incrementado_IF;
+	assign test_pc_incrementado_PC = pc_incrementado_PC;
 	assign test_instruction_IF = instruction_IF;
 	
 	//IF-ID (salidas)
@@ -464,6 +545,7 @@ module pipeline
 	assign test_sign_extended_ID_EX_out = sgn_extend_IDEX;
 	assign test_inst_15_11_ID_EX_out = instruction_15_11_IDEX;
 	assign test_inst_20_16_ID_EX_out = instruction_20_16_IDEX;
+	assign test_inst_25_21_ID_EX_out = instruction_25_21_IDEX;
 	
 	//EX
 	////Data signals
@@ -485,5 +567,16 @@ module pipeline
 	//WB
 	////Data signals
 	assign test_mux_wb_data_WB = data_to_write_WB;
+	
+	//HZ
+	assign test_ForwardAE = ForwardAE_HZ;
+	assign test_ForwardBE = ForwardBE_HZ;
+	assign test_flushE = flushE_HZ;
+	assign test_stallF = stallF_HZ;
+	assign test_stallD = stallD_HZ;
+	assign test_instruction_25_21_ID = instruction_25_21_ID;
+	assign test_instruction_20_16_ID = instruction_20_16_ID;
+	assign test_wb_MemtoReg_IDEX = wb_MemtoReg_IDEX ;
+	assign test_wb_MemtoReg_EXMEM = wb_MemtoReg_EXMEM;
 	
 endmodule

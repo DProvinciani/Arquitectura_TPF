@@ -25,19 +25,22 @@ module latch_ID_EX
 	(
 	input wire clk,
 	input wire reset,
+	input wire flush,
 	/* Data signals INPUTS */
-	input wire [B-1:0]pc_next_in,
-	input wire [B-1:0]r_data1_in,
-	input wire [B-1:0]r_data2_in,
-	input wire [B-1:0]sign_ext_in,
-	input wire [W-1:0]inst_20_16_in,
-	input wire [W-1:0]inst_15_11_in,
+	input wire [B-1:0] pc_next_in,
+	input wire [B-1:0] r_data1_in,
+	input wire [B-1:0] r_data2_in,
+	input wire [B-1:0] sign_ext_in,
+	input wire [W-1:0] inst_25_21_in,//FIX HAZARD
+	input wire [W-1:0] inst_20_16_in,
+	input wire [W-1:0] inst_15_11_in,
 	input wire [B-1:0] pc_jump_in,
 	/* Data signals OUTPUTS */	
 	output wire [B-1:0] pc_next_out,
 	output wire [B-1:0] r_data1_out,
 	output wire [B-1:0] r_data2_out,
 	output wire [B-1:0] sign_ext_out,
+	output wire [W-1:0] inst_25_21_out,//FIX HAZARD
 	output wire [W-1:0] inst_20_16_out,
 	output wire [W-1:0] inst_15_11_out,
 	output wire [B-1:0] pc_jump_out,
@@ -79,6 +82,7 @@ module latch_ID_EX
 	reg signed [B-1:0] r_data1_reg;
 	reg signed [B-1:0] r_data2_reg;
 	reg [B-1:0] sign_ext_reg;
+	reg [W-1:0] inst_25_21_reg;//FIX HAZARD
 	reg [W-1:0] inst_20_16_reg;
 	reg [W-1:0] inst_15_11_reg;
 	reg [B-1:0] pc_jump_reg;
@@ -101,14 +105,15 @@ module latch_ID_EX
 	
 	always @(posedge clk, posedge reset)
 	begin
-		if (reset)
-		begin
+		if (reset | flush)
+			begin
 				pc_next_reg <= 0;
 				r_data1_reg <= 0;
 				r_data2_reg <= 0;
 				sign_ext_reg <= 0;
-				inst_20_16_reg <= 0;
-				inst_15_11_reg <= 0;
+				inst_25_21_reg <= 5'b00000;//FIX HAZARD
+				inst_20_16_reg <= 5'b00000;
+				inst_15_11_reg <= 5'b00000;
 				pc_jump_reg <=0;
 				wb_RegWrite_reg <= 0;
 				wb_MemtoReg_reg <= 0;
@@ -121,41 +126,43 @@ module latch_ID_EX
 				ex_ALUOp_reg <= 0;
 				ex_ALUSrc_reg <= 0;
 				opcode_reg <= 0;
-		end
+			end
 		else
-		begin
-		/* Data signals write to ID_EX register */
-		pc_next_reg <= pc_next_in;
-		r_data1_reg <= r_data1_in;
-		r_data2_reg <= r_data2_in;
-		sign_ext_reg <= sign_ext_in;
-		inst_20_16_reg <= inst_20_16_in;
-		inst_15_11_reg <= inst_15_11_in;
-		pc_jump_reg <= pc_jump_in;
-		
-		/* Control signals write to ID_EX register */
-		//Write back
-		wb_RegWrite_reg <= wb_RegWrite_in;
-		wb_MemtoReg_reg <= wb_MemtoReg_in;
-		//Memory
-		m_Jump_reg <= m_Jump_in;
-		m_Branch_reg <= m_Branch_in;
-		m_BranchNot_reg <= m_BranchNot_in;
-		m_MemRead_reg <= m_MemRead_in;
-		m_MemWrite_reg <= m_MemWrite_in;
-		//Execution
-		ex_RegDst_reg <= ex_RegDst_in;
-		ex_ALUOp_reg <= ex_ALUOp_in;
-		ex_ALUSrc_reg <= ex_ALUSrc_in;
-		//Other
-		opcode_reg <= opcode_in;
-		end
+			begin
+			/* Data signals write to ID_EX register */
+			pc_next_reg <= pc_next_in;
+			r_data1_reg <= r_data1_in;
+			r_data2_reg <= r_data2_in;
+			sign_ext_reg <= sign_ext_in;
+			inst_25_21_reg <= inst_25_21_in;//FIX HAZARD
+			inst_20_16_reg <= inst_20_16_in;
+			inst_15_11_reg <= inst_15_11_in;
+			pc_jump_reg <= pc_jump_in;
+			
+			/* Control signals write to ID_EX register */
+			//Write back
+			wb_RegWrite_reg <= wb_RegWrite_in;
+			wb_MemtoReg_reg <= wb_MemtoReg_in;
+			//Memory
+			m_Jump_reg <= m_Jump_in;
+			m_Branch_reg <= m_Branch_in;
+			m_BranchNot_reg <= m_BranchNot_in;
+			m_MemRead_reg <= m_MemRead_in;
+			m_MemWrite_reg <= m_MemWrite_in;
+			//Execution
+			ex_RegDst_reg <= ex_RegDst_in;
+			ex_ALUOp_reg <= ex_ALUOp_in;
+			ex_ALUSrc_reg <= ex_ALUSrc_in;
+			//Other
+			opcode_reg <= opcode_in;
+			end
 	end
 	/* Data signals read from ID_EX register */	
 	assign pc_next_out = pc_next_reg;
 	assign r_data1_out = r_data1_reg;
 	assign r_data2_out = r_data2_reg;
 	assign sign_ext_out = sign_ext_reg;
+	assign inst_25_21_out = inst_25_21_reg;//FIX HAZARD
 	assign inst_20_16_out = inst_20_16_reg;
 	assign inst_15_11_out = inst_15_11_reg;
 	assign pc_jump_out = pc_jump_reg;

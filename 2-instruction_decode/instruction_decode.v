@@ -36,11 +36,12 @@ module instruction_decode
 		
 		//output wire [B-1:0] pc_incrementado_out,		//se pasa a la etapa ex
 		/*Data signals output*/
-		output wire [B-1:0]reg_data1,					//dato 1 del reg
-		output wire [B-1:0]reg_data2,					//dato 2 del reg
-		output wire [B-1:0]sgn_extend_data_imm,		//Inmediato de 32bits
-		output wire [W-1:0]rd,
-		output wire [W-1:0]rt,
+		output wire [B-1:0] reg_data1,					//dato 1 del reg
+		output wire [B-1:0] reg_data2,					//dato 2 del reg
+		output wire [B-1:0] sgn_extend_data_imm,		//Inmediato de 32bits
+		output wire [W-1:0] rd,
+		output wire [W-1:0] rt,
+		output wire [W-1:0] rs,
 		output wire [B-1:0] pc_jump,
 		/* Control signals OUTPUTS */
 		//Write back
@@ -111,6 +112,7 @@ module instruction_decode
 						.reg_out(sgn_extend_data_imm));	//la operacion de signo extendido
 	
 	assign rt = instruction[20:16];
+	assign rs = instruction[25:21];
 	wire [W-1:0] rdaux;
 	assign rdaux = instruction[15:11];
 	assign m_Jump_out = jump;

@@ -25,24 +25,33 @@ module latch_IF_ID
 	(
 	input wire clk,
 	input wire reset,
+	input wire disa,
 	input wire [B-1:0]pc_incrementado_in,
 	input wire [B-1:0]instruction_in,
 	output reg [B-1:0]pc_incrementado_out,
 	output reg [B-1:0]instruction_out
 	);
 	
+	reg [B-1:0] instr_reg;
+	reg [B-1:0] pc_next_reg;
+	
 	always @(posedge clk, posedge reset)
 	begin
 		if (reset)
-		begin
+			begin
 			pc_incrementado_out <= 0;
 			instruction_out <=0;
-		end
+			end
+		else if(disa==1)
+			begin
+			pc_next_reg <= pc_next_reg;
+			instr_reg <= instr_reg;
+			end
 		else
-		begin
+			begin
 			instruction_out <= instruction_in;
 			pc_incrementado_out <= pc_incrementado_in;
-		end
+			end
 	end
 
 endmodule
