@@ -1,5 +1,4 @@
-import ui
-import controller
+from components import controller, ui
 
 # This program needs to run pyserial and bitstring modules
 
