@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import wx
-import serial
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
-from wx._controls_ import TB_HORIZONTAL, TB_HORZ_TEXT, TB_FLAT
+
+from wx._controls_ import TB_FLAT
 
 
 class AutoWidthListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
@@ -62,6 +62,7 @@ class MicompsFrame(wx.Frame):
     def __make_main_section(self):
         self.main_notebook = wx.Notebook(self, wx.ID_ANY)
 
+        self.panel_registers_bank = wx.Panel(self.main_notebook, wx.ID_ANY)
         self.panel_step1 = wx.Panel(self.main_notebook, wx.ID_ANY)
         self.panel_step2 = wx.Panel(self.main_notebook, wx.ID_ANY)
         self.panel_step3 = wx.Panel(self.main_notebook, wx.ID_ANY)
@@ -85,6 +86,8 @@ class MicompsFrame(wx.Frame):
         self.observer.set_lists(self.lists)
 
     def __make_titles(self):
+        self.label_title_registers_bank = wx.StaticText(self.panel_registers_bank, wx.ID_ANY,
+                                                        "REGISTERS BANK LIVE STATUS", style=wx.ALIGN_CENTER)
         self.label_title_left_step1 = wx.StaticText(self.panel_left_step1, wx.ID_ANY, "INPUTS",
                                                     style=wx.ALIGN_CENTER)
         self.label_title_right_step1 = wx.StaticText(self.panel_right_step1, wx.ID_ANY, "OUTPUTS",
@@ -109,6 +112,10 @@ class MicompsFrame(wx.Frame):
                                                   style=wx.ALIGN_CENTER)
 
     def __make_lists(self):
+        self.list_registers = AutoWidthListCtrl(self.panel_registers_bank)
+        self.list_registers.InsertColumn(wx.ID_ANY, 'Nro.', width=-1)
+        self.list_registers.InsertColumn(wx.ID_ANY, 'Value', width=-1)
+
         self.list_inputs_step1 = AutoWidthListCtrl(self.panel_left_step1)
         self.list_inputs_step1.InsertColumn(wx.ID_ANY, 'Name', width=-1)
         self.list_inputs_step1.InsertColumn(wx.ID_ANY, 'Value', width=-1)
@@ -153,18 +160,19 @@ class MicompsFrame(wx.Frame):
         self.list_pipeline.InsertColumn(wx.ID_ANY, 'Step', width=-1)
         self.list_pipeline.InsertColumn(wx.ID_ANY, 'Step', width=-1)
 
-        self.lists = [self.list_inputs_step1, self.list_outputs_step1, self.list_inputs_step2,
-                      self.list_outputs_step2, self.list_inputs_step3, self.list_outputs_step3,
-                      self.list_inputs_step4, self.list_outputs_step4, self.list_inputs_step5,
-                      self.list_outputs_step5, self.list_pipeline]
+        self.lists = [self.list_registers, self.list_inputs_step1, self.list_outputs_step1,
+                      self.list_inputs_step2, self.list_outputs_step2, self.list_inputs_step3,
+                      self.list_outputs_step3, self.list_inputs_step4, self.list_outputs_step4,
+                      self.list_inputs_step5, self.list_outputs_step5, self.list_pipeline]
 
     def __set_properties(self):
         self.SetTitle("MIcomPS")
         self.SetSize((700, 500))
         self.main_frame_statusbar.SetStatusWidths([-1])
-        self.main_frame_statusbar.SetStatusText("MIcomPS - Disconnected", 0)
+        self.main_frame_statusbar.SetStatusText("Disconnected", 0)
 
     def __do_layout(self):
+        sizer_registers_bank = wx.BoxSizer(wx.VERTICAL)
         sizer_step1 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_left_step1 = wx.BoxSizer(wx.VERTICAL)
         sizer_right_step1 = wx.BoxSizer(wx.VERTICAL)
@@ -181,6 +189,10 @@ class MicompsFrame(wx.Frame):
         sizer_left_step5 = wx.BoxSizer(wx.VERTICAL)
         sizer_right_step5 = wx.BoxSizer(wx.VERTICAL)
         sizer_pipeline = wx.BoxSizer(wx.VERTICAL)
+
+        sizer_registers_bank.Add(self.label_title_registers_bank, 0, wx.ALIGN_CENTER | wx.EXPAND, 0)
+        sizer_registers_bank.Add(self.list_registers, 1, wx.ALIGN_CENTER | wx.EXPAND, 0)
+        self.panel_registers_bank.SetSizer(sizer_registers_bank)
 
         sizer_left_step1.Add(self.label_title_left_step1, 0, wx.ALIGN_CENTER | wx.EXPAND, 0)
         sizer_left_step1.Add(self.list_inputs_step1, 1, wx.ALIGN_CENTER | wx.EXPAND, 0)
@@ -236,6 +248,7 @@ class MicompsFrame(wx.Frame):
         sizer_pipeline.Add(self.list_pipeline, 1, wx.ALIGN_CENTER | wx.EXPAND, 0)
         self.panel_pipeline.SetSizer(sizer_pipeline)
 
+        self.main_notebook.AddPage(self.panel_registers_bank, "Registers Bank")
         self.main_notebook.AddPage(self.panel_step1, "Step 1 - IF")
         self.main_notebook.AddPage(self.panel_step2, "Step 2 - ID")
         self.main_notebook.AddPage(self.panel_step3, "Step 3 - EX")
@@ -290,13 +303,13 @@ class MicompsFrame(wx.Frame):
 
     def __on_connect(self, event):
         if self.port == "":
-            self.main_frame_statusbar.SetStatusText = "ERROR: Choose a port."
+            self.main_frame_statusbar.SetStatusText("ERROR: Choose a port.")
         else:
             res = self.observer.connect_to_serial_port(self.port)
             if res == "ERROR":
-                self.main_frame_statusbar.SetStatusText = "ERROR: Connection failed."
+                self.main_frame_statusbar.SetStatusText("ERROR: Connection failed.")
             else:
-                self.main_frame_statusbar.SetStatusText = "ERROR: Connected."
+                self.main_frame_statusbar.SetStatusText("Connected.")
 
 
 class Micomps_UI(wx.App):

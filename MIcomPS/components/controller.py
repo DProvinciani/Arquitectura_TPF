@@ -14,7 +14,6 @@ class Controller:
         if sys.platform.startswith('win'):
             ports = ['COM%s' % (i + 1) for i in range(256)]
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            # this excludes your current terminal "/dev/tty"
             ports = glob.glob('/dev/tty[A-Za-z]*')
         elif sys.platform.startswith('darwin'):
             ports = glob.glob('/dev/tty.*')
@@ -32,23 +31,33 @@ class Controller:
         return result
 
     def connect_to_serial_port(self, port):
-        self.ser = serial.Serial(port, 19200, timeout=0)
+        try:
+            self.ser = serial.Serial(port=port, baudrate=9600, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE,
+                                     bytesize=serial.EIGHTBITS, timeout=0)
+        except:
+            return "ERROR: The device can not be found or can not be configured."
+        try:
+            self.ser.open()
+        except serial.SerialException:
+            return "WARNING: The serial port is already open"
+        return "Connected"
 
     def set_lists(self, lists):
         self.lists = lists
 
     def send_event(self, event):
         if event == "clock":
-            #self.ser.write("00110000")
+            self.ser.write("00000000")
             self.update_fields()
         elif event == "run":
-            #self.ser.write("01110000")
+            self.ser.write("00000001")
             self.update_fields()
 
     def update_fields(self):
-        #data1 = ("WireNameClk", str(self.ser.readline()))
-        data1 = ("WireNameClk", "00000010000100011010000000100111")
-        data2 = ("10", instruction_decode.get_instruction("00000010000100011010000000100111"), "---", "---", "IF", "ID", "EX")
+        lectura = self.ser.read(100)
+        data1 = ("ArduinoDice:", str(lectura))
+        data2 = ("10", instruction_decode.get_instruction("00000010000100011010000000100111"), "---", "---", "IF", "ID",
+                 "EX")
         i = 0
         for lista in self.lists:
             if i != 10:
