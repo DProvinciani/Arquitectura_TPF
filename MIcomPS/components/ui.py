@@ -1,10 +1,28 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 import wx
+import sys
+import serial
+import threading
+from wx._controls_ import TB_FLAT
+from utils import instruction_decode
+from components import serial_config_dialog
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
 
-from wx._controls_ import TB_FLAT
+SERIALRX = wx.NewEventType()
+# bind to serial data receive events
+EVT_SERIALRX = wx.PyEventBinder(SERIALRX, 0)
+
+
+class SerialRxEvent(wx.PyCommandEvent):
+    eventType = SERIALRX
+
+    def __init__(self, windowID, data):
+        wx.PyCommandEvent.__init__(self, self.eventType, windowID)
+        self.data = data
+
+    def Clone(self):
+        self.__class__(self.GetId(), self.data)
 
 
 class AutoWidthListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
@@ -14,12 +32,15 @@ class AutoWidthListCtrl(wx.ListCtrl, ListCtrlAutoWidthMixin):
 
 
 class MicompsFrame(wx.Frame):
-    def __init__(self, control, *args, **kwds):
+    def __init__(self, *args, **kwds):
         wx.Frame.__init__(self, *args, **kwds)
 
-        self.port = ""
+        self.data_recived = ""
         self.lists = []
-        self.observer = control
+        self.serial = serial.Serial()
+        self.serial.timeout = 0.5
+        self.thread = None
+        self.alive = threading.Event()
 
         self.__make_bars()
         self.__make_main_section()
@@ -27,16 +48,24 @@ class MicompsFrame(wx.Frame):
         self.__do_layout()
         self.__set_events()
 
+        self.__on_port_settings(None)  # call setup dialog on startup, opens port
+        if not self.alive.isSet():
+            self.Close()
+
     def __make_bars(self):
         self.file = wx.Menu()
         self.help = wx.Menu()
 
-        self.itemRun = self.file.Append(wx.ID_ANY, "&Run\tCtrl+Shift+F5", " Ejecutar todo el programa")
-        self.itemClock = self.file.Append(wx.ID_ANY, "&Clock\tCtrl+F5", " Ejecutar siguiente instruccion")
+        self.itemPortSettings = self.file.Append(wx.ID_ANY, "&Port Settings\tCtrl+Alt+S",
+                                                 " Configuration of serial port")
         self.file.AppendSeparator()
-        self.itemExit = self.file.Append(wx.ID_EXIT, "&Salir\tCtrl+Q", " Cerrar el programa")
-        self.itemHelp = self.help.Append(wx.ID_HELP_CONTENTS, "&Ayuda\tF1", " Abrir la ayuda del programa")
-        self.itemAbout = self.help.Append(wx.ID_ABOUT, "&Acerca de", " Informacion acerca del programa")
+        self.itemRun = self.file.Append(wx.ID_ANY, "&Run\tCtrl+Shift+F5", " Execute all the instructions")
+        self.itemClock = self.file.Append(wx.ID_ANY, "&Clock\tCtrl+F5", " Execute the next instruction")
+        self.itemUpdateFields = self.file.Append(wx.ID_ANY, "&Update Fields\tF5", " Update the fields values")
+        self.file.AppendSeparator()
+        self.itemExit = self.file.Append(wx.ID_EXIT, "&Exit\tCtrl+Q", " Close the program")
+        self.itemHelp = self.help.Append(wx.ID_HELP_CONTENTS, "&Help\tF1", " Show help contents")
+        self.itemAbout = self.help.Append(wx.ID_ABOUT, "&About", " Show information about MIcomPS")
 
         self.main_frame_menubar = wx.MenuBar()
         self.main_frame_menubar.Append(self.file, "&File")
@@ -44,16 +73,18 @@ class MicompsFrame(wx.Frame):
         self.SetMenuBar(self.main_frame_menubar)
 
         self.main_frame_toolbar = wx.ToolBar(self, wx.ID_ANY, style=wx.TB_HORIZONTAL | TB_FLAT)
-        self.combo_ports = wx.ComboBox(self.main_frame_toolbar, wx.ID_ANY, "Port", pos=(-1, -1), size=(-1, -1),
-                                       choices=self.observer.scan_ports(), style=wx.CB_DROPDOWN)
-        self.button_connect = wx.Button(self.main_frame_toolbar, wx.ID_ANY, "CONNECT", pos=(-1, -1), size=(-1, -1))
+        self.button_port_settings = wx.Button(self.main_frame_toolbar, wx.ID_ANY, "PORT SETTINGS", pos=(-1, -1),
+                                              size=(100, -1))
         self.button_clock = wx.Button(self.main_frame_toolbar, wx.ID_ANY, "CLOCK", pos=(-1, -1), size=(-1, -1))
         self.button_run = wx.Button(self.main_frame_toolbar, wx.ID_ANY, "RUN", pos=(-1, -1), size=(-1, -1))
-        self.main_frame_toolbar.AddControl(self.combo_ports)
-        self.main_frame_toolbar.AddControl(self.button_connect)
+        self.button_update_fields = wx.Button(self.main_frame_toolbar, wx.ID_ANY, "UPDATE FIELDS", pos=(-1, -1),
+                                              size=(100, -1))
+        self.main_frame_toolbar.AddControl(self.button_port_settings)
         self.main_frame_toolbar.AddSeparator()
         self.main_frame_toolbar.AddControl(self.button_clock)
         self.main_frame_toolbar.AddControl(self.button_run)
+        self.main_frame_toolbar.AddSeparator()
+        self.main_frame_toolbar.AddControl(self.button_update_fields)
         self.main_frame_toolbar.Realize()
         self.SetToolBar(self.main_frame_toolbar)
 
@@ -83,7 +114,6 @@ class MicompsFrame(wx.Frame):
 
         self.__make_titles()
         self.__make_lists()
-        self.observer.set_lists(self.lists)
 
     def __make_titles(self):
         self.label_title_registers_bank = wx.StaticText(self.panel_registers_bank, wx.ID_ANY,
@@ -263,24 +293,136 @@ class MicompsFrame(wx.Frame):
         self.Layout()
 
     def __set_events(self):
+        self.Bind(wx.EVT_MENU, self.__on_port_settings, self.itemPortSettings)
         self.Bind(wx.EVT_MENU, self.__on_run, self.itemRun)
         self.Bind(wx.EVT_MENU, self.__on_clock, self.itemClock)
+        self.Bind(wx.EVT_MENU, self.__on_update_fields, self.itemUpdateFields)
         self.Bind(wx.EVT_MENU, self.__on_exit, self.itemExit)
         self.Bind(wx.EVT_MENU, self.__on_help, self.itemHelp)
         self.Bind(wx.EVT_MENU, self.__on_about, self.itemAbout)
-        self.Bind(wx.EVT_COMBOBOX, self.__on_combo, self.combo_ports)
-        self.Bind(wx.EVT_BUTTON, self.__on_connect, self.button_connect)
+        self.Bind(wx.EVT_BUTTON, self.__on_port_settings, self.button_port_settings)
         self.Bind(wx.EVT_BUTTON, self.__on_clock, self.button_clock)
         self.Bind(wx.EVT_BUTTON, self.__on_run, self.button_run)
+        self.Bind(wx.EVT_BUTTON, self.__on_update_fields, self.button_update_fields)
+        self.Bind(EVT_SERIALRX, self.__on_serial_read)
+
+    def __start_thread(self):
+        """Start the receiver thread"""
+        self.thread = threading.Thread(target=self.__com_port_thread)
+        self.thread.setDaemon(1)
+        self.alive.set()
+        self.thread.start()
+        self.serial.rts = True
+        self.serial.dtr = True
+
+    def __stop_thread(self):
+        """Stop the receiver thread, wait until it's finished."""
+        if self.thread is not None:
+            self.alive.clear()  # clear alive event for thread
+            self.thread.join()  # wait until thread has finished
+            self.thread = None
+
+    def __add_data_recived(self, text):
+        self.data_recived += text
+
+    def __on_serial_read(self, event):
+        """Handle input from the serial port."""
+        self.__add_data_recived(event.data.decode('UTF-8', 'replace'))
+
+    def __com_port_thread(self):
+        """\
+        Thread that handles the incoming traffic. Does the basic input
+        transformation (newlines) and generates an SerialRxEvent
+        """
+        while self.alive.isSet():
+            b = self.serial.read(self.serial.inWaiting() or 1)
+            if b:
+                event = SerialRxEvent(self.GetId(), b)
+                self.GetEventHandler().AddPendingEvent(event)
+
+    def __update_fields(self, data):
+        data1 = ("ArduinoDice:", str(data))
+        data2 = ("10", instruction_decode.get_instruction("00000010000100011010000000100111"), "---", "---", "IF", "ID",
+                 "EX")
+        i = 0
+        for lista in self.lists:
+            if i != 11:
+                if lista.GetItemCount() > 0:
+                    lista.DeleteAllItems()
+                index = lista.InsertStringItem(sys.maxint, data1[0])
+                lista.SetStringItem(index, 1, data1[1])
+                lista.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+                lista.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+            else:
+                if lista.GetItemCount() > 0:
+                    lista.DeleteAllItems()
+                index = lista.InsertStringItem(sys.maxint, data2[0])
+                lista.SetStringItem(index, 1, data2[1])
+                lista.SetStringItem(index, 2, data2[2])
+                lista.SetStringItem(index, 3, data2[3])
+                lista.SetStringItem(index, 4, data2[4])
+                lista.SetStringItem(index, 5, data2[5])
+                lista.SetStringItem(index, 6, data2[6])
+                lista.SetColumnWidth(0, 50)
+                lista.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+                lista.SetColumnWidth(2, 50)
+                lista.SetColumnWidth(3, 50)
+                lista.SetColumnWidth(4, 50)
+                lista.SetColumnWidth(5, 50)
+                lista.SetColumnWidth(6, 50)
+            i += 1
+
+        self.data_recived = ""
+
+    def __on_port_settings(self, event):
+        if event is not None:
+            self.__stop_thread()
+            self.serial.close()
+        ok = False
+        while not ok:
+            with serial_config_dialog.SerialConfigDialog(self, -1, "",
+                                                         show=serial_config_dialog.SHOW_BAUDRATE | serial_config_dialog.SHOW_FORMAT | serial_config_dialog.SHOW_FLOW,
+                                                         serial=self.serial) as dialog_serial_cfg:
+                dialog_serial_cfg.CenterOnParent()
+                result = dialog_serial_cfg.ShowModal()
+
+            if result == wx.ID_OK or event is not None:
+                try:
+                    self.serial.open()
+                except serial.SerialException as e:
+                    with wx.MessageDialog(self, str(e), "Serial Port Error", wx.OK | wx.ICON_ERROR) as dlg:
+                        dlg.ShowModal()
+                else:
+                    self.__start_thread()
+                    self.SetTitle(
+                        "Serial Terminal on %s [%s,%s,%s,%s%s%s]" % (self.serial.portstr, self.serial.baudrate,
+                                                                     self.serial.bytesize, self.serial.parity,
+                                                                     self.serial.stopbits,
+                                                                     ' RTS/CTS' if self.serial.rtscts else '',
+                                                                     ' Xon/Xoff' if self.serial.xonxoff else '',))
+                    ok = True
+            else:
+                # on startup, dialog aborted
+                self.alive.clear()
+                ok = True
 
     def __on_run(self, event):
-        self.observer.send_event("run")
+        char = 2
+        char = unichr(char)
+        self.serial.write(char.encode('UTF-8', 'replace'))
 
     def __on_clock(self, event):
-        self.observer.send_event("clock")
+        char = 4
+        char = unichr(char)
+        self.serial.write(char.encode('UTF-8', 'replace'))
+
+    def __on_update_fields(self, event):
+        self.__update_fields(self.data_recived)
 
     def __on_exit(self, event):
-        self.Close(True)
+        self.__stop_thread()
+        self.serial.close()
+        self.Destroy()
 
     def __on_help(self, event):
         message = "No implementado..."
@@ -298,23 +440,10 @@ class MicompsFrame(wx.Frame):
         dlg.ShowModal()
         dlg.Destroy()
 
-    def __on_combo(self, event):
-        self.port = event.GetString()
-
-    def __on_connect(self, event):
-        if self.port == "":
-            self.main_frame_statusbar.SetStatusText("ERROR: Choose a port.")
-        else:
-            res = self.observer.connect_to_serial_port(self.port)
-            if res == "ERROR":
-                self.main_frame_statusbar.SetStatusText("ERROR: Connection failed.")
-            else:
-                self.main_frame_statusbar.SetStatusText("Connected.")
-
 
 class Micomps_UI(wx.App):
-    def __init__(self, control):
+    def __init__(self):
         wx.App.__init__(self)
-        self.main_frame = MicompsFrame(control, None, wx.ID_ANY, "")
+        self.main_frame = MicompsFrame(None, wx.ID_ANY, "")
         self.SetTopWindow(self.main_frame)
         self.main_frame.Show()
