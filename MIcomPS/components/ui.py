@@ -8,6 +8,7 @@ from wx._controls_ import TB_FLAT
 from utils import instruction_decode
 from components import serial_config_dialog
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
+import binascii
 
 SERIALRX = wx.NewEventType()
 # bind to serial data receive events
@@ -35,10 +36,10 @@ class MicompsFrame(wx.Frame):
     def __init__(self, *args, **kwds):
         wx.Frame.__init__(self, *args, **kwds)
 
-        self.data_recived = ""
+        self.data_recived = ''
         self.lists = []
         self.serial = serial.Serial()
-        self.serial.timeout = 0.5
+        self.serial.timeout = 0
         self.thread = None
         self.alive = threading.Event()
 
@@ -327,7 +328,7 @@ class MicompsFrame(wx.Frame):
 
     def __on_serial_read(self, event):
         """Handle input from the serial port."""
-        self.__add_data_recived(event.data.decode('UTF-8', 'replace'))
+        self.__add_data_recived(event.data) #str(event.data)
 
     def __com_port_thread(self):
         """\
@@ -335,13 +336,18 @@ class MicompsFrame(wx.Frame):
         transformation (newlines) and generates an SerialRxEvent
         """
         while self.alive.isSet():
-            b = self.serial.read(self.serial.inWaiting() or 1)
+            b = self.serial.read(1) #(self.serial.inWaiting() or 1)
             if b:
-                event = SerialRxEvent(self.GetId(), b)
+                print binascii.b2a_hex(b)
+                event = SerialRxEvent(self.GetId(), binascii.b2a_hex(b))
                 self.GetEventHandler().AddPendingEvent(event)
 
     def __update_fields(self, data):
-        data1 = ("ArduinoDice:", str(data))
+        log = open("lalala", 'w')
+        log.write(data)
+        log.close()
+        data1 = ("ArduinoDice:", data)
+        print(data)
         data2 = ("10", instruction_decode.get_instruction("00000010000100011010000000100111"), "---", "---", "IF", "ID",
                  "EX")
         i = 0
@@ -372,7 +378,7 @@ class MicompsFrame(wx.Frame):
                 lista.SetColumnWidth(6, 50)
             i += 1
 
-        self.data_recived = ""
+        self.data_recived = ''
 
     def __on_port_settings(self, event):
         if event is not None:
