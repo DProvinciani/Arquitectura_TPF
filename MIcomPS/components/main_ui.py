@@ -476,17 +476,18 @@ class MicompsFrame(wx.Frame):
             ("PC+4", binary_to_dec.strbin_to_udec(str(data[1088:1120]))),
             ("Instruccion", str(data[1120:1152])),
             ("Write data", binary_to_dec.strbin_to_dec(str(data[1152:1184]))),
-            ("Write register addr", binary_to_dec.strbin_to_dec(str(data[1184:1192])[3:])),
-            ("Alu result EX", binary_to_dec.strbin_to_dec(str(data[1192:1224])))
+            ("Write register addr", binary_to_dec.strbin_to_udec(str(data[1184:1192])[3:])),
+            ("ALU result", binary_to_dec.strbin_to_dec(str(data[1192:1224])))
         ]
         self.step2_output_tuples = []
         self.step2_output_tuples = [
             ("Reg data 1", binary_to_dec.strbin_to_dec(str(data[1224:1256]))),
             ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1256:1288]))),
-            ("Sign extend", binary_to_dec.strbin_to_dec(str(data[1288:1320]))),
-            ("instruccion[25:21]", binary_to_dec.strbin_to_udec(str(data[1320:1328])[3:])),
-            ("instruccion[20:16]", binary_to_dec.strbin_to_udec(str(data[1328:1336])[3:])),
-            ("instruccion[15:11]", binary_to_dec.strbin_to_udec(str(data[1336:1344])[3:])),
+            ("Sign extend (signed)", binary_to_dec.strbin_to_dec(str(data[1288:1320]))),
+            ("Sign extend (unsigned)", binary_to_dec.strbin_to_dec(str(data[1288:1320]))),
+            ("RS", binary_to_dec.strbin_to_udec(str(data[1320:1328])[3:])),
+            ("RT", binary_to_dec.strbin_to_udec(str(data[1328:1336])[3:])),
+            ("RD", binary_to_dec.strbin_to_udec(str(data[1336:1344])[3:])),
             ("PC jump", binary_to_dec.strbin_to_udec(str(data[1344:1376]))),
             ("PC branch", binary_to_dec.strbin_to_udec(str(data[1376:1408])))
         ]
@@ -495,16 +496,19 @@ class MicompsFrame(wx.Frame):
             ("PC incrementado", binary_to_dec.strbin_to_udec(str(data[1408:1440]))),
             ("Reg data 1", binary_to_dec.strbin_to_dec(str(data[1440:1472]))),
             ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1472:1504]))),
-            ("Sign extend", binary_to_dec.strbin_to_dec(str(data[1504:1536]))),
-            ("RT", binary_to_dec.strbin_to_dec(str(data[1536:1544])[3:])),
-            ("RD", binary_to_dec.strbin_to_dec(str(data[1544:1552])[3:]))
+            ("Sign extend (signed)", binary_to_dec.strbin_to_dec(str(data[1504:1536]))),
+            ("Sign extend (unsigned)", binary_to_dec.strbin_to_udec(str(data[1504:1536]))),
+            ("RT", binary_to_dec.strbin_to_udec(str(data[1536:1544])[3:])),
+            ("RD", binary_to_dec.strbin_to_udec(str(data[1544:1552])[3:]))
         ]
         self.step3_output_tuples = []
         self.step3_output_tuples = [
             ("Zero signal", str(data[1552:1560])[7:]),
-            ("ALU result", binary_to_dec.strbin_to_dec(str(data[1552:1584]))),
+            ("ALU result (signed)", binary_to_dec.strbin_to_dec(str(data[1552:1584]))),
+            ("ALU result (unsigned)", binary_to_dec.strbin_to_udec(str(data[1552:1584]))),
+            ("ALU result (binary)", str(data[1552:1584])),
             ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1584:1616]))),
-            ("RT o RD", binary_to_dec.strbin_to_dec(str(data[1616:1624])[3:]))
+            ("RT o RD", binary_to_dec.strbin_to_udec(str(data[1616:1624])[3:]))
         ]
         self.step4_input_tuples = []
         self.step4_input_tuples = [
@@ -513,7 +517,9 @@ class MicompsFrame(wx.Frame):
         ]
         self.step4_output_tuples = []
         self.step4_output_tuples = [
-            ("Read data", binary_to_dec.strbin_to_dec(str(data[1688:1720])))
+            ("Read data (signed)", binary_to_dec.strbin_to_dec(str(data[1688:1720]))),
+            ("Read data (unsigned)", binary_to_dec.strbin_to_udec(str(data[1688:1720]))),
+            ("Read data (binary)", str(data[1688:1720]))
         ]
         self.step5_input_tuples = []
         self.step5_input_tuples = [

@@ -121,79 +121,79 @@ def opcode_000000(fields):
 
 
 def opcode_000100(fields):
-    return rs_rt_offset(fields) + ";"
+    return "BEQ " + rs_rt_offset(fields) + ";"
 
 
 def opcode_000101(fields):
-    return rs_rt_offset(fields) + ";"
+    return "BNE " + rs_rt_offset(fields) + ";"
 
 
 def opcode_001000(fields):
-    return rt_rs_immediate(fields) + ";"
+    return "ADDI " + rt_rs_immediate(fields) + ";"
 
 
 def opcode_001010(fields):
-    return rt_rs_immediate(fields) + ";"
+    return "SLTI " + rt_rs_immediate(fields) + ";"
 
 
 def opcode_001100(fields):
-    return rt_rs_immediate(fields) + ";"
+    return "ANDI " + rt_rs_immediate(fields) + ";"
 
 
 def opcode_001101(fields):
-    return rt_rs_immediate(fields) + ";"
+    return "ORI " + rt_rs_immediate(fields) + ";"
 
 
 def opcode_001110(fields):
-    return rt_rs_immediate(fields) + ";"
+    return "XORI " + rt_rs_immediate(fields) + ";"
 
 
 def opcode_001111(fields):
-    return rt_immediate(fields) + ";"
+    return "LUI " + rt_immediate(fields) + ";"
 
 
 def opcode_100000(fields):
-    return rt_offset_base(fields) + ";"
+    return "LB " + rt_offset_base(fields) + ";"
 
 
 def opcode_100001(fields):
-    return rt_offset_base(fields) + ";"
+    return "LH " + rt_offset_base(fields) + ";"
 
 
 def opcode_100011(fields):
-    return rt_offset_base(fields) + ";"
+    return "LW " + rt_offset_base(fields) + ";"
 
 
 def opcode_100100(fields):
-    return rt_offset_base(fields) + ";"
+    return "LBU " + rt_offset_base(fields) + ";"
 
 
 def opcode_100101(fields):
-    return rt_offset_base(fields) + ";"
+    return "LHU " + rt_offset_base(fields) + ";"
 
 
 def opcode_100111(fields):
-    return rt_offset_base(fields) + ";"
+    return "LWU " + rt_offset_base(fields) + ";"
 
 
 def opcode_101000(fields):
-    return rt_offset_base(fields) + ";"
+    return "SB " + rt_offset_base(fields) + ";"
 
 
 def opcode_101001(fields):
-    return rt_offset_base(fields) + ";"
+    return "SH " + rt_offset_base(fields) + ";"
 
 
 def opcode_101011(fields):
-    return rt_offset_base(fields) + ";"
+    return "SW " + rt_offset_base(fields) + ";"
 
 
 def opcode_000010(fields):
-    return binary_to_dec.strbin_to_udec(fields) + ";"
+    return "J " + binary_to_dec.strbin_to_udec(fields) + ";"
 
 
 def opcode_000011(fields):
-    return binary_to_dec.strbin_to_udec(fields) + ";"
+    return "JAL " + binary_to_dec.strbin_to_udec(fields) + ";"
 
 
 def get_instruction(binary_instruction):
