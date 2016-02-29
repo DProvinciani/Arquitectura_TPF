@@ -3,12 +3,13 @@
 import wx
 import sys
 import serial
+import binascii
 import threading
 from wx._controls_ import TB_FLAT
+from utils import binary_to_dec
 from utils import instruction_decode
 from components import serial_config_dialog
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
-import binascii
 
 SERIALRX = wx.NewEventType()
 # bind to serial data receive events
@@ -37,6 +38,25 @@ class MicompsFrame(wx.Frame):
         wx.Frame.__init__(self, *args, **kwds)
 
         self.data_recived = ''
+        self.registers_tuples = []
+        self.step1_input_tuples = []
+        self.step1_output_tuples = []
+        self.step2_input_tuples = []
+        self.step2_output_tuples = []
+        self.step3_input_tuples = []
+        self.step3_output_tuples = []
+        self.step4_input_tuples = []
+        self.step4_output_tuples = []
+        self.step5_input_tuples = []
+        self.step5_output_tuples = []
+        self.instructions_list = []
+        self.pipeline_tuples = []
+        self.data_recived_lists = [
+            self.registers_tuples, self.step1_input_tuples, self.step1_output_tuples, self.step2_input_tuples,
+            self.step2_output_tuples, self.step3_input_tuples, self.step3_output_tuples, self.step4_input_tuples,
+            self.step4_output_tuples, self.step5_input_tuples, self.step5_output_tuples, self.pipeline_tuples
+        ]
+
         self.lists = []
         self.serial = serial.Serial()
         self.serial.timeout = 0
@@ -328,7 +348,7 @@ class MicompsFrame(wx.Frame):
 
     def __on_serial_read(self, event):
         """Handle input from the serial port."""
-        self.__add_data_recived(event.data) #str(event.data)
+        self.__add_data_recived(event.data)  # str(event.data)
 
     def __com_port_thread(self):
         """\
@@ -336,54 +356,183 @@ class MicompsFrame(wx.Frame):
         transformation (newlines) and generates an SerialRxEvent
         """
         while self.alive.isSet():
-            b = self.serial.read(1) #(self.serial.inWaiting() or 1)
+            b = self.serial.read(1)  # (self.serial.inWaiting() or 1)
             if b:
-                print binascii.b2a_hex(b)
+                log = open("log/byte_recived_log", 'a')
+                log.write(binascii.b2a_hex(b))
+                log.close()
                 event = SerialRxEvent(self.GetId(), binascii.b2a_hex(b))
                 self.GetEventHandler().AddPendingEvent(event)
 
     def __update_fields(self, data):
-        log = open("lalala", 'w')
+        log = open("log/data_recived_log", 'a')
         log.write(data)
         log.close()
-        data1 = ("ArduinoDice:", data)
-        print(data)
-        data2 = ("10", instruction_decode.get_instruction("00000010000100011010000000100111"), "---", "---", "IF", "ID",
-                 "EX")
+        self.__parse_data(data)
         i = 0
         for lista in self.lists:
             if i != 11:
                 if lista.GetItemCount() > 0:
                     lista.DeleteAllItems()
-                index = lista.InsertStringItem(sys.maxint, data1[0])
-                lista.SetStringItem(index, 1, data1[1])
-                lista.SetColumnWidth(0, wx.LIST_AUTOSIZE)
-                lista.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+
+                lista_tuplas = self.data_recived_lists.__getitem__(i)
+
+                for tupla in lista_tuplas:
+                    index = lista.InsertStringItem(sys.maxint, tupla[0])
+                    lista.SetStringItem(index, 1, tupla[1])
+                    lista.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+                    lista.SetColumnWidth(1, wx.LIST_AUTOSIZE)
             else:
                 if lista.GetItemCount() > 0:
                     lista.DeleteAllItems()
-                index = lista.InsertStringItem(sys.maxint, data2[0])
-                lista.SetStringItem(index, 1, data2[1])
-                lista.SetStringItem(index, 2, data2[2])
-                lista.SetStringItem(index, 3, data2[3])
-                lista.SetStringItem(index, 4, data2[4])
-                lista.SetStringItem(index, 5, data2[5])
-                lista.SetStringItem(index, 6, data2[6])
-                lista.SetColumnWidth(0, 50)
-                lista.SetColumnWidth(1, wx.LIST_AUTOSIZE)
-                lista.SetColumnWidth(2, 50)
-                lista.SetColumnWidth(3, 50)
-                lista.SetColumnWidth(4, 50)
-                lista.SetColumnWidth(5, 50)
-                lista.SetColumnWidth(6, 50)
+
+                lista_tuplas = self.data_recived_lists.__getitem__(i)
+
+                for tupla in lista_tuplas:
+                    index = lista.InsertStringItem(sys.maxint, tupla[0])
+                    lista.SetStringItem(index, 1, tupla[1])
+                    lista.SetStringItem(index, 2, tupla[2])
+                    lista.SetStringItem(index, 3, tupla[3])
+                    lista.SetStringItem(index, 4, tupla[4])
+                    lista.SetStringItem(index, 5, tupla[5])
+                    lista.SetStringItem(index, 6, tupla[6])
+                    lista.SetColumnWidth(0, 50)
+                    lista.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+                    lista.SetColumnWidth(2, wx.LIST_AUTOSIZE)
+                    lista.SetColumnWidth(3, wx.LIST_AUTOSIZE)
+                    lista.SetColumnWidth(4, wx.LIST_AUTOSIZE)
+                    lista.SetColumnWidth(5, wx.LIST_AUTOSIZE)
+                    lista.SetColumnWidth(6, wx.LIST_AUTOSIZE)
             i += 1
 
         self.data_recived = ''
+
+    def __parse_data(self, data):
+        self.list_registers = []
+        self.list_registers = [
+            ("Reg 0", binary_to_dec.strbin_to_dec(str(data[0:32]))),
+            ("Reg 1", binary_to_dec.strbin_to_dec(str(data[32:64]))),
+            ("Reg 2", binary_to_dec.strbin_to_dec(str(data[64:96]))),
+            ("Reg 3", binary_to_dec.strbin_to_dec(str(data[96:128]))),
+            ("Reg 4", binary_to_dec.strbin_to_dec(str(data[128:160]))),
+            ("Reg 5", binary_to_dec.strbin_to_dec(str(data[160:192]))),
+            ("Reg 6", binary_to_dec.strbin_to_dec(str(data[192:224]))),
+            ("Reg 7", binary_to_dec.strbin_to_dec(str(data[224:256]))),
+            ("Reg 8", binary_to_dec.strbin_to_dec(str(data[256:288]))),
+            ("Reg 9", binary_to_dec.strbin_to_dec(str(data[288:320]))),
+            ("Reg 10", binary_to_dec.strbin_to_dec(str(data[320:352]))),
+            ("Reg 11", binary_to_dec.strbin_to_dec(str(data[352:384]))),
+            ("Reg 12", binary_to_dec.strbin_to_dec(str(data[384:416]))),
+            ("Reg 13", binary_to_dec.strbin_to_dec(str(data[416:448]))),
+            ("Reg 14", binary_to_dec.strbin_to_dec(str(data[448:480]))),
+            ("Reg 15", binary_to_dec.strbin_to_dec(str(data[480:512]))),
+            ("Reg 16", binary_to_dec.strbin_to_dec(str(data[512:544]))),
+            ("Reg 17", binary_to_dec.strbin_to_dec(str(data[544:576]))),
+            ("Reg 18", binary_to_dec.strbin_to_dec(str(data[576:608]))),
+            ("Reg 19", binary_to_dec.strbin_to_dec(str(data[608:640]))),
+            ("Reg 20", binary_to_dec.strbin_to_dec(str(data[640:672]))),
+            ("Reg 21", binary_to_dec.strbin_to_dec(str(data[672:704]))),
+            ("Reg 22", binary_to_dec.strbin_to_dec(str(data[704:736]))),
+            ("Reg 23", binary_to_dec.strbin_to_dec(str(data[736:768]))),
+            ("Reg 24", binary_to_dec.strbin_to_dec(str(data[768:800]))),
+            ("Reg 25", binary_to_dec.strbin_to_dec(str(data[800:832]))),
+            ("Reg 26", binary_to_dec.strbin_to_dec(str(data[832:864]))),
+            ("Reg 27", binary_to_dec.strbin_to_dec(str(data[864:896]))),
+            ("Reg 28", binary_to_dec.strbin_to_dec(str(data[896:928]))),
+            ("Reg 29", binary_to_dec.strbin_to_dec(str(data[928:960]))),
+            ("Reg 30", binary_to_dec.strbin_to_dec(str(data[960:992]))),
+            ("Reg 31", binary_to_dec.strbin_to_dec(str(data[992:1024])))
+        ]
+        self.step1_input_tuples = []
+        self.step1_input_tuples = [
+            ("PC", binary_to_dec.strbin_to_udec(str(data[1024:1056])))
+        ]
+        self.step1_output_tuples = []
+        self.step1_output_tuples = [
+            ("Instruccion", str(data[1056:1088]))
+        ]
+        self.step2_input_tuples = []
+        self.step2_input_tuples = [
+            ("PC+4", binary_to_dec.strbin_to_udec(str(data[1088:1120]))),
+            ("Instruccion", str(data[1120:1152])),
+            ("Write data", binary_to_dec.strbin_to_dec(str(data[1152:1184]))),
+            ("Write register addr", binary_to_dec.strbin_to_dec(str(data[1184:1192])[3:])),
+            ("Alu result EX", binary_to_dec.strbin_to_dec(str(data[1192:1224])))
+        ]
+        self.step2_output_tuples = []
+        self.step2_output_tuples = [
+            ("Reg data 1", binary_to_dec.strbin_to_dec(str(data[1224:1256]))),
+            ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1256:1288]))),
+            ("Sign extend", binary_to_dec.strbin_to_dec(str(data[1288:1320]))),
+            ("instruccion[25:21]", binary_to_dec.strbin_to_dec(str(data[1320:1328])[3:])),
+            ("instruccion[20:16]", binary_to_dec.strbin_to_dec(str(data[1328:1336])[3:])),
+            ("instruccion[15:11]", binary_to_dec.strbin_to_dec(str(data[1336:1344])[3:])),
+            ("PC jump", binary_to_dec.strbin_to_udec(str(data[1344:1376]))),
+            ("PC branch", binary_to_dec.strbin_to_udec(str(data[1376:1408])))
+        ]
+        self.step3_input_tuples = []
+        self.step3_input_tuples = [
+            ("PC incrementado", binary_to_dec.strbin_to_udec(str(data[1408:1440]))),
+            ("Reg data 1", binary_to_dec.strbin_to_dec(str(data[1440:1472]))),
+            ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1472:1504]))),
+            ("Sign extend", binary_to_dec.strbin_to_dec(str(data[1504:1536]))),
+            ("RT", binary_to_dec.strbin_to_dec(str(data[1536:1544])[3:])),
+            ("RD", binary_to_dec.strbin_to_dec(str(data[1544:1552])[3:]))
+        ]
+        self.step3_output_tuples = []
+        self.step3_output_tuples = [
+            ("Zero signal", str(data[1552:1560])[7:]),
+            ("ALU result", binary_to_dec.strbin_to_dec(str(data[1552:1584]))),
+            ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1584:1616]))),
+            ("RT o RD", binary_to_dec.strbin_to_dec(str(data[1616:1624])[3:]))
+        ]
+        self.step4_input_tuples = []
+        self.step4_input_tuples = [
+            ("ALU result", binary_to_dec.strbin_to_udec(str(data[1624:1656]))),
+            ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1656:1688])))
+        ]
+        self.step4_output_tuples = []
+        self.step4_output_tuples = [
+            ("Read data", binary_to_dec.strbin_to_dec(str(data[1688:1720])))
+        ]
+        self.step5_input_tuples = []
+        self.step5_input_tuples = [
+            ("Read memory data", binary_to_dec.strbin_to_dec(str(data[1720:1752]))),
+            ("ALU result", binary_to_dec.strbin_to_dec(str(data[1752:1784])))
+        ]
+        self.step5_output_tuples = []
+        self.step5_output_tuples = [
+            ("Write data", binary_to_dec.strbin_to_dec(str(data[1784:])))
+        ]
+        self.pipeline_tuples = []
+        self.instructions_list.append(str(data[1056:1088]))
+        for i in range(0, self.instructions_list.__len__(), 1):
+            if (self.instructions_list.__len__() - i) > 4:
+                self.pipeline_tuples.append((str(i + 1),
+                                             instruction_decode.get_instruction(self.instructions_list.__getitem__(i)),
+                                             "IF", "ID", "EX", "MEM", "WB"))
+            elif (self.instructions_list.__len__() - i) == 4:
+                self.pipeline_tuples.append((str(i + 1),
+                                             instruction_decode.get_instruction(self.instructions_list.__getitem__(i)),
+                                             "---", "IF", "ID", "EX", "MEM"))
+            elif (self.instructions_list.__len__() - i) == 3:
+                self.pipeline_tuples.append((str(i + 1),
+                                             instruction_decode.get_instruction(self.instructions_list.__getitem__(i)),
+                                             "---", "---", "IF", "ID", "EX"))
+            elif (self.instructions_list.__len__() - i) == 2:
+                self.pipeline_tuples.append((str(i + 1),
+                                             instruction_decode.get_instruction(self.instructions_list.__getitem__(i)),
+                                             "---", "---", "---", "IF", "ID"))
+            elif (self.instructions_list.__len__() - i) == 1:
+                self.pipeline_tuples.append((str(i + 1),
+                                             instruction_decode.get_instruction(self.instructions_list.__getitem__(i)),
+                                             "---", "---", "---", "---", "IF"))
 
     def __on_port_settings(self, event):
         if event is not None:
             self.__stop_thread()
             self.serial.close()
+            self.main_frame_statusbar.SetStatusText("Disconnected", 0)
         ok = False
         while not ok:
             with serial_config_dialog.SerialConfigDialog(self, -1, "",
@@ -406,9 +555,11 @@ class MicompsFrame(wx.Frame):
                                                                      self.serial.stopbits,
                                                                      ' RTS/CTS' if self.serial.rtscts else '',
                                                                      ' Xon/Xoff' if self.serial.xonxoff else '',))
+                    self.main_frame_statusbar.SetStatusText("Connected", 0)
                     ok = True
             else:
                 # on startup, dialog aborted
+                self.main_frame_statusbar.SetStatusText("Connected", 0)
                 self.alive.clear()
                 ok = True
 

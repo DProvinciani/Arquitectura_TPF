@@ -1,1 +1,1 @@
-__all__ = ["controller", "ui"]
+__all__ = ["main_ui", "serial_config_dialog"]

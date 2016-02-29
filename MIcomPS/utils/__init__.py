@@ -1,1 +1,1 @@
-__all__ = ["instruction_decode", "binary_to_dec"]
+__all__ = ["binary_to_dec", "instruction_decode"]
