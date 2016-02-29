@@ -10,6 +10,7 @@ from utils import binary_to_dec
 from utils import instruction_decode
 from components import serial_config_dialog
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
+import string
 
 SERIALRX = wx.NewEventType()
 # bind to serial data receive events
@@ -51,11 +52,6 @@ class MicompsFrame(wx.Frame):
         self.step5_output_tuples = []
         self.instructions_list = []
         self.pipeline_tuples = []
-        self.data_recived_lists = [
-            self.registers_tuples, self.step1_input_tuples, self.step1_output_tuples, self.step2_input_tuples,
-            self.step2_output_tuples, self.step3_input_tuples, self.step3_output_tuples, self.step4_input_tuples,
-            self.step4_output_tuples, self.step5_input_tuples, self.step5_output_tuples, self.pipeline_tuples
-        ]
 
         self.lists = []
         self.serial = serial.Serial()
@@ -364,18 +360,42 @@ class MicompsFrame(wx.Frame):
                 event = SerialRxEvent(self.GetId(), binascii.b2a_hex(b))
                 self.GetEventHandler().AddPendingEvent(event)
 
+    def __hex2bin(self, str):
+        bin = ["0000", "0001", "0010", "0011",
+               "0100", "0101", "0110", "0111",
+               "1000", "1001", "1010", "1011",
+               "1100", "1101", "1110", "1111"]
+        res = ""
+        for i in range(len(str)):
+            res += bin[string.atoi(str[i], base=16)]
+        return res
+
     def __update_fields(self, data):
         log = open("log/data_recived_log", 'a')
         log.write(data)
         log.close()
-        self.__parse_data(data)
+
+        print data
+        data_bin = self.__hex2bin(str(data))
+        self.__parse_data(data_bin)
         i = 0
         for lista in self.lists:
-            if i != 11:
+            if i < 11:
                 if lista.GetItemCount() > 0:
                     lista.DeleteAllItems()
 
-                lista_tuplas = self.data_recived_lists.__getitem__(i)
+                lista_tuplas = []
+                if i == 0: lista_tuplas = self.registers_tuples
+                elif i == 1: lista_tuplas = self.step1_input_tuples
+                elif i == 2: lista_tuplas = self.step1_output_tuples
+                elif i == 3: lista_tuplas = self.step2_input_tuples
+                elif i == 4: lista_tuplas = self.step2_output_tuples
+                elif i == 5: lista_tuplas = self.step3_input_tuples
+                elif i == 6: lista_tuplas = self.step3_output_tuples
+                elif i == 7: lista_tuplas = self.step4_input_tuples
+                elif i == 8: lista_tuplas = self.step4_output_tuples
+                elif i == 9: lista_tuplas = self.step5_input_tuples
+                elif i == 10: lista_tuplas = self.step5_output_tuples
 
                 for tupla in lista_tuplas:
                     index = lista.InsertStringItem(sys.maxint, tupla[0])
@@ -386,7 +406,7 @@ class MicompsFrame(wx.Frame):
                 if lista.GetItemCount() > 0:
                     lista.DeleteAllItems()
 
-                lista_tuplas = self.data_recived_lists.__getitem__(i)
+                lista_tuplas = self.pipeline_tuples
 
                 for tupla in lista_tuplas:
                     index = lista.InsertStringItem(sys.maxint, tupla[0])
@@ -408,8 +428,8 @@ class MicompsFrame(wx.Frame):
         self.data_recived = ''
 
     def __parse_data(self, data):
-        self.list_registers = []
-        self.list_registers = [
+        self.registers_tuples = []
+        self.registers_tuples = [
             ("Reg 0", binary_to_dec.strbin_to_dec(str(data[0:32]))),
             ("Reg 1", binary_to_dec.strbin_to_dec(str(data[32:64]))),
             ("Reg 2", binary_to_dec.strbin_to_dec(str(data[64:96]))),
@@ -464,9 +484,9 @@ class MicompsFrame(wx.Frame):
             ("Reg data 1", binary_to_dec.strbin_to_dec(str(data[1224:1256]))),
             ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1256:1288]))),
             ("Sign extend", binary_to_dec.strbin_to_dec(str(data[1288:1320]))),
-            ("instruccion[25:21]", binary_to_dec.strbin_to_dec(str(data[1320:1328])[3:])),
-            ("instruccion[20:16]", binary_to_dec.strbin_to_dec(str(data[1328:1336])[3:])),
-            ("instruccion[15:11]", binary_to_dec.strbin_to_dec(str(data[1336:1344])[3:])),
+            ("instruccion[25:21]", binary_to_dec.strbin_to_udec(str(data[1320:1328])[3:])),
+            ("instruccion[20:16]", binary_to_dec.strbin_to_udec(str(data[1328:1336])[3:])),
+            ("instruccion[15:11]", binary_to_dec.strbin_to_udec(str(data[1336:1344])[3:])),
             ("PC jump", binary_to_dec.strbin_to_udec(str(data[1344:1376]))),
             ("PC branch", binary_to_dec.strbin_to_udec(str(data[1376:1408])))
         ]
@@ -509,23 +529,23 @@ class MicompsFrame(wx.Frame):
         for i in range(0, self.instructions_list.__len__(), 1):
             if (self.instructions_list.__len__() - i) > 4:
                 self.pipeline_tuples.append((str(i + 1),
-                                             instruction_decode.get_instruction(self.instructions_list.__getitem__(i)),
+                                             instruction_decode.get_instruction(self.instructions_list[i]),
                                              "IF", "ID", "EX", "MEM", "WB"))
             elif (self.instructions_list.__len__() - i) == 4:
                 self.pipeline_tuples.append((str(i + 1),
-                                             instruction_decode.get_instruction(self.instructions_list.__getitem__(i)),
+                                             instruction_decode.get_instruction(self.instructions_list[i]),
                                              "---", "IF", "ID", "EX", "MEM"))
             elif (self.instructions_list.__len__() - i) == 3:
                 self.pipeline_tuples.append((str(i + 1),
-                                             instruction_decode.get_instruction(self.instructions_list.__getitem__(i)),
+                                             instruction_decode.get_instruction(self.instructions_list[i]),
                                              "---", "---", "IF", "ID", "EX"))
             elif (self.instructions_list.__len__() - i) == 2:
                 self.pipeline_tuples.append((str(i + 1),
-                                             instruction_decode.get_instruction(self.instructions_list.__getitem__(i)),
+                                             instruction_decode.get_instruction(self.instructions_list[i]),
                                              "---", "---", "---", "IF", "ID"))
             elif (self.instructions_list.__len__() - i) == 1:
                 self.pipeline_tuples.append((str(i + 1),
-                                             instruction_decode.get_instruction(self.instructions_list.__getitem__(i)),
+                                             instruction_decode.get_instruction(self.instructions_list[i]),
                                              "---", "---", "---", "---", "IF"))
 
     def __on_port_settings(self, event):
@@ -564,12 +584,12 @@ class MicompsFrame(wx.Frame):
                 ok = True
 
     def __on_run(self, event):
-        char = 2
+        char = 0
         char = unichr(char)
         self.serial.write(char.encode('UTF-8', 'replace'))
 
     def __on_clock(self, event):
-        char = 4
+        char = 2
         char = unichr(char)
         self.serial.write(char.encode('UTF-8', 'replace'))
 
