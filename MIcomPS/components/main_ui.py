@@ -590,7 +590,7 @@ class MicompsFrame(wx.Frame):
                 ok = True
 
     def __on_run(self, event):
-        char = 0
+        char = 1
         char = unichr(char)
         self.serial.write(char.encode('UTF-8', 'replace'))
 
