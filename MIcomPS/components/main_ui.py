@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import os
 import wx
 import sys
 import time
@@ -8,6 +9,7 @@ import string
 import binascii
 import threading
 
+import errno
 
 from utils import binary_to_dec
 from utils import instruction_decode
@@ -357,8 +359,15 @@ class MicompsFrame(wx.Frame):
         while self.alive.isSet():
             b = self.serial.read(1)  # (self.serial.inWaiting() or 1)
             if b:
-                log = open("log/byte_recived_log", 'a')
-                log.write(binascii.b2a_hex(b))
+                if not os.path.exists(os.path.dirname("log/byte_recived_log")):
+                    try:
+                        os.makedirs(os.path.dirname("log/byte_recived_log"))
+                    except OSError as exc:
+                        if exc.errno != errno.EEXIST:
+                            raise
+
+                log = open("log/byte_recived_log", 'a+')
+                log.write(binascii.b2a_hex(b) + "\n")
                 log.close()
                 event = SerialRxEvent(self.GetId(), binascii.b2a_hex(b))
                 self.GetEventHandler().AddPendingEvent(event)
@@ -374,8 +383,16 @@ class MicompsFrame(wx.Frame):
         return res
 
     def __update_fields(self, data):
-        log = open("log/data_recived_log", 'a')
-        log.write(data)
+
+        if not os.path.exists(os.path.dirname("log/data_recived_log")):
+            try:
+                os.makedirs(os.path.dirname("log/data_recived_log"))
+            except OSError as exc:
+                if exc.errno != errno.EEXIST:
+                    raise
+
+        log = open("log/data_recived_log", 'a+')
+        log.write(data + "\n")
         log.close()
 
         while data.__len__() < 456:
