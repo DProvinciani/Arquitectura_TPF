@@ -26,7 +26,7 @@ module third_step(
 		input wire [1:0] ForwardAE,
 		input wire [1:0] ForwardBE,		
 		/*Data signals input*/
-		input wire [31:0] pcPlusFour,
+		//input wire [31:0] pcPlusFour,
 		input wire [31:0] reg1,
 		input wire [31:0] reg2,
 		input wire [31:0] signExtend,
@@ -35,8 +35,8 @@ module third_step(
 		input wire [31:0] reg_muxes_b,
 		input wire [31:0] reg_muxes_d,
 		/*Signal output*/
-		output wire [31:0] addResult,
-		output wire zero,
+		//output wire [31:0] addResult,
+		//output wire zero,
 		output wire [31:0] aluResult,
 		output wire [31:0] reg2Out,
 		output wire [4:0] muxRegDstOut
@@ -94,21 +94,24 @@ module third_step(
 		.op2(muxAluSrc2Out),
 		.alu_control(ALUcontrolOut),
 		.result(aluResult),
-		.zero(zero)
+		.zero()
 	);
 	
 	wire [31:0] shiftLeftOut;
 	
+	/*
 	shift_left shiftModule(
     	.shift_in(signExtend),
 		.shift_out(shiftLeftOut)
     );
+	
 	
 	adder #(32) adderModule(
 		.value1(pcPlusFour),
 		.value2(shiftLeftOut),
 		.result(addResult)
 	);
+	*/
 	
 	assign reg2Out = ALUoperator2;
 

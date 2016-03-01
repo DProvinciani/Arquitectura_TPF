@@ -32,13 +32,13 @@ module data_access
 		input wire [5:0] opcode,
 		input wire mem_write,
 		//input wire mem_read,
-		input wire zero,
-		input wire branch_in,
-		input wire branchNot_in,
+		//input wire zero,
+		//input wire branch_in,
+		//input wire branchNot_in,
 		/*Data signals output*/
-		output wire [B-1:0] data_out,
+		output wire [B-1:0] data_out
 		/*Control signals output*/
-		output wire pcSrc_out
+		//output wire pcSrc_out
     );
 		
 		wire [3:0] we;
@@ -129,6 +129,7 @@ module data_access
 			.signal(data_out)
 		);
 		
+		/*
 		//Manejo de beq y bne
 		wire and1;
 		assign and1 = branch_in && zero;
@@ -137,5 +138,6 @@ module data_access
 		assign and2 = branchNot_in && (~zero);
 		
 		assign pcSrc_out = and1 || and2;
+		*/
 
 endmodule

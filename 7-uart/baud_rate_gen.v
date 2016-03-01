@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 module baud_rate_gen
 	#(
-		M = 652 //clk 100MHz, baudrate 9600 --> clk/(baudrate*16) = count
+		M = 651 //clk 100MHz, baudrate 9600 --> clk/(baudrate*16) = count
 	)
 	(
 		input wire clk, reset,

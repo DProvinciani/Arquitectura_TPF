@@ -25,6 +25,7 @@ module PC_counter
 	(
 	input wire clk,
 	input wire reset,
+	input wire ena,
 	input wire disa,
 	input wire [B-1:0] pc_branch, //PC para tomar el salto
 	input wire [B-1:0] pc_jump,
@@ -43,15 +44,20 @@ module PC_counter
 		);
 
 	always@(posedge clk)
-	if (reset == 1) 
-		pc <= 0;		//Si entro por reset, resetea el PC
-	else if (disa == 1)
-		pc <= pc;//do nothing
-	else
-	begin
-		if (PCSrc == 1) pc <= pc_branch;
-		else if (jump == 1) pc <= pc_jump;
-		else pc <= pc_incrementado;			//Si entro por clk, actualiza el PC con el nuevo valor
-	end
+			if (reset) 
+				pc <= 0;		//Si entro por reset, resetea el PC
+			else
+				if (ena)
+					begin
+					if (disa == 1)
+						pc <= pc;//do nothing
+					else
+						begin
+							if (PCSrc == 1) pc <= pc_branch;
+							else if (jump == 1) pc <= pc_jump;
+							else pc <= pc_incrementado;			//Si entro por clk, actualiza el PC con el nuevo valor
+						end
+					end
+			
 	assign pc_out = pc;
 endmodule

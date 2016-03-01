@@ -25,6 +25,7 @@ module latch_MEM_WB
 	(
 	input wire clk,
 	input wire reset,
+	input wire ena,
 	/* Data signals INPUTS */
 	input wire [B-1:0] read_data_in,
 	input wire [B-1:0] alu_result_in,
@@ -52,7 +53,7 @@ module latch_MEM_WB
 	reg wb_RegWrite_reg;
 	reg wb_MemtoReg_reg;
 
-	always @(posedge clk, posedge reset)
+	always @(posedge clk)
 	begin
 		if (reset)
 		begin
@@ -62,17 +63,18 @@ module latch_MEM_WB
 			wb_RegWrite_reg <= 0;
 			wb_MemtoReg_reg <= 0;
 		end
-		else 
-		begin
-			/* Data signals write to ID_EX register */
-			read_data_reg <= read_data_in;
-			alu_result_reg <= alu_result_in;
-			mux_RegDst_reg <= mux_RegDst_in;
-			/* Control signals write to ID_EX register */
-			//Write back
-			wb_RegWrite_reg <= wb_RegWrite_in;
-			wb_MemtoReg_reg <= wb_MemtoReg_in;
-		end
+		else
+			if(ena==1'b1)
+			begin
+				/* Data signals write to ID_EX register */
+				read_data_reg <= read_data_in;
+				alu_result_reg <= alu_result_in;
+				mux_RegDst_reg <= mux_RegDst_in;
+				/* Control signals write to ID_EX register */
+				//Write back
+				wb_RegWrite_reg <= wb_RegWrite_in;
+				wb_MemtoReg_reg <= wb_MemtoReg_in;
+			end
 	end
 	/* Data signals read from ID_EX register */	
 	assign read_data_out = read_data_reg;

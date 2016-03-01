@@ -23,7 +23,7 @@ module instruction_fetch
 		parameter B=32 // ancho de la direccion (PC)
 	)
 	(
-		input wire reset,
+		//input wire reset,
 		input wire clk,
 		input wire [B-1:0] pc,
 		//output wire [B-1:0] pc_incrementado, //PC para enviar al registro IF/ID

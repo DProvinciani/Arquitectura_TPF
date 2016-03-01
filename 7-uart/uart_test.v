@@ -21,8 +21,8 @@
 module uart_test
 	(
 	input wire clk, reset,// boton1,
-	input wire rx,
 	input wire btn,
+	input wire rx,
 	output wire tx,
 	output wire [7:0] sseg, led
 	);
