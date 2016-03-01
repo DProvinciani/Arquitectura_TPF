@@ -509,31 +509,31 @@ class MicompsFrame(wx.Frame):
         self.step3_output_tuples = []
         self.step3_output_tuples = [
             ("Zero signal", str(data[1552:1560])[7:]),
-            ("ALU result (signed)", binary_to_dec.strbin_to_dec(str(data[1552:1584]))),
-            ("ALU result (unsigned)", binary_to_dec.strbin_to_udec(str(data[1552:1584]))),
-            ("ALU result (binary)", str(data[1552:1584])),
-            ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1584:1616]))),
-            ("RT o RD", binary_to_dec.strbin_to_udec(str(data[1616:1624])[3:]))
+            ("ALU result (signed)", binary_to_dec.strbin_to_dec(str(data[1560:1592]))),
+            ("ALU result (unsigned)", binary_to_dec.strbin_to_udec(str(data[1560:1592]))),
+            ("ALU result (binary)", str(data[1560:1592])),
+            ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1592:1624]))),
+            ("RT o RD", binary_to_dec.strbin_to_udec(str(data[1624:1632])[3:]))
         ]
         self.step4_input_tuples = []
         self.step4_input_tuples = [
-            ("ALU result", binary_to_dec.strbin_to_udec(str(data[1624:1656]))),
-            ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1656:1688])))
+            ("ALU result", binary_to_dec.strbin_to_udec(str(data[1632:1664]))),
+            ("Reg data 2", binary_to_dec.strbin_to_dec(str(data[1664:1696])))
         ]
         self.step4_output_tuples = []
         self.step4_output_tuples = [
-            ("Read data (signed)", binary_to_dec.strbin_to_dec(str(data[1688:1720]))),
-            ("Read data (unsigned)", binary_to_dec.strbin_to_udec(str(data[1688:1720]))),
-            ("Read data (binary)", str(data[1688:1720]))
+            ("Read data (signed)", binary_to_dec.strbin_to_dec(str(data[1696:1728]))),
+            ("Read data (unsigned)", binary_to_dec.strbin_to_udec(str(data[1696:1728]))),
+            ("Read data (binary)", str(data[1696:1728]))
         ]
         self.step5_input_tuples = []
         self.step5_input_tuples = [
-            ("Read memory data", binary_to_dec.strbin_to_dec(str(data[1720:1752]))),
-            ("ALU result", binary_to_dec.strbin_to_dec(str(data[1752:1784])))
+            ("Read memory data", binary_to_dec.strbin_to_dec(str(data[1728:1760]))),
+            ("ALU result", binary_to_dec.strbin_to_dec(str(data[1760:1792])))
         ]
         self.step5_output_tuples = []
         self.step5_output_tuples = [
-            ("Write data", binary_to_dec.strbin_to_dec(str(data[1784:]))),
+            ("Write data", binary_to_dec.strbin_to_dec(str(data[1792:]))),
             ("Write register addr", binary_to_dec.strbin_to_udec(str(data[1184:1192])[3:])),
             ("ALU result", binary_to_dec.strbin_to_dec(str(data[1192:1224])))
         ]
@@ -597,7 +597,7 @@ class MicompsFrame(wx.Frame):
                 ok = True
 
     def __on_run(self, event):
-        char = 0
+        char = 1
         char = unichr(char)
         self.serial.write(char.encode('UTF-8', 'replace'))
 

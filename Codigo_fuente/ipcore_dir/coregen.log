@@ -1,0 +1,59 @@
+Welcome to Xilinx CORE Generator.
+Help system initialized.
+The IP Catalog has been reloaded.
+Opening project file
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/coregen
+.cgp.
+Customize and GenerateINFO:sim:172 - Generating IP...
+Applying current project options...
+Finished applying current project options.
+Resolving generics for 'clk_divider'...
+Applying external generics to 'clk_divider'...
+Delivering associated files for 'clk_divider'...
+WARNING:sim - Component clk_wiz_v3_6 does not have a valid model name for
+   Verilog synthesis
+Delivering EJava files for 'clk_divider'...
+Delivered 3 files into directory
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/clk_divider
+Delivered 1 file into directory
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/clk_divider
+Generating ASY schematic symbol...
+Loading device for application Rf_Device from file '6slx16.nph' in environment
+/home/Xilinx/14.7/ISE_DS/ISE/.
+INFO:sim:949 - Finished generation of ASY schematic symbol.
+Generating ISE project...
+XCO file found: clk_divider.xco
+XMDF file found: clk_divider_xmdf.tcl
+Adding
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/clk_divider.asy -view all -origin_type imported
+Adding
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/clk_divider.ucf -view all -origin_type created
+Adding
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/clk_divider.v -view all -origin_type created
+INFO:HDLCompiler:1845 - Analyzing Verilog file
+   "/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp
+   /_cg/clk_divider.v" into library work
+INFO:ProjectMgmt - Parsing design hierarchy completed successfully.
+Adding
+/home/poche002/Desktop/ArqComp/Trabajo_final/arquitectura_tpf/ipcore_dir/tmp/_cg
+/clk_divider.veo -view all -origin_type imported
+INFO:TclTasksC:2116 - The automatic calculation of top has been turned-off.
+   Please set the new top explicitly by running the "project set top" command.
+   To re-calculate the new top automatically, set the "Auto Implementation Top"
+   property to true.
+Top level has been set to "/clk_divider"
+Generating README file...
+Generating FLIST file...
+INFO:sim:948 - Finished FLIST file generation.
+Launching README viewer...
+Moving files to output directory...
+Finished moving files to output directory
+Saved CGP file for project 'coregen'.
+Recustomize and Generate (Under Original Project Settings)INFO:sim:172 - Generating IP...
+Cancelled executing Tcl generator.
+Closed project file.
