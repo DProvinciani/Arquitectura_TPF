@@ -23,7 +23,7 @@ module control_unit
 		parameter B=32 	// ancho de palabra de la instruccion
 	)
 	(
-		input wire clk,
+		//input wire clk,
 		input wire [5:0] opcode,
 		input wire [5:0] func,
 		/* Control signals OUTPUTS */
@@ -34,7 +34,7 @@ module control_unit
 		output wire m_Jump_out,
 		output wire m_Branch_out,
 		output wire m_BranchNot_out,
-		output wire m_MemRead_out,
+		//output wire m_MemRead_out,
 		output wire m_MemWrite_out,
 		//Execution
 		output wire ex_RegDst_out,
@@ -144,7 +144,7 @@ module control_unit
 		assign ex_RegDst_out = ex_ctrl_sgnl[1];
 		assign ex_ALUSrc_out = ex_ctrl_sgnl[0];
 		//Memory
-		assign m_MemRead_out = mem_ctrl_sgnl[4];
+		//assign m_MemRead_out = mem_ctrl_sgnl[4];
 		assign m_MemWrite_out = mem_ctrl_sgnl[3];
 		assign m_Branch_out = mem_ctrl_sgnl[2];
 		assign m_BranchNot_out = mem_ctrl_sgnl[1];

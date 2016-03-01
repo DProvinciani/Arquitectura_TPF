@@ -27,23 +27,25 @@ module pipeline_tb;
 	// Inputs
 	reg clk;
 	reg reset;
+	reg ena;
 	integer ciclo;
 	
 	//HZ
-	wire [1:0] test_ForwardAE;
-	wire [1:0] test_ForwardBE;
-	wire test_stallF;
-	wire test_stallD;
-	wire test_flushE;
-	wire [4:0] test_instruction_25_21_ID;
-	wire [4:0] test_instruction_20_16_ID;
-	wire test_wb_MemtoReg_IDEX;
+	//wire [1:0] test_ForwardAE;
+	//wire [1:0] test_ForwardBE;
+	//wire test_stallF;
+	//wire test_stallD;
+	//wire test_flushE;
+	//wire [4:0] test_instruction_25_21_ID;
+	//wire [4:0] test_instruction_20_16_ID;
+	//wire test_wb_MemtoReg_IDEX;
 	
 	//IF (salidas)
 	////Datos
 	wire [31:0] test_pc_incrementado_PC;
 	wire [31:0] test_instruction_IF;
 	
+	/*
 	//IF-ID (salidas)
 	////Datos
 	wire [31:0] test_pc_incrementado_IF_ID;
@@ -116,21 +118,24 @@ module pipeline_tb;
 	wire [31:0] test_reg_18;
 	wire [31:0] test_reg_19;
 	wire [31:0] test_reg_20;
+	*/
 	
 	// Instantiate the Unit Under Test (UUT)
 	pipeline uut (
 		.clk(clk), 
 		.reset(reset),
+		.ena(ena),
 		//IF (salidas)
 		////Datos
 		.test_pc_incrementado_PC(test_pc_incrementado_PC),
-		.test_instruction_IF(test_instruction_IF),
+		.test_instruction_IF(test_instruction_IF)
 		
 		//IF-ID (salidas)
 		////Datos
-		.test_pc_incrementado_IF_ID(test_pc_incrementado_IF_ID),
-		.test_instruction_IF_ID(test_instruction_IF_ID),
+		//.test_pc_incrementado_IF_ID(test_pc_incrementado_IF_ID),
+		//.test_instruction_IF_ID(test_instruction_IF_ID),
 		
+		/*
 		//ID (salidas)
 		////Datos
 		.test_data1_ID(test_data1_ID),
@@ -206,6 +211,7 @@ module pipeline_tb;
 		.reg_18(test_reg_18),
 		.reg_19(test_reg_19),
 		.reg_20(test_reg_20)
+		*/
 	);
 
 	initial begin
@@ -213,11 +219,17 @@ module pipeline_tb;
 		clk = 0;
 		reset = 1;
 		ciclo = 0;
+		ena = 1'b0;
 
 		// Wait 100 ns for global reset to finish
 
 		#2;
-		reset = 0;		
+		begin
+		reset = 1'b0;
+		//ena = 1'b0;
+		end
+		#1000
+		ena = 1'b1;
 		// Add stimulus here
 
 	end

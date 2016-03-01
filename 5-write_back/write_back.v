@@ -23,7 +23,7 @@ module write_back
 	parameter B=32, D=5
 	)
 	(
-	input clk,
+	//input clk,
 	input wire[B-1:0]mem_data,
 	input wire[B-1:0]ALU_data,
 	input wire MemtoReg,

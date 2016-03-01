@@ -32,7 +32,7 @@ module instruction_decode
 		input wire [B-1:0] alu_result_EX,
 		input wire ForwardAD,
 		input wire ForwardBD,
-		input wire stallD,
+		//input wire stallD,
 		
 		/*Data signals input*/
 		input wire [B-1:0] instruction,
@@ -59,7 +59,7 @@ module instruction_decode
 		output wire branch_out,
 		output wire branch_taken_out,
 		output wire jump_out,
-		output wire m_MemRead_out,
+		//output wire m_MemRead_out,
 		output wire m_MemWrite_out,
 		//Execution
 		output wire ex_RegDst_out,
@@ -121,7 +121,7 @@ module instruction_decode
 	assign opcode_out = instruction[31:26];
 	assign func_out = instruction[5:0];
 	
-	control_unit cu (.clk(clk),
+	control_unit cu (//.clk(clk),
 						  .opcode(instruction[31:26]),
 						  .func(instruction[5:0]),
 						  //Write back
@@ -131,7 +131,7 @@ module instruction_decode
 						  .m_Jump_out(jump),
 						  .m_Branch_out(branch_signal),
 						  .m_BranchNot_out(branchNot_signal),
-						  .m_MemRead_out(m_MemRead_out),
+						  //.m_MemRead_out(m_MemRead_out),
 						  .m_MemWrite_out(m_MemWrite_out),
 						  //Execution
 						  .ex_RegDst_out(ex_RegDst_out),

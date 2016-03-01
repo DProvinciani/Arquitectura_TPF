@@ -156,8 +156,17 @@ module tp_final
 		wire [31:0] reg_30_out;
 		wire [31:0] reg_31_out;
 		
+		wire clk50;
+		clk_divider clk50MHz
+		(
+			.CLK_IN1(clk),
+			.CLK_OUT1(clk50),
+			.RESET(reset),
+			.LOCKED()
+		);
+		
 		debugger_unit db (
-			.clk(clk), 
+			.clk(clk50), 
 			.reset(reset), 
 			.ena_pip(ena_pip),
 			.led(led),
@@ -165,7 +174,7 @@ module tp_final
 			.tx(tx),
 			
 			//PC
-			.pc_incrementado_PC_out(pc_incrementado_ID_in),
+			.pc_incrementado_PC_out(pc_incrementado_PC_out),
 			
 			//Modulo IF
 			////Input
@@ -212,10 +221,10 @@ module tp_final
 			//.regDst_EX_in(regDst_EX_in), 
 			//.aluOp_EX_in(aluOp_EX_in), 
 			//.add_result_EX_out(add_result_EX_out), 
-			.alu_result_EX_out(alu_result_EX_in), 
+			//.alu_result_EX_out(alu_result_EX_in), 
 			.reg_data2_EX_out(reg_data2_EX_out), 
 			.rt_or_rd_EX_out(rt_or_rd_EX_out), 
-			.zero(8'b0000_0000), 
+			.zero(1'b0), 
 			
 			//Modulo MEM
 			.addres_MEM_in(addres_MEM_in), 
@@ -270,11 +279,11 @@ module tp_final
 		
 		pipeline pip
 		(
-			.clk(clk),
+			.clk(clk50),
 			.reset(reset),
 			.ena(ena_pip),
 			
-			//.test_pc_incrementado_PC(pc_incrementado_PC_out),
+			.test_pc_incrementado_PC(pc_incrementado_PC_out),
 			
 			//Modulo IF
 			.test_pc_PC(pc_PC_out),
@@ -282,7 +291,7 @@ module tp_final
 			
 			//Modulo ID
 			////Input
-			.test_pc_incrementado_PC(pc_incrementado_ID_in), 
+			.test_pc_incrementado_IF_ID(pc_incrementado_ID_in), 
 			.test_instruction_IF_ID(instruction_ID_in), 
 			.test_mux_wb_data_WB(write_data_ID_in), 
 			.test_reg_dest_addr_MEM_WB(write_addr_ID_in), 

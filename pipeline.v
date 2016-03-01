@@ -48,6 +48,7 @@ module pipeline
 		output wire [W-1:0] test_instruction_15_11_ID,
 		output wire [B-1:0] test_pc_jump_ID,
 		output wire [B-1:0] test_pc_Branch_ID,
+		/*
 		////Control
 		//////WB
 		output wire test_wb_RegWrite_ID,
@@ -61,8 +62,10 @@ module pipeline
 		output wire test_ex_RegDst_ID,
 		output wire [5:0] test_ex_ALUOp_ID,
 		output wire test_ex_ALUSrc_ID,
+		*/
 		//ID-EX (salidas)
 		////Control signals
+		/*
 		output wire test_wb_RegWrite_ID_EX_out,
 		output wire test_wb_MemtoReg_ID_EX_out,
 		output wire test_m_Jump_ID_EX_out,
@@ -72,6 +75,7 @@ module pipeline
 		output wire test_ex_RegDst_ID_EX_out,
 		output wire [5:0] test_ex_ALUOp_ID_EX_out,
 		output wire test_ex_ALUSrc_ID_EX_out,
+		*/
 		////Data signals
 		output wire [31:0] test_pc_incrementado_ID_EX_out,
 		output wire [31:0] test_data1_ID_EX_out,
@@ -79,14 +83,14 @@ module pipeline
 		output wire [31:0] test_sign_extended_ID_EX_out,
 		output wire [4:0] test_inst_15_11_ID_EX_out,
 		output wire [4:0] test_inst_20_16_ID_EX_out,
-		output wire [4:0] test_inst_25_21_ID_EX_out,
-		output wire [1:0] test_ForwardAE,
-		output wire [1:0] test_ForwardBE,
-		output wire test_flushE,
-		output wire test_stallD,
-		output wire test_stallF,
-		output wire test_wb_MemtoReg_ID_EX,
-		output wire test_wb_MemtoReg_IDEX,
+		//output wire [4:0] test_inst_25_21_ID_EX_out,
+		//output wire [1:0] test_ForwardAE,
+		//output wire [1:0] test_ForwardBE,
+		//output wire test_flushE,
+		//output wire test_stallD,
+		//output wire test_stallF,
+		//output wire test_wb_MemtoReg_ID_EX,
+		//output wire test_wb_MemtoReg_IDEX,
 		//EX
 		////Data signals
 		output wire [B-1:0] test_alu_result_EX,
@@ -119,7 +123,7 @@ module pipeline
 		////Control
 		//output wire test_flushE_HZ,
 		//output wire test_stallD_HZ,
-		output wire test_stallF_HZ,
+		//output wire test_stallF_HZ,
 		//output wire [1:0] test_ForwardAE_HZ,
 		//output wire [1:0] test_ForwardBE_HZ,
 		
@@ -308,7 +312,7 @@ module pipeline
 		//Hazards
 		.ForwardAD(ForwardAD_HZ),
 		.ForwardBD(ForwardBD_HZ),
-		.stallD(stallD_HZ),
+		//.stallD(stallD_HZ),
 		.alu_result_EX(alu_result_EX),
 		.reg_muxes_b(alu_result_EXMEM),
 		//Data INPUT
@@ -322,7 +326,7 @@ module pipeline
 		.jump_out(jump_ID),
 		.branch_taken_out(branch_taken_ID),
 		.branch_out(branch_ID),
-		.m_MemRead_out(m_MemRead_ID),
+		//.m_MemRead_out(m_MemRead_ID),
 		.m_MemWrite_out(m_MemWrite_ID),
 		.ex_RegDst_out(ex_RegDst_ID),
 		.ex_ALUOp_out(ex_ALUOp_ID),
@@ -380,7 +384,7 @@ module pipeline
 	//wire m_Jump_IDEX;
 	//wire m_Branch_IDEX;
 	//wire m_BranchNot_IDEX;
-	wire m_MemRead_IDEX;
+	//wire m_MemRead_IDEX;
 	wire m_MemWrite_IDEX;
 	wire ex_RegDst_IDEX;
 	wire [5:0] ex_ALUOp_IDEX;
@@ -406,7 +410,7 @@ module pipeline
 		//.m_Jump_in(m_Jump_ID),
 		//.m_Branch_in(m_Branch_ID),
 		//.m_BranchNot_in(m_BranchNot_ID),
-		.m_MemRead_in(m_MemRead_ID),
+		//.m_MemRead_in(m_MemRead_ID),
 		.m_MemWrite_in(m_MemWrite_ID),
 		.ex_RegDst_in(ex_RegDst_ID),
 		.ex_ALUOp_in(ex_ALUOp_ID),
@@ -427,7 +431,7 @@ module pipeline
 		//.m_Jump_out(m_Jump_IDEX),
 		//.m_Branch_out(m_Branch_IDEX),
 		//.m_BranchNot_out(m_BranchNot_IDEX),
-		.m_MemRead_out(m_MemRead_IDEX),
+		//.m_MemRead_out(m_MemRead_IDEX),
 		.m_MemWrite_out(m_MemWrite_IDEX),
 		.ex_RegDst_out(ex_RegDst_IDEX),
 		.ex_ALUOp_out(ex_ALUOp_IDEX),
@@ -488,7 +492,7 @@ module pipeline
 	//wire wb_MemtoReg_EXMEM;	//Definida mas arriba	
 	//wire m_Branch_EXMEM;
 	//wire m_BranchNot_EXMEM;
-	wire m_MemRead_EXMEM;
+	//wire m_MemRead_EXMEM;
 	wire m_MemWrite_EXMEM;
 	wire [5:0] opcode_EXMEM;
 	
@@ -511,7 +515,7 @@ module pipeline
 		//.m_Jump_in(m_Jump_IDEX),
 		//.m_Branch_in(m_Branch_IDEX),
 		//.m_BranchNot_in(m_BranchNot_IDEX),
-		.m_MemRead_in(m_MemRead_IDEX),
+		//.m_MemRead_in(m_MemRead_IDEX),
 		.m_MemWrite_in(m_MemWrite_IDEX),
 		//Other
 		.opcode_in(opcode_IDEX),
@@ -530,7 +534,7 @@ module pipeline
 		//.m_Jump_out(m_Jump_EXMEM),
 		//.m_Branch_out(m_Branch_EXMEM),
 		//.m_BranchNot_out(m_BranchNot_EXMEM),
-		.m_MemRead_out(m_MemRead_EXMEM),
+		//.m_MemRead_out(m_MemRead_EXMEM),
 		.m_MemWrite_out(m_MemWrite_EXMEM),
 		//Other
 		.opcode_out(opcode_EXMEM)
@@ -587,7 +591,7 @@ module pipeline
 	//WB
 	
 	write_back WB(
-		.clk(clk),
+		//.clk(clk),
 		//Data INPUT
 		.mem_data(data_MEMWB),
 		.ALU_data(alu_result_MEMWB),
@@ -606,7 +610,7 @@ module pipeline
 	
 	//IF-ID (salidas)
 	////Datos
-	//assign test_pc_incrementado_IF_ID = pc_incrementado_IFID;
+	assign test_pc_incrementado_IF_ID = pc_incrementado_IFID;
 	assign test_instruction_IF_ID = instruction_IFID;
 	
 	//ID (salidas)
@@ -681,7 +685,7 @@ module pipeline
 	//assign test_ForwardAE = ForwardAE_HZ;
 	//assign test_ForwardBE = ForwardBE_HZ;
 	//assign test_flushE_HZ = flushE_HZ;
-	assign test_stallF_HZ = stallF_HZ;
+	//assign test_stallF_HZ = stallF_HZ;
 	//assign test_stallD_HZ = stallD_HZ;
 	assign test_instruction_25_21_ID = instruction_25_21_ID;
 	assign test_instruction_20_16_ID = instruction_20_16_ID;

@@ -73,7 +73,7 @@ module debugger_unit
 		input wire [W-1:0] rd_EX_in,
 		////Output
 		//////Datos
-		input wire [B-1:0] alu_result_EX_out,
+		//input wire [B-1:0] alu_result_EX_out,
 		input wire [B-1:0] reg_data2_EX_out,
 		input wire [W-1:0] rt_or_rd_EX_out,
 		input wire zero,
@@ -262,6 +262,7 @@ module debugger_unit
 		begin
 			send_data_next = 1'b0;
 			byteN_next = byteN_reg;
+			write_data_next = write_data_reg;
 			case (state_reg)
 				idle:
 					begin
@@ -469,7 +470,7 @@ module debugger_unit
 					datos[146] = write_data_ID_in[15:8];
 					datos[147] = write_data_ID_in[7:0];
 					////write address
-					datos[148] = {000, write_addr_ID_in};
+					datos[148] = {3'b000, write_addr_ID_in};
 					////alu result
 					datos[149] = alu_result_EX_in[31:24];
 					datos[150] = alu_result_EX_in[23:16];
@@ -491,11 +492,11 @@ module debugger_unit
 					datos[163] = sign_extend_ID_out[15:8];
 					datos[164] = sign_extend_ID_out[7:0];
 					////inst 25-21
-					datos[165] = {000, inst_25_21_ID_out};
+					datos[165] = {3'b000, inst_25_21_ID_out};
 					////inst 20-16
-					datos[166] = {000, inst_20_16_ID_out};
+					datos[166] = {3'b000, inst_20_16_ID_out};
 					////inst 15-11
-					datos[167] = {000, inst_15_11_ID_out};
+					datos[167] = {3'b000, inst_15_11_ID_out};
 					////pc jump
 					datos[168] = pc_jump_ID_out[31:24];
 					datos[169] = pc_jump_ID_out[23:16];
@@ -529,23 +530,23 @@ module debugger_unit
 					datos[190] = sign_extend_EX_in[15:8];
 					datos[191] = sign_extend_EX_in[7:0];
 					////rt
-					datos[192] = {000, rt_EX_in};
+					datos[192] = {3'b000, rt_EX_in};
 					////rd
-					datos[193] = {000, rd_EX_in};
+					datos[193] = {3'b000, rd_EX_in};
 					////zero signal
-					datos[194] = {0000_000, zero};
+					datos[194] = {7'b0000_000, zero};
 					////alu result
-					datos[195] = alu_result_EX_out[31:24];
-					datos[196] = alu_result_EX_out[23:16];
-					datos[197] = alu_result_EX_out[15:8];
-					datos[198] = alu_result_EX_out[7:0];
+					datos[195] = alu_result_EX_in[31:24];
+					datos[196] = alu_result_EX_in[23:16];
+					datos[197] = alu_result_EX_in[15:8];
+					datos[198] = alu_result_EX_in[7:0];
 					////reg data 2
 					datos[199] = reg_data2_EX_out[31:24];
 					datos[200] = reg_data2_EX_out[23:16];
 					datos[201] = reg_data2_EX_out[15:8];
 					datos[202] = reg_data2_EX_out[7:0];
 					////rt ot rd
-					datos[203] = {000, rt_or_rd_EX_out};
+					datos[203] = {3'b000, rt_or_rd_EX_out};
 					
 					//MEM
 					////mem address
