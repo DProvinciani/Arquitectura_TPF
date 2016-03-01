@@ -491,14 +491,14 @@ class MicompsFrame(wx.Frame):
         ]
         self.step1_output_tuples = []
         self.step1_output_tuples = [
-            ("Instruccion", str(data[1056:1088])),
-            ("Instruccion", instruction_decode.get_instruction(str(data[1056:1088])))
+            ("Instruccion (binary)", str(data[1056:1088])),
+            ("Instruccion (assembly code)", instruction_decode.get_instruction(str(data[1056:1088])))
         ]
         self.step2_input_tuples = []
         self.step2_input_tuples = [
             ("PC+4", binary_to_dec.strbin_to_udec(str(data[1088:1120]))),
-            ("Instruccion", str(data[1120:1152])),
-            ("Instruccion", instruction_decode.get_instruction(str(data[1120:1152]))),
+            ("Instruccion (binary)", str(data[1120:1152])),
+            ("Instruccion (assembly code)", instruction_decode.get_instruction(str(data[1120:1152]))),
             ("Write data", binary_to_dec.strbin_to_dec(str(data[1152:1184])))
         ]
         self.step2_output_tuples = []
