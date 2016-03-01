@@ -2,15 +2,18 @@
 # -*- coding: utf-8 -*-
 import wx
 import sys
+import time
 import serial
+import string
 import binascii
 import threading
-from wx._controls_ import TB_FLAT
+
+
 from utils import binary_to_dec
 from utils import instruction_decode
+from wx._controls_ import TB_FLAT
 from components import serial_config_dialog
 from wx.lib.mixins.listctrl import ListCtrlAutoWidthMixin
-import string
 
 SERIALRX = wx.NewEventType()
 # bind to serial data receive events
@@ -82,7 +85,7 @@ class MicompsFrame(wx.Frame):
         self.file.AppendSeparator()
         self.itemExit = self.file.Append(wx.ID_EXIT, "&Exit\tCtrl+Q", " Close the program")
         self.itemHelp = self.help.Append(wx.ID_HELP_CONTENTS, "&Help\tF1", " Show help contents")
-        self.itemAbout = self.help.Append(wx.ID_ABOUT, "&About", " Show information about MIcomPS")
+        self.itemAbout = self.help.Append(wx.ID_ABOUT, "&About\tCtrl+A", " Show information about MIcomPS")
 
         self.main_frame_menubar = wx.MenuBar()
         self.main_frame_menubar.Append(self.file, "&File")
@@ -375,7 +378,9 @@ class MicompsFrame(wx.Frame):
         log.write(data)
         log.close()
 
-        print data
+        while data.__len__() < 456:
+            time.sleep(0.1)
+
         data_bin = self.__hex2bin(str(data))
         self.__parse_data(data_bin)
         i = 0
@@ -469,15 +474,15 @@ class MicompsFrame(wx.Frame):
         ]
         self.step1_output_tuples = []
         self.step1_output_tuples = [
-            ("Instruccion", str(data[1056:1088]))
+            ("Instruccion", str(data[1056:1088])),
+            ("Instruccion", instruction_decode.get_instruction(str(data[1056:1088])))
         ]
         self.step2_input_tuples = []
         self.step2_input_tuples = [
             ("PC+4", binary_to_dec.strbin_to_udec(str(data[1088:1120]))),
             ("Instruccion", str(data[1120:1152])),
-            ("Write data", binary_to_dec.strbin_to_dec(str(data[1152:1184]))),
-            ("Write register addr", binary_to_dec.strbin_to_udec(str(data[1184:1192])[3:])),
-            ("ALU result", binary_to_dec.strbin_to_dec(str(data[1192:1224])))
+            ("Instruccion", instruction_decode.get_instruction(str(data[1120:1152]))),
+            ("Write data", binary_to_dec.strbin_to_dec(str(data[1152:1184])))
         ]
         self.step2_output_tuples = []
         self.step2_output_tuples = [
@@ -528,7 +533,9 @@ class MicompsFrame(wx.Frame):
         ]
         self.step5_output_tuples = []
         self.step5_output_tuples = [
-            ("Write data", binary_to_dec.strbin_to_dec(str(data[1784:])))
+            ("Write data", binary_to_dec.strbin_to_dec(str(data[1784:]))),
+            ("Write register addr", binary_to_dec.strbin_to_udec(str(data[1184:1192])[3:])),
+            ("ALU result", binary_to_dec.strbin_to_dec(str(data[1192:1224])))
         ]
         self.pipeline_tuples = []
         self.instructions_list.append(str(data[1056:1088]))
@@ -608,7 +615,22 @@ class MicompsFrame(wx.Frame):
         self.Destroy()
 
     def __on_help(self, event):
-        message = "No implementado..."
+        message = """FUNCIONALIDADES
+
+- CLOCK: Indicar a la placa que ejecute la siguiente instruccion del programa.
+- RUN: Indicar a la placa que ejecute todas las instrucciones del programa.
+- UPDATE FIELDS: Refrescar los datos desplegados por la interfaz a los valores actuales.
+
+
+ATAJOS:
+
+- Port settings: Ctrl+Alt+S
+- Run: Ctrl+Shift+F5
+- Clock: Ctrl+F5
+- Update fields: F5
+- Exit: Ctrl+Q
+- Help: F1
+- About: Ctrl+A"""
         dlg = wx.MessageDialog(self, message, "Ayuda", wx.OK)
         dlg.ShowModal()
         dlg.Destroy()

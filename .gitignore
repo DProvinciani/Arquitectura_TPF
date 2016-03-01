@@ -78,3 +78,12 @@ ipcore_dir/_xmsgs/cg.xmsgs
 ipcore_dir/_xmsgs/pn_parser.xmsgs
 xst/work/work.sdbx
 iseconfig/
+MIcomPS/.idea/
+MIcomPS/components/__init__.pyc
+MIcomPS/components/main_ui.pyc
+MIcomPS/components/serial_config_dialog.pyc
+MIcomPS/utils/__init__.pyc
+MIcomPS/utils/binary_to_dec.pyc
+MIcomPS/utils/instruction_decode.pyc
+MIcomPS/log/byte_recived_log
+MIcomPS/log/data_recived_log
