@@ -166,7 +166,9 @@ class MicompsFrame(wx.Frame):
     def __make_lists(self):
         self.list_registers = AutoWidthListCtrl(self.panel_registers_bank)
         self.list_registers.InsertColumn(wx.ID_ANY, 'Nro.', width=-1)
-        self.list_registers.InsertColumn(wx.ID_ANY, 'Value', width=-1)
+        self.list_registers.InsertColumn(wx.ID_ANY, 'Binary', width=-1)
+        self.list_registers.InsertColumn(wx.ID_ANY, 'U Decinal', width=-1)
+        self.list_registers.InsertColumn(wx.ID_ANY, 'Decimal', width=-1)
 
         self.list_inputs_step1 = AutoWidthListCtrl(self.panel_left_step1)
         self.list_inputs_step1.InsertColumn(wx.ID_ANY, 'Name', width=-1)
@@ -372,14 +374,14 @@ class MicompsFrame(wx.Frame):
                 event = SerialRxEvent(self.GetId(), binascii.b2a_hex(b))
                 self.GetEventHandler().AddPendingEvent(event)
 
-    def __hex2bin(self, str):
-        bin = ["0000", "0001", "0010", "0011",
-               "0100", "0101", "0110", "0111",
-               "1000", "1001", "1010", "1011",
-               "1100", "1101", "1110", "1111"]
+    def __hex_to_bin(self, data_hex):
+        dictionary = ["0000", "0001", "0010", "0011",
+                      "0100", "0101", "0110", "0111",
+                      "1000", "1001", "1010", "1011",
+                      "1100", "1101", "1110", "1111"]
         res = ""
-        for i in range(len(str)):
-            res += bin[string.atoi(str[i], base=16)]
+        for i in range(len(data_hex)):
+            res += dictionary[string.atoi(data_hex[i], base=16)]
         return res
 
     def __update_fields(self, data):
@@ -398,33 +400,58 @@ class MicompsFrame(wx.Frame):
         while data.__len__() < 456:
             time.sleep(0.1)
 
-        data_bin = self.__hex2bin(str(data))
+        data_bin = self.__hex_to_bin(str(data))
         self.__parse_data(data_bin)
         i = 0
         for lista in self.lists:
-            if i < 11:
+            if i < 1:
+                if lista.GetItemCount() > 0:
+                    lista.DeleteAllItems()
+
+                lista_tuplas = self.registers_tuples
+
+                for tupla in lista_tuplas:
+                    index = lista.InsertStringItem(sys.maxint, tupla[0])
+                    lista.SetStringItem(index, 1, tupla[1])
+                    lista.SetStringItem(index, 2, tupla[2])
+                    lista.SetStringItem(index, 3, tupla[3])
+                    lista.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+                    lista.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+                    lista.SetColumnWidth(2, wx.LIST_AUTOSIZE)
+                    lista.SetColumnWidth(3, wx.LIST_AUTOSIZE)
+
+            elif (i > 0) and (i < 11):
                 if lista.GetItemCount() > 0:
                     lista.DeleteAllItems()
 
                 lista_tuplas = []
-                if i == 0: lista_tuplas = self.registers_tuples
-                elif i == 1: lista_tuplas = self.step1_input_tuples
-                elif i == 2: lista_tuplas = self.step1_output_tuples
-                elif i == 3: lista_tuplas = self.step2_input_tuples
-                elif i == 4: lista_tuplas = self.step2_output_tuples
-                elif i == 5: lista_tuplas = self.step3_input_tuples
-                elif i == 6: lista_tuplas = self.step3_output_tuples
-                elif i == 7: lista_tuplas = self.step4_input_tuples
-                elif i == 8: lista_tuplas = self.step4_output_tuples
-                elif i == 9: lista_tuplas = self.step5_input_tuples
-                elif i == 10: lista_tuplas = self.step5_output_tuples
+                if i == 1:
+                    lista_tuplas = self.step1_input_tuples
+                elif i == 2:
+                    lista_tuplas = self.step1_output_tuples
+                elif i == 3:
+                    lista_tuplas = self.step2_input_tuples
+                elif i == 4:
+                    lista_tuplas = self.step2_output_tuples
+                elif i == 5:
+                    lista_tuplas = self.step3_input_tuples
+                elif i == 6:
+                    lista_tuplas = self.step3_output_tuples
+                elif i == 7:
+                    lista_tuplas = self.step4_input_tuples
+                elif i == 8:
+                    lista_tuplas = self.step4_output_tuples
+                elif i == 9:
+                    lista_tuplas = self.step5_input_tuples
+                elif i == 10:
+                    lista_tuplas = self.step5_output_tuples
 
                 for tupla in lista_tuplas:
                     index = lista.InsertStringItem(sys.maxint, tupla[0])
                     lista.SetStringItem(index, 1, tupla[1])
                     lista.SetColumnWidth(0, wx.LIST_AUTOSIZE)
                     lista.SetColumnWidth(1, wx.LIST_AUTOSIZE)
-            else:
+            elif i > 10:
                 if lista.GetItemCount() > 0:
                     lista.DeleteAllItems()
 
@@ -452,38 +479,70 @@ class MicompsFrame(wx.Frame):
     def __parse_data(self, data):
         self.registers_tuples = []
         self.registers_tuples = [
-            ("Reg 0", binary_to_dec.strbin_to_dec(str(data[0:32]))),
-            ("Reg 1", binary_to_dec.strbin_to_dec(str(data[32:64]))),
-            ("Reg 2", binary_to_dec.strbin_to_dec(str(data[64:96]))),
-            ("Reg 3", binary_to_dec.strbin_to_dec(str(data[96:128]))),
-            ("Reg 4", binary_to_dec.strbin_to_dec(str(data[128:160]))),
-            ("Reg 5", binary_to_dec.strbin_to_dec(str(data[160:192]))),
-            ("Reg 6", binary_to_dec.strbin_to_dec(str(data[192:224]))),
-            ("Reg 7", binary_to_dec.strbin_to_dec(str(data[224:256]))),
-            ("Reg 8", binary_to_dec.strbin_to_dec(str(data[256:288]))),
-            ("Reg 9", binary_to_dec.strbin_to_dec(str(data[288:320]))),
-            ("Reg 10", binary_to_dec.strbin_to_dec(str(data[320:352]))),
-            ("Reg 11", binary_to_dec.strbin_to_dec(str(data[352:384]))),
-            ("Reg 12", binary_to_dec.strbin_to_dec(str(data[384:416]))),
-            ("Reg 13", binary_to_dec.strbin_to_dec(str(data[416:448]))),
-            ("Reg 14", binary_to_dec.strbin_to_dec(str(data[448:480]))),
-            ("Reg 15", binary_to_dec.strbin_to_dec(str(data[480:512]))),
-            ("Reg 16", binary_to_dec.strbin_to_dec(str(data[512:544]))),
-            ("Reg 17", binary_to_dec.strbin_to_dec(str(data[544:576]))),
-            ("Reg 18", binary_to_dec.strbin_to_dec(str(data[576:608]))),
-            ("Reg 19", binary_to_dec.strbin_to_dec(str(data[608:640]))),
-            ("Reg 20", binary_to_dec.strbin_to_dec(str(data[640:672]))),
-            ("Reg 21", binary_to_dec.strbin_to_dec(str(data[672:704]))),
-            ("Reg 22", binary_to_dec.strbin_to_dec(str(data[704:736]))),
-            ("Reg 23", binary_to_dec.strbin_to_dec(str(data[736:768]))),
-            ("Reg 24", binary_to_dec.strbin_to_dec(str(data[768:800]))),
-            ("Reg 25", binary_to_dec.strbin_to_dec(str(data[800:832]))),
-            ("Reg 26", binary_to_dec.strbin_to_dec(str(data[832:864]))),
-            ("Reg 27", binary_to_dec.strbin_to_dec(str(data[864:896]))),
-            ("Reg 28", binary_to_dec.strbin_to_dec(str(data[896:928]))),
-            ("Reg 29", binary_to_dec.strbin_to_dec(str(data[928:960]))),
-            ("Reg 30", binary_to_dec.strbin_to_dec(str(data[960:992]))),
-            ("Reg 31", binary_to_dec.strbin_to_dec(str(data[992:1024])))
+            ("Reg 0", str(data[0:32]), binary_to_dec.strbin_to_udec(str(data[0:32])),
+             binary_to_dec.strbin_to_dec(str(data[0:32]))),
+            ("Reg 1", str(data[32:64]), binary_to_dec.strbin_to_udec(str(data[32:64])),
+             binary_to_dec.strbin_to_dec(str(data[32:64]))),
+            ("Reg 2", str(data[64:96]), binary_to_dec.strbin_to_udec(str(data[64:96])),
+             binary_to_dec.strbin_to_dec(str(data[64:96]))),
+            ("Reg 3", str(data[96:128]), binary_to_dec.strbin_to_udec(str(data[96:128])),
+             binary_to_dec.strbin_to_dec(str(data[96:128]))),
+            ("Reg 4", str(data[128:160]), binary_to_dec.strbin_to_udec(str(data[128:160])),
+             binary_to_dec.strbin_to_dec(str(data[128:160]))),
+            ("Reg 5", str(data[160:192]), binary_to_dec.strbin_to_udec(str(data[160:192])),
+             binary_to_dec.strbin_to_dec(str(data[160:192]))),
+            ("Reg 6", str(data[192:224]), binary_to_dec.strbin_to_udec(str(data[192:224])),
+             binary_to_dec.strbin_to_dec(str(data[192:224]))),
+            ("Reg 7", str(data[224:256]), binary_to_dec.strbin_to_udec(str(data[224:256])),
+             binary_to_dec.strbin_to_dec(str(data[224:256]))),
+            ("Reg 8", str(data[256:288]), binary_to_dec.strbin_to_udec(str(data[256:288])),
+             binary_to_dec.strbin_to_dec(str(data[256:288]))),
+            ("Reg 9", str(data[288:320]), binary_to_dec.strbin_to_udec(str(data[288:320])),
+             binary_to_dec.strbin_to_dec(str(data[288:320]))),
+            ("Reg 10", str(data[320:352]), binary_to_dec.strbin_to_udec(str(data[320:352])),
+             binary_to_dec.strbin_to_dec(str(data[320:352]))),
+            ("Reg 11", str(data[352:384]), binary_to_dec.strbin_to_udec(str(data[352:384])),
+             binary_to_dec.strbin_to_dec(str(data[352:384]))),
+            ("Reg 12", str(data[384:416]), binary_to_dec.strbin_to_udec(str(data[384:416])),
+             binary_to_dec.strbin_to_dec(str(data[384:416]))),
+            ("Reg 13", str(data[416:448]), binary_to_dec.strbin_to_udec(str(data[416:448])),
+             binary_to_dec.strbin_to_dec(str(data[416:448]))),
+            ("Reg 14", str(data[448:480]), binary_to_dec.strbin_to_udec(str(data[448:480])),
+             binary_to_dec.strbin_to_dec(str(data[448:480]))),
+            ("Reg 15", str(data[480:512]), binary_to_dec.strbin_to_udec(str(data[480:512])),
+             binary_to_dec.strbin_to_dec(str(data[480:512]))),
+            ("Reg 16", str(data[512:544]), binary_to_dec.strbin_to_udec(str(data[512:544])),
+             binary_to_dec.strbin_to_dec(str(data[512:544]))),
+            ("Reg 17", str(data[544:576]), binary_to_dec.strbin_to_udec(str(data[544:576])),
+             binary_to_dec.strbin_to_dec(str(data[544:576]))),
+            ("Reg 18", str(data[576:608]), binary_to_dec.strbin_to_udec(str(data[576:608])),
+             binary_to_dec.strbin_to_dec(str(data[576:608]))),
+            ("Reg 19", str(data[608:640]), binary_to_dec.strbin_to_udec(str(data[608:640])),
+             binary_to_dec.strbin_to_dec(str(data[608:640]))),
+            ("Reg 20", str(data[640:672]), binary_to_dec.strbin_to_udec(str(data[640:672])),
+             binary_to_dec.strbin_to_dec(str(data[640:672]))),
+            ("Reg 21", str(data[672:704]), binary_to_dec.strbin_to_udec(str(data[672:704])),
+             binary_to_dec.strbin_to_dec(str(data[672:704]))),
+            ("Reg 22", str(data[704:736]), binary_to_dec.strbin_to_udec(str(data[704:736])),
+             binary_to_dec.strbin_to_dec(str(data[704:736]))),
+            ("Reg 23", str(data[736:768]), binary_to_dec.strbin_to_udec(str(data[736:768])),
+             binary_to_dec.strbin_to_dec(str(data[736:768]))),
+            ("Reg 24", str(data[768:800]), binary_to_dec.strbin_to_udec(str(data[768:800])),
+             binary_to_dec.strbin_to_dec(str(data[768:800]))),
+            ("Reg 25", str(data[800:832]), binary_to_dec.strbin_to_udec(str(data[800:832])),
+             binary_to_dec.strbin_to_dec(str(data[800:832]))),
+            ("Reg 26", str(data[832:864]), binary_to_dec.strbin_to_udec(str(data[832:864])),
+             binary_to_dec.strbin_to_dec(str(data[832:864]))),
+            ("Reg 27", str(data[864:896]), binary_to_dec.strbin_to_udec(str(data[864:896])),
+             binary_to_dec.strbin_to_dec(str(data[864:896]))),
+            ("Reg 28", str(data[896:928]), binary_to_dec.strbin_to_udec(str(data[896:928])),
+             binary_to_dec.strbin_to_dec(str(data[896:928]))),
+            ("Reg 29", str(data[928:960]), binary_to_dec.strbin_to_udec(str(data[928:960])),
+             binary_to_dec.strbin_to_dec(str(data[928:960]))),
+            ("Reg 30", str(data[960:992]), binary_to_dec.strbin_to_udec(str(data[960:992])),
+             binary_to_dec.strbin_to_dec(str(data[960:992]))),
+            ("Reg 31", str(data[992:1024]), binary_to_dec.strbin_to_udec(str(data[992:1024])),
+             binary_to_dec.strbin_to_dec(str(data[992:1024]))),
         ]
         self.step1_input_tuples = []
         self.step1_input_tuples = [
